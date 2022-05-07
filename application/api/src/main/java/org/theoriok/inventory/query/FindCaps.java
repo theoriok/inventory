@@ -14,13 +14,7 @@ public interface FindCaps {
     record SingleResponse(Cap cap) {
     }
 
-    record Cap(
-        String businessId,
-        String name,
-        String description,
-        int amount,
-        Country country
-    ) {
+    record Cap(String businessId, String name, String description, int amount, Country country) {
     }
 
     record Country(String name, String code) {
