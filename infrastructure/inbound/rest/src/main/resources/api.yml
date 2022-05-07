@@ -1,0 +1,90 @@
+openapi: 3.0.1
+info:
+  title: 'Inventory OpenAPI spec'
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080
+    description: local
+paths:
+  /caps:
+    get:
+      tags:
+        - cap-controller
+      operationId: allCaps
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cap'
+    put:
+      tags:
+        - cap-controller
+      operationId: upsertCap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertCap'
+        required: true
+      responses:
+        '204':
+          description: No-content
+  /caps/{id}:
+    get:
+      tags:
+        - cap-controller
+      operationId: findCapById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Cap'
+components:
+  schemas:
+    UpsertCap:
+      type: object
+      properties:
+        business_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        amount:
+          type: integer
+          format: int32
+        country:
+          type: string
+    Cap:
+      type: object
+      properties:
+        business_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        amount:
+          type: integer
+          format: int32
+        country:
+          $ref: '#/components/schemas/Country'
+    Country:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
