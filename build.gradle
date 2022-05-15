@@ -44,7 +44,7 @@ allprojects {
         useJUnitPlatform()
     }
 
-    tasks.matching { task -> task.name.equals('jacocoAggregatedReport') }.forEach { task ->
+    tasks.matching { task -> (task.name == 'jacocoAggregatedReport') }.forEach { task ->
         task.reports {
             xml.required = true
             xml.outputLocation = file("build/reports/jacocoAggregatedReport.xml")
