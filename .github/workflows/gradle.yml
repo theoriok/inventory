@@ -31,4 +31,4 @@ jobs:
     - name: Grant Permissions to gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew clean build jacocoTestReport
