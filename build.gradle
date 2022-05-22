@@ -190,6 +190,8 @@ sonarqube {
         property "sonar.projectKey", "theoriok_inventory"
         property "sonar.organization", "theorioksoft"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.jacoco.reportPaths", "build/reports/jacocoAggregatedReport.xml"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.rootDir}/build/reports/jacocoAggregatedReport.xml"
+        property "sonar.tests", "src/test"
     }
 }
