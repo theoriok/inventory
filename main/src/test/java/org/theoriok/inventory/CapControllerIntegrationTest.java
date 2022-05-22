@@ -1,6 +1,10 @@
 package org.theoriok.inventory;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.from;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,24 +59,6 @@ class CapControllerIntegrationTest {
             .andExpect(content().json(expectedJsonArray()));
     }
 
-    @Language("JSON")
-    private String expectedJsonArray() {
-        return """
-            [
-                {
-                    "business_id": "BE-1",
-                    "name": "Belgian Cap",
-                    "description": "This is a Belgian Cap",
-                    "amount": 5,
-                    "country": {
-                        "name": "Belgium",
-                        "code": "BE"
-                    }
-                }
-            ]
-            """;
-    }
-
     @Test
     void shouldReturnNotFoundWhenCapNotFoundById() throws Exception {
         mvc.perform(get("/caps/BE-1"))
@@ -89,6 +75,76 @@ class CapControllerIntegrationTest {
         mvc.perform(get("/caps/BE-1"))
             .andExpect(status().isOk())
             .andExpect(content().json(expectedJsonObject()));
+    }
+
+    @Test
+    void shouldInsertNewCap() throws Exception {
+        var country = testCountry();
+        countryRepository.save(country);
+
+        mvc.perform(put("/caps")
+                .contentType(APPLICATION_JSON)
+                .content(capToUpsert()))
+            .andExpect(status().isNoContent());
+
+        assertThat(capRepository.findAll())
+            .singleElement()
+            .returns("BE-1", from(CapEntity::getBusinessId))
+            .returns("Belgian Cap", from(CapEntity::getName))
+            .returns("This is a Belgian Cap", from(CapEntity::getDescription))
+            .returns(5, from(CapEntity::getAmount))
+            .returns(country, from(CapEntity::getCountry))        ;
+    }
+
+    @Test
+    void shouldUpdateExistingCap() throws Exception {
+        var country = testCountry();
+        countryRepository.save(country);
+        capRepository.save(testCapWithSameIdButDifferentValues(country));
+
+        mvc.perform(put("/caps")
+                .contentType(APPLICATION_JSON)
+                .content(capToUpsert()))
+            .andExpect(status().isNoContent());
+
+        assertThat(capRepository.findAll())
+            .singleElement()
+            .returns("BE-1", from(CapEntity::getBusinessId))
+            .returns("Belgian Cap", from(CapEntity::getName))
+            .returns("This is a Belgian Cap", from(CapEntity::getDescription))
+            .returns(5, from(CapEntity::getAmount))
+            .returns(country, from(CapEntity::getCountry))        ;
+    }
+
+    @Language("JSON")
+    private String capToUpsert() {
+        return """
+            {
+                "business_id": "BE-1",
+                "name": "Belgian Cap",
+                "description": "This is a Belgian Cap",
+                "amount": 5,
+                "country": "BE"
+            }
+            """;
+    }
+
+    @Language("JSON")
+    private String expectedJsonArray() {
+        return """
+            [
+                {
+                    "business_id": "BE-1",
+                    "name": "Belgian Cap",
+                    "description": "This is a Belgian Cap",
+                    "amount": 5,
+                    "country": {
+                        "name": "Belgium",
+                        "code": "BE"
+                    }
+                }
+            ]
+            """;
     }
 
     @Language("JSON")
@@ -109,6 +165,9 @@ class CapControllerIntegrationTest {
 
     private CapEntity testCap(CountryEntity country) {
         return new CapEntity("BE-1", "Belgian Cap", "This is a Belgian Cap", 5, country);
+    }
+    private CapEntity testCapWithSameIdButDifferentValues(CountryEntity country) {
+        return new CapEntity("BE-1", "Jupiler", "Stella Artois en al", 1, country);
     }
 
     private CountryEntity testCountry() {
