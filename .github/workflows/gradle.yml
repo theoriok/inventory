@@ -27,7 +27,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'temurin'
+        distribution: 'coretto'
     - name: Grant Permissions to gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
