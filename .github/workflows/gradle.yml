@@ -31,4 +31,7 @@ jobs:
     - name: Grant Permissions to gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew clean build jacocoTestReport
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: ./gradlew clean build jacocoAggregatedReport sonarqube --info
