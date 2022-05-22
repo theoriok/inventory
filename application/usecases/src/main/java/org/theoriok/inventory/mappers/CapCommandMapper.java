@@ -8,14 +8,13 @@ import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.query.FindCaps;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Component
 public class CapCommandMapper implements CommandMapper<Cap, UpsertCap.Request, FindCaps.ListResponse, FindCaps.SingleResponse> {
 
     @Override
     public FindCaps.ListResponse toListResponse(Collection<Cap> domainObjects) {
-        return new FindCaps.ListResponse(domainObjects.stream().map(this::toResponseCap).collect(Collectors.toList()));
+        return new FindCaps.ListResponse(domainObjects.stream().map(this::toResponseCap).toList());
     }
 
     @Override

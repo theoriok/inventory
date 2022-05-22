@@ -49,7 +49,7 @@ public class CapController {
     }
 
     @PutMapping
-    public ResponseEntity<?> upsertCap(@RequestBody UpsertCapDto capDto) {
+    public ResponseEntity<Void> upsertCap(@RequestBody UpsertCapDto capDto) {
         upsertCap.upsert(toUpsertRequest(capDto));
         return ResponseEntity.noContent().build();
     }
