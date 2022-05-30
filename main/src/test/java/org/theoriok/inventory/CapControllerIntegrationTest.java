@@ -69,7 +69,7 @@ class CapControllerIntegrationTest {
         capRepository.save(testCap(differentCountry, "NL-2"));
 
 
-        mvc.perform(get("/caps/BE"))
+        mvc.perform(get("/caps/?country=BE"))
             .andExpect(status().isOk())
             .andExpect(content().json(expectedJsonArray()));
     }
