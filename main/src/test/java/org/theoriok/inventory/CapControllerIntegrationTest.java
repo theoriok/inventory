@@ -73,6 +73,20 @@ class CapControllerIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(content().json(expectedJsonArray()));
     }
+    @Test
+    void shouldReturnEmptyArrayWhenNoCapsFoundForCountry() throws Exception {
+        var country = testCountry("BE");
+        countryRepository.save(country);
+        capRepository.save(testCap(country, "BE-1"));
+        var differentCountry = testCountry("NL");
+        countryRepository.save(differentCountry);
+        capRepository.save(testCap(differentCountry, "NL-2"));
+
+
+        mvc.perform(get("/caps/?country=US"))
+            .andExpect(status().isOk())
+            .andExpect(content().json("[]"));
+    }
 
     @Test
     void shouldReturnNotFoundWhenCapNotFoundById() throws Exception {

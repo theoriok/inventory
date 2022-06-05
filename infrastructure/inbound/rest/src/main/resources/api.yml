@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Inventory OpenAPI spec'
-  version: 0.0.1
+  version: 0.0.2
 servers:
   - url: http://localhost:8080
     description: local
@@ -10,7 +10,13 @@ paths:
     get:
       tags:
         - cap-controller
-      operationId: allCaps
+      operationId: findCaps
+      parameters:
+        - name: country
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK

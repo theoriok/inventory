@@ -29,6 +29,12 @@ public class PersistCapAdapter implements PersistCapPort {
     }
 
     @Override
+    public Collection<Cap> findAllByCountry(String country) {
+        var capEntities = capRepository.findAllByCountry_code(country);
+        return capDomainMapper.toDomainObjects(capEntities);
+    }
+
+    @Override
     public Optional<Cap> findById(String businessId) {
         var capEntity = capRepository.findByBusinessId(businessId);
         return capEntity.map(capDomainMapper::toDomainObject);

@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface PersistCapPort {
     Collection<Cap> findAll();
 
+    Collection<Cap> findAllByCountry(String country);
+
     Optional<Cap> findById(String businessId);
 
     void upsert(Cap cap);

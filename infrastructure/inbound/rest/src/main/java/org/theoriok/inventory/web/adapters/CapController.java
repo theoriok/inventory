@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.theoriok.inventory.command.UpsertCap;
 import org.theoriok.inventory.query.FindCaps;
@@ -28,8 +29,8 @@ public class CapController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<CapDto>> allCaps() {
-        var capsResponse = findCaps.findAll();
+    public ResponseEntity<Collection<CapDto>> findCaps(@RequestParam(required = false) String country) {
+        var capsResponse = findCaps.findAll(new FindCaps.Request(country));
         return ResponseEntity.ok(toCapDtos(capsResponse));
     }
 

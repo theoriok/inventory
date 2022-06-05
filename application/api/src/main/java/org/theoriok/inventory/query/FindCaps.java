@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FindCaps {
-    ListResponse findAll();
+    ListResponse findAll(Request request);
 
     Optional<SingleResponse> findById(String businessId);
 
     record ListResponse(List<Cap> caps) {
+    }
+
+    record Request(String country) {
     }
 
     record SingleResponse(Cap cap) {

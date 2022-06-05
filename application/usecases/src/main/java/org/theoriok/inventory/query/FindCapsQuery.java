@@ -17,8 +17,10 @@ public class FindCapsQuery implements FindCaps {
     }
 
     @Override
-    public ListResponse findAll() {
-        var caps = persistCapPort.findAll();
+    public ListResponse findAll(Request request) {
+        var caps = Optional.ofNullable(request.country())
+            .map(persistCapPort::findAllByCountry)
+            .orElseGet(persistCapPort::findAll);
         return capCommandMapper.toListResponse(caps);
     }
 
