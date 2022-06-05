@@ -68,11 +68,11 @@ class CapControllerIntegrationTest {
         countryRepository.save(differentCountry);
         capRepository.save(testCap(differentCountry, "NL-2"));
 
-
         mvc.perform(get("/caps/?country=BE"))
             .andExpect(status().isOk())
             .andExpect(content().json(expectedJsonArray()));
     }
+
     @Test
     void shouldReturnEmptyArrayWhenNoCapsFoundForCountry() throws Exception {
         var country = testCountry("BE");
@@ -81,7 +81,6 @@ class CapControllerIntegrationTest {
         var differentCountry = testCountry("NL");
         countryRepository.save(differentCountry);
         capRepository.save(testCap(differentCountry, "NL-2"));
-
 
         mvc.perform(get("/caps/?country=US"))
             .andExpect(status().isOk())
@@ -122,7 +121,7 @@ class CapControllerIntegrationTest {
             .returns("Belgian Cap", from(CapEntity::getName))
             .returns("This is a Belgian Cap", from(CapEntity::getDescription))
             .returns(5, from(CapEntity::getAmount))
-            .returns(country, from(CapEntity::getCountry))        ;
+            .returns(country, from(CapEntity::getCountry));
     }
 
     @Test
@@ -142,7 +141,7 @@ class CapControllerIntegrationTest {
             .returns("Belgian Cap", from(CapEntity::getName))
             .returns("This is a Belgian Cap", from(CapEntity::getDescription))
             .returns(5, from(CapEntity::getAmount))
-            .returns(country, from(CapEntity::getCountry))        ;
+            .returns(country, from(CapEntity::getCountry));
     }
 
     @Language("JSON")
@@ -199,6 +198,7 @@ class CapControllerIntegrationTest {
     private CapEntity testCap(CountryEntity country, String businessId) {
         return new CapEntity(businessId, "Belgian Cap", "This is a Belgian Cap", 5, country);
     }
+
     private CapEntity testCapWithSameIdButDifferentValues(CountryEntity country) {
         return new CapEntity("BE-1", "Jupiler", "Stella Artois en al", 1, country);
     }
