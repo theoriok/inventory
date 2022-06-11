@@ -26,7 +26,7 @@ import org.theoriok.inventory.persistence.repositories.CountryRepository;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @EnableJpaRepositories
-class CapControllerIntegrationTest {
+class CapIntegrationTest {
     @Autowired
     private CapRepository capRepository;
     @Autowired
