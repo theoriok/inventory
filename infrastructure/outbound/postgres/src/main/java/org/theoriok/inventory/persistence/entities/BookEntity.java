@@ -11,13 +11,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Table(name = "cap")
+@Table(name = "book")
 @Entity
-public class CapEntity implements Serializable {
+public class BookEntity implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -27,24 +25,20 @@ public class CapEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String businessId;
     @Column(nullable = false)
-    private String name;
+    private String title;
+    @Column(nullable = false)
+    private String author;
     @Column(columnDefinition = "text")
     private String description;
-    @Column(nullable = false)
-    private int amount;
-    @ManyToOne(optional = false)
-    @JoinColumn(referencedColumnName = "code")
-    private CountryEntity country;
 
-    public CapEntity() {
+    public BookEntity() {
     }
 
-    public CapEntity(String businessId, String name, String description, int amount, CountryEntity country) {
+    public BookEntity(String businessId, String title, String author, String description) {
         this.businessId = businessId;
-        this.name = name;
         this.description = description;
-        this.amount = amount;
-        this.country = country;
+        this.title = title;
+        this.author = author;
     }
 
     public UUID getId() {
@@ -59,24 +53,16 @@ public class CapEntity implements Serializable {
         return businessId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public CountryEntity getCountry() {
-        return country;
-    }
-
-    public void setCountry(CountryEntity country) {
-        this.country = country;
     }
 
     @Override
@@ -85,15 +71,21 @@ public class CapEntity implements Serializable {
             return true;
         }
 
-        if (!(obj instanceof CapEntity capEntity)) {
+        if (!(obj instanceof BookEntity bookEntity)) {
             return false;
         }
 
-        return new EqualsBuilder().append(name, capEntity.name).isEquals();
+        return new EqualsBuilder()
+            .append(title, bookEntity.title)
+            .append(author, bookEntity.author)
+            .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(name).toHashCode();
+        return new HashCodeBuilder(17, 37)
+            .append(title)
+            .append(author)
+            .toHashCode();
     }
 }

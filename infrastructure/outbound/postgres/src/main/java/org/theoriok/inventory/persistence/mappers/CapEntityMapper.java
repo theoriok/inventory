@@ -7,10 +7,10 @@ import org.theoriok.inventory.persistence.entities.CapEntity;
 
 @Component
 public class CapEntityMapper implements EntityMapper<Cap, CapEntity> {
-    private final CountryEntityMapper countryDomainMapper;
+    private final CountryEntityMapper countryEntityMapper;
 
-    public CapEntityMapper(CountryEntityMapper countryDomainMapper) {
-        this.countryDomainMapper = countryDomainMapper;
+    public CapEntityMapper(CountryEntityMapper countryEntityMapper) {
+        this.countryEntityMapper = countryEntityMapper;
     }
 
     @Override
@@ -20,7 +20,7 @@ public class CapEntityMapper implements EntityMapper<Cap, CapEntity> {
             domainObject.name(),
             domainObject.description(),
             domainObject.amount(),
-            countryDomainMapper.toEntity(domainObject.country())
+            countryEntityMapper.toEntity(domainObject.country())
         );
     }
 
@@ -31,7 +31,7 @@ public class CapEntityMapper implements EntityMapper<Cap, CapEntity> {
             .name(entity.getName())
             .description(entity.getDescription())
             .amount(entity.getAmount())
-            .country(countryDomainMapper.toDomainObject(entity.getCountry()))
+            .country(countryEntityMapper.toDomainObject(entity.getCountry()))
             .build();
     }
 }
