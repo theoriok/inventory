@@ -19,7 +19,7 @@ public class BookEntity implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(updatable = false, nullable = false, columnDefinition = "uuid DEFAULT random_uuid()")
+    @Column(updatable = false, nullable = false, columnDefinition = "uuid DEFAULT gen_random_uuid()")
     private UUID id;
 
     @Column(nullable = false, unique = true)
