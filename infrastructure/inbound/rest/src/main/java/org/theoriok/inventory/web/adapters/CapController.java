@@ -1,5 +1,6 @@
 package org.theoriok.inventory.web.adapters;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/caps")
+@Timed
 public class CapController {
     private final UpsertCap upsertCap;
     private final FindCaps findCaps;
