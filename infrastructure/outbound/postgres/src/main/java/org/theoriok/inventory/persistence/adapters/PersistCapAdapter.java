@@ -36,8 +36,8 @@ public class PersistCapAdapter implements PersistCapPort {
 
     @Override
     public Optional<Cap> findById(String businessId) {
-        var capEntity = capRepository.findByBusinessId(businessId);
-        return capEntity.map(capDomainMapper::toDomainObject);
+        return capRepository.findByBusinessId(businessId)
+            .map(capDomainMapper::toDomainObject);
     }
 
     @Override

@@ -1,7 +1,10 @@
 package org.theoriok.inventory.command;
 
-import org.theoriok.inventory.mappers.CapCommandMapper;
+import static org.theoriok.inventory.command.UpsertCap.Result.UNKNOWN_COUNTRY;
+import static org.theoriok.inventory.command.UpsertCap.Result.UPSERTED;
+
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.mappers.CapCommandMapper;
 import org.theoriok.inventory.port.PersistCapPort;
 import org.theoriok.inventory.port.PersistCountryPort;
 
@@ -19,9 +22,13 @@ public class UpsertCapCommand implements UpsertCap {
     }
 
     @Override
-    public void upsert(Request request) {
-        var country = persistCountryPort.findByCode(request.country());
-        var cap = capCommandMapper.toDomainObject(request).withCountry(country);
-        persistCapPort.upsert(cap);
+    public Result upsert(Request request) {
+        return persistCountryPort.findByCode(request.country())
+            .map(country -> {
+                var cap = capCommandMapper.toDomainObject(request).withCountry(country);
+                persistCapPort.upsert(cap);
+                return UPSERTED;
+            })
+            .orElse(UNKNOWN_COUNTRY);
     }
 }

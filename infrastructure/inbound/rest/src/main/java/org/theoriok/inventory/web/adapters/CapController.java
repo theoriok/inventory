@@ -52,9 +52,12 @@ public class CapController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> upsertCap(@RequestBody UpsertCapDto capDto) {
-        upsertCap.upsert(toUpsertRequest(capDto));
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> upsertCap(@RequestBody UpsertCapDto capDto) {
+        var upsertResult = upsertCap.upsert(toUpsertRequest(capDto));
+       return switch (upsertResult) {
+            case UPSERTED -> ResponseEntity.noContent().build();
+            case UNKNOWN_COUNTRY -> ResponseEntity.badRequest().body("Unknown country %s".formatted(capDto.getCountry()));
+        };
     }
 
     private CapDto toCapDto(FindCaps.Cap domainObject) {

@@ -6,6 +6,8 @@ import org.theoriok.inventory.persistence.mappers.CountryEntityMapper;
 import org.theoriok.inventory.persistence.repositories.CountryRepository;
 import org.theoriok.inventory.port.PersistCountryPort;
 
+import java.util.Optional;
+
 @Component
 public class PersistCountryAdapter implements PersistCountryPort {
     private final CountryRepository countryRepository;
@@ -17,9 +19,8 @@ public class PersistCountryAdapter implements PersistCountryPort {
     }
 
     @Override
-    public Country findByCode(String code) {
+    public Optional<Country> findByCode(String code) {
         return countryRepository.findByCode(code)
-            .map(countryDomainMapper::toDomainObject)
-            .orElseThrow();
+            .map(countryDomainMapper::toDomainObject);
     }
 }

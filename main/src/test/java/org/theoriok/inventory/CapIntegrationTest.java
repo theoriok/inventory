@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.theoriok.inventory.persistence.entities.CapEntity;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.persistence.repositories.CapRepository;
@@ -142,6 +143,15 @@ class CapIntegrationTest {
             .returns("This is a Belgian Cap", from(CapEntity::getDescription))
             .returns(5, from(CapEntity::getAmount))
             .returns(country, from(CapEntity::getCountry));
+    }
+
+    @Test
+    void shouldHandleUnknownCountry() throws Exception {
+        mvc.perform(put("/caps")
+                .contentType(APPLICATION_JSON)
+                .content(capToUpsert()))
+            .andExpect(status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.content().string("Unknown country BE"));
     }
 
     @Language("JSON")
