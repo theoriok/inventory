@@ -18,7 +18,7 @@ project.ext.name = 'inventory'
 ext {
     jacocoVersion = '0.8.8'
     flywayVersion = '8.5.13'
-    annotationsVersion = '13.0'
+    annotationsVersion = '23.0'
 }
 
 allprojects {
