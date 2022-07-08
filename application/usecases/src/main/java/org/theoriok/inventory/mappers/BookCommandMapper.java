@@ -2,13 +2,16 @@ package org.theoriok.inventory.mappers;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.command.UpsertBook;
+import org.theoriok.inventory.command.UpsertBookCommand;
 import org.theoriok.inventory.domain.Book;
+import org.theoriok.inventory.domain.BookBuilder;
 import org.theoriok.inventory.query.FindBooks;
 
 import java.util.Collection;
 
 @Component
-public class BookCommandMapper implements CommandMapper<Book, Object, FindBooks.ListResponse, Object> {
+public class BookCommandMapper implements CommandMapper<Book, UpsertBook.Request, FindBooks.ListResponse, Object> {
     @Override
     public Object toSingleResponse(Book domainObject) {
         throw new NotImplementedException();
@@ -24,7 +27,12 @@ public class BookCommandMapper implements CommandMapper<Book, Object, FindBooks.
     }
 
     @Override
-    public Book toDomainObject(Object dto) {
-        throw new NotImplementedException();
+    public Book toDomainObject(UpsertBook.Request dto) {
+        return BookBuilder.builder()
+            .businessId(dto.businessId())
+            .title(dto.title())
+            .author(dto.author())
+            .description(dto.description())
+            .build();
     }
 }

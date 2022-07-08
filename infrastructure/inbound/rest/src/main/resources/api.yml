@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Inventory OpenAPI spec'
-  version: 0.0.3
+  version: 0.0.4
 servers:
   - url: http://localhost:8080
     description: local
@@ -71,6 +71,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
+    put:
+      tags:
+        - book-controller
+      operationId: upsertBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        '204':
+          description: No-content
 components:
   schemas:
     UpsertCap:

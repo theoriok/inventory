@@ -6,4 +6,6 @@ import java.util.Collection;
 
 public interface PersistBookPort {
     Collection<Book> findAll();
+
+    void upsert(Book book);
 }

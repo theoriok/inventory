@@ -22,4 +22,11 @@ public class PersistBookAdapter implements PersistBookPort {
     public Collection<Book> findAll() {
         return bookDomainMapper.toDomainObjects(bookRepository.findAll());
     }
+
+    @Override
+    public void upsert(Book book) {
+        var entity = bookDomainMapper.toEntity(book);
+        bookRepository.findByBusinessId(book.businessId()).ifPresent(foundEntity -> entity.setId(foundEntity.getId()));
+        bookRepository.save(entity);
+    }
 }
