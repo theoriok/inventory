@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.theoriok.inventory.command.UpsertBook;
 import org.theoriok.inventory.query.FindBooks;
-import org.theoriok.inventory.query.FindCaps;
 import org.theoriok.inventory.web.dto.BookDto;
-import org.theoriok.inventory.web.dto.CapDto;
 
 import java.util.Collection;
 import java.util.List;
