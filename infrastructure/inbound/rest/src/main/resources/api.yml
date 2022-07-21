@@ -57,6 +57,19 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Cap'
+    delete:
+      tags:
+        - cap-controller
+      operationId: deleteCapById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
   /books:
     get:
       tags:
@@ -102,6 +115,19 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Book'
+    delete:
+      tags:
+        - book-controller
+      operationId: deleteBookById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
 components:
   schemas:
     UpsertCap:
