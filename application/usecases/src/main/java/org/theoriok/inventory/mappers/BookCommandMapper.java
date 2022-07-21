@@ -12,8 +12,8 @@ import java.util.Collection;
 @Component
 public class BookCommandMapper implements CommandMapper<Book, UpsertBook.Request, FindBooks.ListResponse, Object> {
     @Override
-    public Object toSingleResponse(Book domainObject) {
-        throw new NotImplementedException();
+    public FindBooks.SingleResponse toSingleResponse(Book domainObject) {
+        return new FindBooks.SingleResponse(toResponseBook(domainObject));
     }
 
     @Override

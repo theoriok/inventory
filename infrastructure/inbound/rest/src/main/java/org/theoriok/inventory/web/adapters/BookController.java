@@ -3,13 +3,16 @@ package org.theoriok.inventory.web.adapters;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.theoriok.inventory.command.UpsertBook;
 import org.theoriok.inventory.query.FindBooks;
+import org.theoriok.inventory.query.FindCaps;
 import org.theoriok.inventory.web.dto.BookDto;
+import org.theoriok.inventory.web.dto.CapDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +34,15 @@ public class BookController {
     public ResponseEntity<Collection<BookDto>> findBooks() {
         var booksResponse = findBooks.findAll();
         return ResponseEntity.ok(toBookDtos(booksResponse));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookDto> findBookById(@PathVariable String id) {
+        return findBooks.findById(id)
+            .map(FindBooks.SingleResponse::book)
+            .map(this::toBookDto)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping

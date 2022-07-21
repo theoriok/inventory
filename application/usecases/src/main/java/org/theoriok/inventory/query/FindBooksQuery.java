@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import org.theoriok.inventory.mappers.BookCommandMapper;
 import org.theoriok.inventory.port.PersistBookPort;
 
+import java.util.Optional;
+
 @Component
 public class FindBooksQuery implements FindBooks {
     private final PersistBookPort persistBookPort;
@@ -17,5 +19,10 @@ public class FindBooksQuery implements FindBooks {
     @Override
     public ListResponse findAll() {
         return bookCommandMapper.toListResponse(persistBookPort.findAll());
+    }
+
+    @Override
+    public Optional<SingleResponse> findById(String id) {
+        return persistBookPort.findById(id).map(bookCommandMapper::toSingleResponse);
     }
 }

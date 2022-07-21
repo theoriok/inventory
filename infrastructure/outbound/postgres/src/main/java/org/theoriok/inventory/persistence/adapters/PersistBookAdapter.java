@@ -7,6 +7,7 @@ import org.theoriok.inventory.persistence.repositories.BookRepository;
 import org.theoriok.inventory.port.PersistBookPort;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Component
 public class PersistBookAdapter implements PersistBookPort {
@@ -21,6 +22,11 @@ public class PersistBookAdapter implements PersistBookPort {
     @Override
     public Collection<Book> findAll() {
         return bookDomainMapper.toDomainObjects(bookRepository.findAll());
+    }
+
+    @Override
+    public Optional<Book> findById(String businessId) {
+        return bookRepository.findByBusinessId(businessId).map(bookDomainMapper::toDomainObject);
     }
 
     @Override

@@ -36,6 +36,15 @@ class BookIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void shouldReturnBookWhenBookFoundById() throws Exception {
+        bookRepository.save(testBook());
+
+        mvc.perform(get("/books/BOOK-1"))
+            .andExpect(status().isOk())
+            .andExpect(content().json(expectedJsonObject()));
+    }
+
+    @Test
     void shouldInsertNewBook() throws Exception {
         mvc.perform(put("/books")
                 .contentType(APPLICATION_JSON)
@@ -86,6 +95,18 @@ class BookIntegrationTest extends IntegrationTest {
                     "description": "In a hole under the ground, there lived a Hobbit."
                 }
             ]
+            """;
+    }
+
+    @Language("JSON")
+    private String expectedJsonObject() {
+        return """
+            {
+                "business_id": "BOOK-1",
+                "title": "The Hobbit",
+                "author": "JRR Tolkien",
+                "description": "In a hole under the ground, there lived a Hobbit."
+            }
             """;
     }
 
