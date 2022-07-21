@@ -19,11 +19,13 @@ ext {
     jacocoVersion = '0.8.8'
     flywayVersion = '8.5.13'
     annotationsVersion = '23.0.0'
+    checkstyleVersion = "8.38"
 }
 
 allprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java'
+    apply plugin: 'checkstyle'
 
     group = rootProject.ext.group
     version = rootProject.ext.version
@@ -70,6 +72,14 @@ allprojects {
         java {
             withJavadocJar()
             withSourcesJar()
+        }
+
+        checkstyle {
+            toolVersion = checkstyleVersion
+            ignoreFailures = false
+            maxErrors = 0
+            maxWarnings = 0
+            configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
         }
 
         jacoco {

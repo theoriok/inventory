@@ -3,7 +3,6 @@ package org.theoriok.inventory.mappers;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.command.UpsertBook;
-import org.theoriok.inventory.command.UpsertBookCommand;
 import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.domain.BookBuilder;
 import org.theoriok.inventory.query.FindBooks;

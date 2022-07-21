@@ -1,8 +1,5 @@
 package org.theoriok.inventory.command;
 
-import static org.theoriok.inventory.command.UpsertCap.Result.UNKNOWN_COUNTRY;
-import static org.theoriok.inventory.command.UpsertCap.Result.UPSERTED;
-
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.mappers.BookCommandMapper;
 import org.theoriok.inventory.port.PersistBookPort;
