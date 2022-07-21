@@ -1,5 +1,7 @@
 package org.theoriok.inventory;
 
+import static java.util.Comparator.comparing;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,6 +28,8 @@ abstract class IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        repositories.forEach(CrudRepository::deleteAll);
+        repositories.stream()
+            .sorted(comparing(jpaRepository -> jpaRepository.getClass().getSimpleName()))
+            .forEach(CrudRepository::deleteAll);
     }
 }
