@@ -17,7 +17,7 @@ public class ExceptionHandlingAdvice {
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(code = INTERNAL_SERVER_ERROR)
-    ResponseEntity<String> onRoutingDataException(Throwable exception) {
+    ResponseEntity<String> onException(Throwable exception) {
         LOGGER.error(exception.getMessage());
         return ResponseEntity.internalServerError()
             .body("Something went wrong");
