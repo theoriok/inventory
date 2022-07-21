@@ -1,4 +1,4 @@
-package org.theoriok.inventory.web;
+package org.theoriok.inventory.web.config;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
