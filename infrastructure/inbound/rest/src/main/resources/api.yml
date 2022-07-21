@@ -70,6 +70,8 @@ paths:
       responses:
         '200':
           description: OK
+        '404':
+          description: Cap not found
   /books:
     get:
       tags:
@@ -128,6 +130,8 @@ paths:
       responses:
         '200':
           description: OK
+        '404':
+          description: Book not found
 components:
   schemas:
     UpsertCap:
