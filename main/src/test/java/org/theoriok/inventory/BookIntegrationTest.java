@@ -27,7 +27,7 @@ class BookIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    void shouldReturnCapWhenCapFound() throws Exception {
+    void shouldReturnBookWhenBookFound() throws Exception {
         bookRepository.save(testBook());
 
         mvc.perform(get("/books"))
@@ -50,8 +50,29 @@ class BookIntegrationTest extends IntegrationTest {
             .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
     }
 
+    @Test
+    void shouldUpdateExistingBook() throws Exception {
+        bookRepository.save(testBookWithSameIdButDifferentDescription());
+
+        mvc.perform(put("/books")
+                .contentType(APPLICATION_JSON)
+                .content(bookToUpsert()))
+            .andExpect(status().isNoContent());
+
+        assertThat(bookRepository.findAll())
+            .singleElement()
+            .returns("BOOK-1", from(BookEntity::getBusinessId))
+            .returns("The Hobbit", from(BookEntity::getTitle))
+            .returns("JRR Tolkien", from(BookEntity::getAuthor))
+            .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
+    }
+
     private BookEntity testBook() {
         return new BookEntity("BOOK-1", "The Hobbit", "JRR Tolkien", "In a hole under the ground, there lived a Hobbit.");
+    }
+
+    private BookEntity testBookWithSameIdButDifferentDescription() {
+        return new BookEntity("BOOK-1", "The Hobbit", "JRR Tolkien", "INSERT DESCRIPTION HERE");
     }
 
     @Language("JSON")
