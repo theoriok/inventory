@@ -7,16 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.support.Repositories;
-import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.sql.DataSource;
 
 @SpringBootTest
 @ActiveProfiles("test")

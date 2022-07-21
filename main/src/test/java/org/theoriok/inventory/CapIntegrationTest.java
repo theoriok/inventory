@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.theoriok.inventory.persistence.entities.CapEntity;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.persistence.repositories.CapRepository;
@@ -133,7 +132,7 @@ class CapIntegrationTest extends IntegrationTest {
                 .contentType(APPLICATION_JSON)
                 .content(capToUpsert()))
             .andExpect(status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.content().string("Unknown country BE"));
+            .andExpect(content().string("Unknown country BE"));
     }
 
     @Language("JSON")
