@@ -20,12 +20,14 @@ ext {
     flywayVersion = '8.5.13'
     annotationsVersion = '23.0.0'
     checkstyleVersion = "8.38"
+    pmdVersion = '6.29.0'
 }
 
 allprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java'
     apply plugin: 'checkstyle'
+    apply plugin: 'pmd'
 
     group = rootProject.ext.group
     version = rootProject.ext.version
@@ -72,6 +74,20 @@ allprojects {
         java {
             withJavadocJar()
             withSourcesJar()
+        }
+
+        pmd {
+            ruleSets = []
+            ignoreFailures = false
+            toolVersion = pmdVersion
+        }
+
+        pmdMain {
+            ruleSetFiles = files("${project.rootDir}/config/pmd/pmd.xml")
+        }
+
+        pmdTest {
+            ruleSetFiles = files("${project.rootDir}/config/pmd/testPmd.xml")
         }
 
         checkstyle {
