@@ -9,38 +9,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.intellij.lang.annotations.Language;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.theoriok.inventory.persistence.entities.CapEntity;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.persistence.repositories.CapRepository;
 import org.theoriok.inventory.persistence.repositories.CountryRepository;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-@EnableJpaRepositories
-class CapIntegrationTest {
+class CapIntegrationTest extends IntegrationTest {
+
     @Autowired
     private CapRepository capRepository;
     @Autowired
     private CountryRepository countryRepository;
-
-    @Autowired
-    private MockMvc mvc;
-
-    @BeforeEach
-    void setUp() {
-        capRepository.deleteAll();
-        countryRepository.deleteAll();
-    }
 
     @Test
     void shouldReturnEmptyArrayWhenNoCapsFound() throws Exception {
