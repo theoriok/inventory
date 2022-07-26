@@ -47,4 +47,9 @@ public class PersistCapAdapter implements PersistCapPort {
         countryRepository.findByCode(cap.country().code()).ifPresentOrElse(entity::setCountry, () -> countryRepository.save(entity.getCountry()));
         capRepository.save(entity);
     }
+
+    @Override
+    public void delete(String businessId) {
+        capRepository.findByBusinessId(businessId).ifPresent(capRepository::delete);
+    }
 }

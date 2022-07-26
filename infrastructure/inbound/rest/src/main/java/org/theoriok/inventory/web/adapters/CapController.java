@@ -2,6 +2,7 @@ package org.theoriok.inventory.web.adapters;
 
 import io.micrometer.core.annotation.Timed;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.theoriok.inventory.command.DeleteCap;
 import org.theoriok.inventory.command.UpsertCap;
 import org.theoriok.inventory.query.FindCaps;
 import org.theoriok.inventory.web.dto.CapDto;
@@ -24,10 +26,12 @@ import java.util.List;
 public class CapController {
     private final UpsertCap upsertCap;
     private final FindCaps findCaps;
+    private final DeleteCap deleteCap;
 
-    public CapController(UpsertCap upsertCap, FindCaps findCaps) {
+    public CapController(UpsertCap upsertCap, FindCaps findCaps, DeleteCap deleteCap) {
         this.upsertCap = upsertCap;
         this.findCaps = findCaps;
+        this.deleteCap = deleteCap;
     }
 
     @GetMapping
@@ -49,6 +53,12 @@ public class CapController {
             .map(this::toCapDto)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCapById(@PathVariable String id) {
+        deleteCap.delete(id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping

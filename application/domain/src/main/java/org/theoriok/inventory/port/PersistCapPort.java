@@ -13,4 +13,6 @@ public interface PersistCapPort {
     Optional<Cap> findById(String businessId);
 
     void upsert(Cap cap);
+
+    void delete(String businessId);
 }

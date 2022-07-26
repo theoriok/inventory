@@ -3,6 +3,7 @@ package org.theoriok.inventory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -133,6 +134,18 @@ class CapIntegrationTest extends IntegrationTest {
                 .content(capToUpsert()))
             .andExpect(status().isBadRequest())
             .andExpect(content().string("Unknown country BE"));
+    }
+
+    @Test
+    void shouldDeleteCapWhenCapFoundById() throws Exception {
+        var country = testCountry();
+        countryRepository.save(country);
+        capRepository.save(testCap(country));
+
+        mvc.perform(delete("/caps/BE-1"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(""));
+        assertThat(capRepository.findAll()).isEmpty();
     }
 
     @Language("JSON")
