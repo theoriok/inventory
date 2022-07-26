@@ -64,7 +64,7 @@ public class CapController {
     @PutMapping
     public ResponseEntity<?> upsertCap(@RequestBody UpsertCapDto capDto) {
         var upsertResult = upsertCap.upsert(toUpsertRequest(capDto));
-       return switch (upsertResult) {
+        return switch (upsertResult) {
             case UPSERTED -> ResponseEntity.noContent().build();
             case UNKNOWN_COUNTRY -> ResponseEntity.badRequest().body("Unknown country %s".formatted(capDto.getCountry()));
         };

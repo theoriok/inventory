@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.intellij.lang.annotations.Language;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.theoriok.inventory.persistence.entities.BookEntity;
@@ -20,78 +21,88 @@ class BookIntegrationTest extends IntegrationTest {
     @Autowired
     private BookRepository bookRepository;
 
-    @Test
-    void shouldReturnEmptyArrayWhenNoBookFound() throws Exception {
-        mvc.perform(get("/books"))
-            .andExpect(status().isOk())
-            .andExpect(content().json("[]"));
+    @Nested
+    class Find {
+        @Test
+        void shouldReturnEmptyArrayWhenNoBookFound() throws Exception {
+            mvc.perform(get("/books"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+        }
+
+        @Test
+        void shouldReturnBookWhenBookFound() throws Exception {
+            bookRepository.save(testBook());
+
+            mvc.perform(get("/books"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedJsonArray()));
+        }
+
+        @Test
+        void shouldReturnBookWhenBookFoundById() throws Exception {
+            bookRepository.save(testBook());
+
+            mvc.perform(get("/books/BOOK-1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedJsonObject()));
+        }
+
+        @Test
+        void shouldReturnNotFoundWhenBookNotFoundById() throws Exception {
+            mvc.perform(get("/books/BOOK-1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""));
+        }
     }
 
-    @Test
-    void shouldReturnBookWhenBookFound() throws Exception {
-        bookRepository.save(testBook());
+    @Nested
+    class Upsert {
+        @Test
+        void shouldInsertNewBook() throws Exception {
+            mvc.perform(put("/books")
+                    .contentType(APPLICATION_JSON)
+                    .content(bookToUpsert()))
+                .andExpect(status().isNoContent());
 
-        mvc.perform(get("/books"))
-            .andExpect(status().isOk())
-            .andExpect(content().json(expectedJsonArray()));
+            assertThat(bookRepository.findAll())
+                .singleElement()
+                .returns("BOOK-1", from(BookEntity::getBusinessId))
+                .returns("The Hobbit", from(BookEntity::getTitle))
+                .returns("JRR Tolkien", from(BookEntity::getAuthor))
+                .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
+        }
+
+        @Test
+        void shouldUpdateExistingBook() throws Exception {
+            bookRepository.save(testBookWithSameIdButDifferentDescription());
+
+            mvc.perform(put("/books")
+                    .contentType(APPLICATION_JSON)
+                    .content(bookToUpsert()))
+                .andExpect(status().isNoContent());
+
+            assertThat(bookRepository.findAll())
+                .singleElement()
+                .returns("BOOK-1", from(BookEntity::getBusinessId))
+                .returns("The Hobbit", from(BookEntity::getTitle))
+                .returns("JRR Tolkien", from(BookEntity::getAuthor))
+                .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
+        }
     }
 
-    @Test
-    void shouldReturnBookWhenBookFoundById() throws Exception {
-        bookRepository.save(testBook());
+    @Nested
+    class Delete {
+        @Test
+        void shouldDeleteBookWhenBookFoundById() throws Exception {
+            bookRepository.save(testBook());
 
-        mvc.perform(get("/books/BOOK-1"))
-            .andExpect(status().isOk())
-            .andExpect(content().json(expectedJsonObject()));
-    }
+            mvc.perform(delete("/books/BOOK-1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
+            assertThat(bookRepository.findAll()).isEmpty();
+        }
 
-    @Test
-    void shouldReturnNotFoundWhenBookNotFoundById() throws Exception {
-        mvc.perform(get("/books/BOOK-1"))
-            .andExpect(status().isNotFound())
-            .andExpect(content().string(""));
-    }
-
-    @Test
-    void shouldInsertNewBook() throws Exception {
-        mvc.perform(put("/books")
-                .contentType(APPLICATION_JSON)
-                .content(bookToUpsert()))
-            .andExpect(status().isNoContent());
-
-        assertThat(bookRepository.findAll())
-            .singleElement()
-            .returns("BOOK-1", from(BookEntity::getBusinessId))
-            .returns("The Hobbit", from(BookEntity::getTitle))
-            .returns("JRR Tolkien", from(BookEntity::getAuthor))
-            .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
-    }
-
-    @Test
-    void shouldUpdateExistingBook() throws Exception {
-        bookRepository.save(testBookWithSameIdButDifferentDescription());
-
-        mvc.perform(put("/books")
-                .contentType(APPLICATION_JSON)
-                .content(bookToUpsert()))
-            .andExpect(status().isNoContent());
-
-        assertThat(bookRepository.findAll())
-            .singleElement()
-            .returns("BOOK-1", from(BookEntity::getBusinessId))
-            .returns("The Hobbit", from(BookEntity::getTitle))
-            .returns("JRR Tolkien", from(BookEntity::getAuthor))
-            .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
-    }
-
-    @Test
-    void shouldDeleteBookWhenBookFoundById() throws Exception {
-        bookRepository.save(testBook());
-
-        mvc.perform(delete("/books/BOOK-1"))
-            .andExpect(status().isOk())
-            .andExpect(content().string(""));
-        assertThat(bookRepository.findAll()).isEmpty();
     }
 
     private BookEntity testBook() {
