@@ -3,6 +3,7 @@ package org.theoriok.inventory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -11,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.client.response.MockRestResponseCreators;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.theoriok.inventory.persistence.entities.BookEntity;
 import org.theoriok.inventory.persistence.repositories.BookRepository;
 
@@ -45,6 +48,13 @@ class BookIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void shouldReturnNotFoundWhenBookNotFoundById() throws Exception {
+        mvc.perform(get("/books/BOOK-1"))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string(""));
+    }
+
+    @Test
     void shouldInsertNewBook() throws Exception {
         mvc.perform(put("/books")
                 .contentType(APPLICATION_JSON)
@@ -74,6 +84,16 @@ class BookIntegrationTest extends IntegrationTest {
             .returns("The Hobbit", from(BookEntity::getTitle))
             .returns("JRR Tolkien", from(BookEntity::getAuthor))
             .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
+    }
+
+    @Test
+    void shouldDeleteBookWhenBookFoundById() throws Exception {
+        bookRepository.save(testBook());
+
+        mvc.perform(delete("/books/BOOK-1"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(""));
+        assertThat(bookRepository.findAll()).isEmpty();
     }
 
     private BookEntity testBook() {

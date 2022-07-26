@@ -35,4 +35,9 @@ public class PersistBookAdapter implements PersistBookPort {
         bookRepository.findByBusinessId(book.businessId()).ifPresent(foundEntity -> entity.setId(foundEntity.getId()));
         bookRepository.save(entity);
     }
+
+    @Override
+    public void delete(String businessId) {
+        bookRepository.findByBusinessId(businessId).ifPresent(bookRepository::delete);
+    }
 }

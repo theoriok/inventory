@@ -11,4 +11,6 @@ public interface PersistBookPort {
     Optional<Book> findById(String businessId);
 
     void upsert(Book book);
+
+    void delete(String businessId);
 }
