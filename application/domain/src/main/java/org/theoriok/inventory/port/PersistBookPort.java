@@ -12,5 +12,5 @@ public interface PersistBookPort {
 
     void upsert(Book book);
 
-    void delete(String businessId);
+    void delete(Book book);
 }

@@ -1,5 +1,8 @@
 package org.theoriok.inventory.command;
 
+import static org.theoriok.inventory.command.DeleteCap.Result.DELETED;
+import static org.theoriok.inventory.command.DeleteCap.Result.NOT_FOUND;
+
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.port.PersistCapPort;
 
@@ -12,7 +15,13 @@ public class DeleteCapCommand implements DeleteCap {
     }
 
     @Override
-    public void delete(String businessId) {
-        persistCapPort.delete(businessId);
+    public Result delete(String businessId) {
+        return persistCapPort.findById(businessId)
+            .map(cap -> {
+                persistCapPort.delete(cap);
+                    return DELETED;
+                }
+            )
+            .orElse(NOT_FOUND);
     }
 }

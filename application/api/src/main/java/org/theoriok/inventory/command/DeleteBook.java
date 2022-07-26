@@ -1,5 +1,9 @@
 package org.theoriok.inventory.command;
 
 public interface DeleteBook {
-    void delete(String businessId);
+    Result delete(String businessId);
+    enum Result {
+        DELETED,
+        NOT_FOUND
+    }
 }

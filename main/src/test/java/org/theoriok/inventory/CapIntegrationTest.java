@@ -156,6 +156,13 @@ class CapIntegrationTest extends IntegrationTest {
                 .andExpect(content().string(""));
             assertThat(capRepository.findAll()).isEmpty();
         }
+
+        @Test
+        void shouldReturnNotFoundWhenCapNotFoundByIdForDelete() throws Exception {
+            mvc.perform(delete("/caps/BE-1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""));
+        }
     }
 
     @Language("JSON")

@@ -14,5 +14,5 @@ public interface PersistCapPort {
 
     void upsert(Cap cap);
 
-    void delete(String businessId);
+    void delete(Cap cap);
 }

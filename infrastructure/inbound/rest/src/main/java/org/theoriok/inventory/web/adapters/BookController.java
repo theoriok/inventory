@@ -49,8 +49,11 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookById(@PathVariable String id) {
-        deleteBook.delete(id);
-        return ResponseEntity.ok().build();
+        var deleteResult = deleteBook.delete(id);
+        return switch (deleteResult) {
+            case DELETED -> ResponseEntity.ok().build();
+            case NOT_FOUND -> ResponseEntity.notFound().build();
+        };
     }
 
     @PutMapping

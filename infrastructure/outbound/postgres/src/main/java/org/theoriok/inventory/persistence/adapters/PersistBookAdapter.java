@@ -37,7 +37,7 @@ public class PersistBookAdapter implements PersistBookPort {
     }
 
     @Override
-    public void delete(String businessId) {
-        bookRepository.findByBusinessId(businessId).ifPresent(bookRepository::delete);
+    public void delete(Book book) {
+        bookRepository.delete(bookRepository.findByBusinessId(book.businessId()).orElseThrow());
     }
 }

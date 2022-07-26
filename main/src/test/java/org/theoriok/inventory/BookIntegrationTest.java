@@ -103,6 +103,12 @@ class BookIntegrationTest extends IntegrationTest {
             assertThat(bookRepository.findAll()).isEmpty();
         }
 
+        @Test
+        void shouldReturnNotFoundWhenBookNotFoundByIdForDelete() throws Exception {
+            mvc.perform(delete("/books/BOOK-1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(""));
+        }
     }
 
     private BookEntity testBook() {

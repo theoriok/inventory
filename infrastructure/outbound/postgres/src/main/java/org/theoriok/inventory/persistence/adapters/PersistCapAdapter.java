@@ -49,7 +49,7 @@ public class PersistCapAdapter implements PersistCapPort {
     }
 
     @Override
-    public void delete(String businessId) {
-        capRepository.findByBusinessId(businessId).ifPresent(capRepository::delete);
+    public void delete(Cap cap) {
+        capRepository.delete(capRepository.findByBusinessId(cap.businessId()).orElseThrow());
     }
 }

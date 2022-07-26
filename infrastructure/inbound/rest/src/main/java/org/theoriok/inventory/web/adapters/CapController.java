@@ -57,8 +57,11 @@ public class CapController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCapById(@PathVariable String id) {
-        deleteCap.delete(id);
-        return ResponseEntity.ok().build();
+        var deleteResult = deleteCap.delete(id);
+        return switch (deleteResult) {
+            case DELETED -> ResponseEntity.ok().build();
+            case NOT_FOUND -> ResponseEntity.notFound().build();
+        };
     }
 
     @PutMapping
