@@ -7,12 +7,6 @@ public interface EntityMapper<D, E> {
 
     D toDomainObject(E entity);
 
-    default Collection<E> toEntities(Collection<D> domainObjects) {
-        return domainObjects.stream()
-            .map(this::toEntity)
-            .toList();
-    }
-
     default Collection<D> toDomainObjects(Collection<E> entities) {
         return entities.stream()
             .map(this::toDomainObject)
