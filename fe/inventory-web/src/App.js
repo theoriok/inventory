@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Caps from './cap/Caps.js';
+import Countries from './country/Countries.js';
+import AddCap from './cap/Add.js';
+import AddCountry from './cap/Add.js';
+import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div>
+            <Router>
+                <ul>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/countries">Countries</Link></li>
+                </ul>
+                <Routes>
+                    <Route path="/country/add" element={<AddCountry/>}/>
+                    <Route path="/cap/add" element={<AddCap/>}/>
+                    <Route path="/countries" element={<Countries/>}/>
+                    <Route path="/" element={<Caps/>}/>
+                </Routes>
+            </Router>
+        </div>
+    );
 }
 
 export default App;
