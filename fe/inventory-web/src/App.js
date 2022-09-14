@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Caps from './cap/Caps.js';
 import Countries from './country/Countries.js';
 import AddCap from './cap/Add.js';
