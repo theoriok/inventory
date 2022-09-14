@@ -20,7 +20,7 @@ ext {
     flywayVersion = '8.5.13'
     annotationsVersion = '23.0.0'
     checkstyleVersion = "8.38"
-    pmdVersion = '6.29.0'
+    pmdVersion = '6.49.0'
 }
 
 allprojects {

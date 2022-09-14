@@ -12,5 +12,6 @@ import java.util.UUID;
 public interface CapRepository extends JpaRepository<CapEntity, UUID> {
     Optional<CapEntity> findByBusinessId(String businessId);
 
+    @SuppressWarnings("PMD.MethodNamingConventions")
     Collection<CapEntity> findAllByCountry_code(String country);
 }
