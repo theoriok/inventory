@@ -22,7 +22,7 @@ public class FindBooksQuery implements FindBooks {
     }
 
     @Override
-    public Optional<SingleResponse> findById(String id) {
-        return persistBookPort.findById(id).map(bookCommandMapper::toSingleResponse);
+    public Optional<SingleResponse> findById(String businessId) {
+        return persistBookPort.findById(businessId).map(bookCommandMapper::toSingleResponse);
     }
 }

@@ -1,12 +1,12 @@
 import React from 'react';
-import {getApi, putApi} from "../util";
+import {putApi} from "../util";
 
 class Add extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            countries: []
+            countries: [{name: "Belgium", code: "BE"}]
         };
     }
 
@@ -15,6 +15,10 @@ class Add extends React.Component {
             <div>
                 <h1>Add Cap</h1>
                 <form onSubmit={this.handleSubmit}>
+                    <div>
+                        <label htmlFor="business_id">Id: </label>
+                        <input type="text" name="business_id" id="business_id"/>
+                    </div>
                     <div>
                         <label htmlFor="name">Name: </label>
                         <input type="text" name="name" id="name"/>
@@ -39,9 +43,10 @@ class Add extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const {name, description, country} = e.target.elements;
+        const {business_id, name, description, country} = e.target.elements;
 
         putApi('caps', {
+            business_id: business_id.value,
             name: name.value,
             description: description.value,
             country: country.value
@@ -51,9 +56,9 @@ class Add extends React.Component {
     }
 
     componentDidMount() {
-        getApi('countries')
-            .then(res => this.setState({countries: res}))
-            .catch(err => console.log(err));
+        // getApi('countries')
+        //     .then(res => this.setState({countries: res}))
+        //     .catch(err => console.log(err));
     }
 }
 

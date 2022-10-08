@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Caps from './cap/Caps.js';
 import Countries from './country/Countries.js';
 import AddCap from './cap/Add.js';
-import AddCountry from './cap/Add.js';
+import AddCountry from './country/Add.js';
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 
 function App() {

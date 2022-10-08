@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Inventory OpenAPI spec'
-  version: 0.0.5
+  version: 0.0.6
 servers:
   - url: http://localhost:8080
     description: local
@@ -74,6 +74,40 @@ paths:
           description: OK
         '404':
           description: Cap not found
+  /coutries:
+    get:
+      tags:
+        - country-controller
+      operationId: findCountries
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+  /countries/{code}:
+    get:
+      tags:
+        - country-controller
+      operationId: findCountryByCode
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Country'
+        '404':
+          description: Country not found
   /books:
     get:
       tags:

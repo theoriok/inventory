@@ -2,7 +2,10 @@ package org.theoriok.inventory.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotEmpty;
+
 public class UpsertCapDto {
+    @NotEmpty
     @JsonProperty("business_id")
     private String businessId;
     @JsonProperty("name")
@@ -11,6 +14,7 @@ public class UpsertCapDto {
     private String description;
     @JsonProperty("amount")
     private int amount;
+    @NotEmpty
     @JsonProperty("country")
     private String country;
 

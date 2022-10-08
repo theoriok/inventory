@@ -198,6 +198,7 @@ project(":infrastructure-inbound-rest") {
         implementation project(":application-api")
         implementation 'org.apache.logging.log4j:log4j-web'
         implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'io.micrometer:micrometer-registry-prometheus'
     }
 }

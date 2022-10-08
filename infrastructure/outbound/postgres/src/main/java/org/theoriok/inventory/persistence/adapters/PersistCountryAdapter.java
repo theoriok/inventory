@@ -6,6 +6,7 @@ import org.theoriok.inventory.persistence.mappers.CountryEntityMapper;
 import org.theoriok.inventory.persistence.repositories.CountryRepository;
 import org.theoriok.inventory.port.PersistCountryPort;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Component
@@ -16,6 +17,12 @@ public class PersistCountryAdapter implements PersistCountryPort {
     public PersistCountryAdapter(CountryRepository countryRepository, CountryEntityMapper countryDomainMapper) {
         this.countryRepository = countryRepository;
         this.countryDomainMapper = countryDomainMapper;
+    }
+
+    @Override
+    public Collection<Country> findAll() {
+        var countries = countryRepository.findAll();
+        return countryDomainMapper.toDomainObjects(countries);
     }
 
     @Override
