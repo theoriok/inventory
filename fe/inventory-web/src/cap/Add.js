@@ -1,12 +1,12 @@
 import React from 'react';
-import {putApi} from "../util";
+import {getApi, putApi} from "../util";
 
 class Add extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            countries: [{name: "Belgium", code: "BE"}]
+            countries: []
         };
     }
 
@@ -56,9 +56,9 @@ class Add extends React.Component {
     }
 
     componentDidMount() {
-        // getApi('countries')
-        //     .then(res => this.setState({countries: res}))
-        //     .catch(err => console.log(err));
+        getApi('countries')
+            .then(res => this.setState({countries: res}))
+            .catch(err => console.log(err));
     }
 }
 
