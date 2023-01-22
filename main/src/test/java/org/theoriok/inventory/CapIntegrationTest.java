@@ -54,7 +54,7 @@ class CapIntegrationTest extends IntegrationTest {
             countryRepository.save(differentCountry);
             capRepository.save(testCap(differentCountry, "NL-2"));
 
-            mvc.perform(get("/caps/?country=BE"))
+            mvc.perform(get("/caps?country=BE"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJsonArray()));
         }
@@ -68,7 +68,7 @@ class CapIntegrationTest extends IntegrationTest {
             countryRepository.save(differentCountry);
             capRepository.save(testCap(differentCountry, "NL-2"));
 
-            mvc.perform(get("/caps/?country=US"))
+            mvc.perform(get("/caps?country=US"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
         }
