@@ -6,10 +6,11 @@ import Countries from './country/Countries.js';
 import AddCap from './cap/Add.js';
 import AddCountry from './country/Add.js';
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
+import {Container} from 'react-bootstrap';
 
 function App() {
     return (
-        <div>
+        <Container>
             <Router>
                 <ul>
                     <li><Link to="/">Home</Link></li>
@@ -22,7 +23,7 @@ function App() {
                     <Route path="/" element={<Caps/>}/>
                 </Routes>
             </Router>
-        </div>
+        </Container>
     );
 }
 

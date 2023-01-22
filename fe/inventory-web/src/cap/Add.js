@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button} from 'react-bootstrap';
 import {getApi, putApi} from "../util";
 
 class Add extends React.Component {
@@ -35,7 +36,7 @@ class Add extends React.Component {
                             }
                         </select>
                     </div>
-                    <div><input type="submit" value="Submit"/></div>
+                    <div><Button variant="dark">Submit</Button></div>
                 </form>
             </div>
         );
