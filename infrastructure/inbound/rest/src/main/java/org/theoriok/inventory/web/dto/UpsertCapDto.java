@@ -1,8 +1,7 @@
 package org.theoriok.inventory.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 public class UpsertCapDto {
     @NotEmpty

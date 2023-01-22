@@ -6,9 +6,9 @@ buildscript {
     }
 }
 plugins {
-    id 'org.springframework.boot' version '2.7.1' apply false
+    id 'org.springframework.boot' version '3.0.2' apply false
     id 'org.barfuin.gradle.jacocolog' version '2.0.0'
-    id "org.sonarqube" version "3.3"
+    id "org.sonarqube" version "3.5.0.2730"
 }
 
 project.ext.group = 'org.theoriok'
@@ -17,10 +17,11 @@ project.ext.name = 'inventory'
 
 ext {
     jacocoVersion = '0.8.8'
-    flywayVersion = '8.5.13'
+    flywayVersion = '9.12.0'
     annotationsVersion = '23.0.0'
     checkstyleVersion = "8.38"
     pmdVersion = '6.49.0'
+    recordBuilderVersion = '35'
 }
 
 allprojects {
@@ -152,7 +153,7 @@ project(":main") {
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.springframework.boot:spring-boot-starter-web'
-        testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa:'
+        testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         testImplementation "com.h2database:h2"
         testImplementation 'org.jetbrains:annotations'
     }
@@ -174,8 +175,8 @@ project(":application-domain") {
     apply plugin: 'java-library'
 
     dependencies {
-        annotationProcessor 'io.soabase.record-builder:record-builder-processor:28'
-        compileOnly 'io.soabase.record-builder:record-builder-core:28'
+        annotationProcessor "io.soabase.record-builder:record-builder-processor:$recordBuilderVersion"
+        compileOnly "io.soabase.record-builder:record-builder-core:$recordBuilderVersion"
     }
 }
 
