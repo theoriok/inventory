@@ -50,6 +50,7 @@ jobs:
             --failOnCVSS 10
             --enableRetired
             --exclude **/package.json
+            --exclude **/package-lock.json
       - name: Upload Test results
         uses: actions/upload-artifact@master
         with:
