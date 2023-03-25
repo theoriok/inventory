@@ -36,7 +36,7 @@ class Add extends React.Component {
                             }
                         </select>
                     </div>
-                    <div><Button variant="dark">Submit</Button></div>
+                    <div><Button variant="dark" type="submit">Submit</Button></div>
                 </form>
             </div>
         );
