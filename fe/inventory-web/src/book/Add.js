@@ -41,8 +41,6 @@ class Add extends React.Component {
             description: description.value,
             author: author.value
         });
-
-
     }
 }
 

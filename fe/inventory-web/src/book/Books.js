@@ -16,7 +16,7 @@ class Books extends React.Component {
             <div>
                 <h1>Hello Books Lovers</h1>
                 {
-                    _.sortBy(this.state.books, "country.name", "name")
+                    _.sortBy(this.state.books, "author", "title")
                         .map((book, i) => <Book key={i} book={book}/>)
                 }
             </div>
