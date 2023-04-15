@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {getApi, putApi} from "../util";
+import {Col, Row} from 'react-bootstrap';
 
 class Add extends React.Component {
 
@@ -16,27 +17,27 @@ class Add extends React.Component {
             <div>
                 <h1>Add Cap</h1>
                 <form onSubmit={this.handleSubmit}>
-                    <div>
-                        <label htmlFor="business_id">Id: </label>
-                        <input type="text" name="business_id" id="business_id"/>
-                    </div>
-                    <div>
-                        <label htmlFor="name">Name: </label>
-                        <input type="text" name="name" id="name"/>
-                    </div>
-                    <div>
-                        <label htmlFor="description">Description: </label>
-                        <textarea name="description" id="description"/>
-                    </div>
-                    <div>
-                        <label htmlFor="country">Country</label>
-                        <select name="country" id="country">
+                    <Row>
+                        <Col xxl={2} xl={3} lg={4} md={6}><label htmlFor="business_id">Id: </label></Col>
+                        <Col xxl={2} xl={3} lg={4} md={6}><input type="text" name="business_id" id="business_id"/></Col>
+                    </Row>
+                    <Row>
+                        <Col xxl={2} xl={3} lg={4} md={6}><label htmlFor="name">Name: </label></Col>
+                        <Col xxl={2} xl={3} lg={4} md={6}><input type="text" name="name" id="name"/></Col>
+                    </Row>
+                    <Row>
+                        <Col xxl={2} xl={3} lg={4} md={6}><label htmlFor="description">Description: </label></Col>
+                        <Col xxl={2} xl={3} lg={4} md={6}><textarea name="description" id="description"/></Col>
+                    </Row>
+                    <Row>
+                        <Col xxl={2} xl={3} lg={4} md={6}><label htmlFor="country">Country</label></Col>
+                        <Col xxl={2} xl={3} lg={4} md={6}><select name="country" id="country">
                             {
                                 this.state.countries.map(country => <option value={country.code} key={country.code}>{country.name}</option>)
                             }
-                        </select>
-                    </div>
-                    <div><Button variant="dark" type="submit">Submit</Button></div>
+                        </select></Col>
+                    </Row>
+                    <Row><Col xxl={2} xl={3} lg={4} md={6}><Button variant="dark" type="submit">Submit</Button></Col></Row>
                 </form>
             </div>
         );

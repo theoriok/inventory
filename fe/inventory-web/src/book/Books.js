@@ -2,6 +2,7 @@ import React from 'react';
 import {getApi} from '../util.js';
 import Book from './Book.js';
 import * as _ from 'lodash';
+import {Link} from "react-router-dom";
 
 class Books extends React.Component {
     constructor(props) {
@@ -14,11 +15,12 @@ class Books extends React.Component {
     render() {
         return (
             <div>
-                <h1>Hello Books Lovers</h1>
+                <h1>All of my Books</h1>
                 {
                     _.sortBy(this.state.books, "author", "title")
                         .map((book, i) => <Book key={i} book={book}/>)
                 }
+                <p><Link to="/book/add">Add</Link></p>
             </div>
         );
     }

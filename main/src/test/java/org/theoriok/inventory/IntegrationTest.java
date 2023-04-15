@@ -24,7 +24,7 @@ abstract class IntegrationTest {
     MockMvc mvc;
 
     @Autowired
-    private List<JpaRepository> repositories;
+    private List<JpaRepository<?, ?>> repositories;
 
     @BeforeEach
     void setUp() {

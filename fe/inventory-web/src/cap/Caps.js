@@ -2,6 +2,7 @@ import React from 'react';
 import {getApi} from '../util.js';
 import Cap from './Cap.js';
 import * as _ from 'lodash';
+import {Link} from "react-router-dom";
 
 class Caps extends React.Component {
     constructor(props) {
@@ -14,11 +15,12 @@ class Caps extends React.Component {
     render() {
         return (
             <div>
-                <h1>Hello Caps Lovers</h1>
+                <h1>All of my Caps</h1>
                 {
                     _.sortBy(this.state.caps, "country.name", "name")
                         .map((cap, i) => <Cap key={i} cap={cap}/>)
                 }
+                <p><Link to="/cap/add">Add</Link></p>
             </div>
         );
     }
