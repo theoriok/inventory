@@ -1,6 +1,7 @@
 package org.theoriok.inventory.web.adapters;
 
 import io.micrometer.core.annotation.Timed;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,9 @@ import org.theoriok.inventory.web.dto.UpsertCapDto;
 
 import java.util.Collection;
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("/caps")
@@ -44,17 +48,17 @@ public class CapController {
 
     private List<CapDto> toCapDtos(FindCaps.ListResponse capsResponse) {
         return capsResponse.caps().stream()
-            .map(this::toCapDto)
-            .toList();
+                .map(this::toCapDto)
+                .toList();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CapDto> findCapById(@PathVariable String id) {
         return findCaps.findById(id)
-            .map(FindCaps.SingleResponse::cap)
-            .map(this::toCapDto)
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+                .map(FindCaps.SingleResponse::cap)
+                .map(this::toCapDto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
     }
 
     @DeleteMapping("/{id}")
@@ -62,7 +66,7 @@ public class CapController {
         var deleteResult = deleteCap.delete(id);
         return switch (deleteResult) {
             case DELETED -> ResponseEntity.ok().build();
-            case NOT_FOUND -> ResponseEntity.notFound().build();
+            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
         };
     }
 
@@ -71,34 +75,36 @@ public class CapController {
         var upsertResult = upsertCap.upsert(toUpsertRequest(capDto));
         return switch (upsertResult) {
             case UPSERTED -> ResponseEntity.noContent().build();
-            case UNKNOWN_COUNTRY -> ResponseEntity.badRequest().body("Unknown country %s".formatted(capDto.getCountry()));
+            case UNKNOWN_COUNTRY -> ResponseEntity.of(
+                    ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.getCountry()))
+            ).build();
         };
     }
 
     private CapDto toCapDto(FindCaps.Cap domainObject) {
         return new CapDto(
-            domainObject.businessId(),
-            domainObject.name(),
-            domainObject.description(),
-            domainObject.amount(),
-            toCountryDto(domainObject.country())
+                domainObject.businessId(),
+                domainObject.name(),
+                domainObject.description(),
+                domainObject.amount(),
+                toCountryDto(domainObject.country())
         );
     }
 
     private CountryDto toCountryDto(FindCaps.Country domainObject) {
         return new CountryDto(
-            domainObject.name(),
-            domainObject.code()
+                domainObject.name(),
+                domainObject.code()
         );
     }
 
     private UpsertCap.Request toUpsertRequest(UpsertCapDto dto) {
         return new UpsertCap.Request(
-            dto.getBusinessId(),
-            dto.getName(),
-            dto.getDescription(),
-            dto.getAmount(),
-            dto.getCountry()
+                dto.getBusinessId(),
+                dto.getName(),
+                dto.getDescription(),
+                dto.getAmount(),
+                dto.getCountry()
         );
     }
 

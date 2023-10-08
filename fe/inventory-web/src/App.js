@@ -15,11 +15,13 @@ function App() {
     return (
         <Container fluid>
             <Router>
-                <Row className="justify-content-center">
-                    <Col xxl={2} xl={3} lg={4} md={6}><Link to="/">Home</Link></Col>
-                    <Col xxl={2} xl={3} lg={4} md={6}><Link to="/caps">Caps</Link></Col>
-                    <Col xxl={2} xl={3} lg={4} md={6}><Link to="/books">Books</Link></Col>
-                </Row>
+                <header>
+                    <Row className="justify-content-center">
+                        <Col xxl={2} xl={3} lg={4} md={6}><Link to="/">Home</Link></Col>
+                        <Col xxl={2} xl={3} lg={4} md={6}><Link to="/caps">Caps</Link></Col>
+                        <Col xxl={2} xl={3} lg={4} md={6}><Link to="/books">Books</Link></Col>
+                    </Row>
+                </header>
                 <Routes>
                     <Route path="/country/add" element={<AddCountry/>}/>
                     <Route path="/cap/add" element={<AddCap/>}/>

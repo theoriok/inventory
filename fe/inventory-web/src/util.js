@@ -29,7 +29,6 @@ export async function postApi(endpoint, data) {
 
 export async function putApi(endpoint, data) {
     let url = baseUrl + endpoint;
-    console.log(url);
     const response = await fetch(url, {
         method: 'PUT',
         mode: 'cors',
@@ -42,7 +41,7 @@ export async function putApi(endpoint, data) {
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(data)
     });
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
-    return body;
+    const body = await response.text();
+    if (200 > response.status >= 300) throw Error(JSON.parse(body).message);
+    return true;
 }

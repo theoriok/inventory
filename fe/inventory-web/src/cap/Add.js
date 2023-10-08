@@ -1,7 +1,6 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Button, Col, Row} from 'react-bootstrap';
 import {getApi, putApi} from "../util";
-import {Col, Row} from 'react-bootstrap';
 
 class Add extends React.Component {
 
@@ -23,7 +22,9 @@ class Add extends React.Component {
                     </Row>
                     <Row>
                         <Col xxl={2} xl={3} lg={4} md={6}><label htmlFor="name">Name: </label></Col>
-                        <Col xxl={2} xl={3} lg={4} md={6}><input type="text" name="name" id="name"/></Col>
+                        <Col xxl={2} xl={3} lg={4} md={6}>
+                            <input type="text" name="name" id="name" required={true}/>
+                        </Col>
                     </Row>
                     <Row>
                         <Col xxl={2} xl={3} lg={4} md={6}><label htmlFor="description">Description: </label></Col>
@@ -31,13 +32,19 @@ class Add extends React.Component {
                     </Row>
                     <Row>
                         <Col xxl={2} xl={3} lg={4} md={6}><label htmlFor="country">Country</label></Col>
-                        <Col xxl={2} xl={3} lg={4} md={6}><select name="country" id="country">
-                            {
-                                this.state.countries.map(country => <option value={country.code} key={country.code}>{country.name}</option>)
-                            }
-                        </select></Col>
+                        <Col xxl={2} xl={3} lg={4} md={6}>
+                            <select name="country" id="country">
+                                {
+                                    this.state.countries.map(country =>
+                                        <option value={country.code} key={country.code}>{country.name}</option>
+                                    )
+                                }
+                            </select>
+                        </Col>
                     </Row>
-                    <Row><Col xxl={2} xl={3} lg={4} md={6}><Button variant="dark" type="submit">Submit</Button></Col></Row>
+                    <Row>
+                        <Col xxl={2} xl={3} lg={4} md={6}><Button variant="dark" type="submit">Submit</Button></Col>
+                    </Row>
                 </form>
             </div>
         );
@@ -47,14 +54,14 @@ class Add extends React.Component {
         e.preventDefault();
         const {business_id, name, description, country} = e.target.elements;
 
-        putApi('caps', {
+         putApi('caps', {
             business_id: business_id.value,
             name: name.value,
             description: description.value,
             country: country.value
-        });
-
-
+        })
+             .then(res => alert(res))
+             .catch(err => alert(err));
     }
 
     componentDidMount() {
