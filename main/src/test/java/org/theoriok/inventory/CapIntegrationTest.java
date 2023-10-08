@@ -30,8 +30,8 @@ class CapIntegrationTest extends IntegrationTest {
         @Test
         void shouldReturnEmptyArrayWhenNoCapsFound() throws Exception {
             mvc.perform(get("/caps"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(expectedEmptyJsonArray()));
         }
 
         @Test
@@ -41,8 +41,8 @@ class CapIntegrationTest extends IntegrationTest {
             capRepository.save(testCap(country));
 
             mvc.perform(get("/caps"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedJsonArray()));
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(expectedJsonArray()));
         }
 
         @Test
@@ -55,8 +55,8 @@ class CapIntegrationTest extends IntegrationTest {
             capRepository.save(testCap(differentCountry, "NL-2"));
 
             mvc.perform(get("/caps?country=BE"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedJsonArray()));
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(expectedJsonArray()));
         }
 
         @Test
@@ -69,15 +69,15 @@ class CapIntegrationTest extends IntegrationTest {
             capRepository.save(testCap(differentCountry, "NL-2"));
 
             mvc.perform(get("/caps?country=US"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(expectedEmptyJsonArray()));
         }
 
         @Test
         void shouldReturnNotFoundWhenCapNotFoundById() throws Exception {
             mvc.perform(get("/caps/BE-1"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("{\"type\":\"about:blank\",\"title\":\"Not Found\",\"status\":404,\"instance\":\"/caps/BE-1\"}")); //todo do better
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().string(expectedCapNotFoundProblemJson()));
         }
 
         @Test
@@ -87,8 +87,8 @@ class CapIntegrationTest extends IntegrationTest {
             capRepository.save(testCap(country));
 
             mvc.perform(get("/caps/BE-1"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedJsonObject()));
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(expectedJsonObject()));
         }
     }
 
@@ -100,17 +100,17 @@ class CapIntegrationTest extends IntegrationTest {
             countryRepository.save(country);
 
             mvc.perform(put("/caps")
-                    .contentType(APPLICATION_JSON)
-                    .content(capToUpsert()))
-                .andExpect(status().isNoContent());
+                            .contentType(APPLICATION_JSON)
+                            .content(capToUpsert()))
+                    .andExpect(status().isNoContent());
 
             assertThat(capRepository.findAll())
-                .singleElement()
-                .returns("BE-1", from(CapEntity::getBusinessId))
-                .returns("Belgian Cap", from(CapEntity::getName))
-                .returns("This is a Belgian Cap", from(CapEntity::getDescription))
-                .returns(5, from(CapEntity::getAmount))
-                .returns(country, from(CapEntity::getCountry));
+                    .singleElement()
+                    .returns("BE-1", from(CapEntity::getBusinessId))
+                    .returns("Belgian Cap", from(CapEntity::getName))
+                    .returns("This is a Belgian Cap", from(CapEntity::getDescription))
+                    .returns(5, from(CapEntity::getAmount))
+                    .returns(country, from(CapEntity::getCountry));
         }
 
         @Test
@@ -120,26 +120,26 @@ class CapIntegrationTest extends IntegrationTest {
             capRepository.save(testCapWithSameIdButDifferentValues(country));
 
             mvc.perform(put("/caps")
-                    .contentType(APPLICATION_JSON)
-                    .content(capToUpsert()))
-                .andExpect(status().isNoContent());
+                            .contentType(APPLICATION_JSON)
+                            .content(capToUpsert()))
+                    .andExpect(status().isNoContent());
 
             assertThat(capRepository.findAll())
-                .singleElement()
-                .returns("BE-1", from(CapEntity::getBusinessId))
-                .returns("Belgian Cap", from(CapEntity::getName))
-                .returns("This is a Belgian Cap", from(CapEntity::getDescription))
-                .returns(5, from(CapEntity::getAmount))
-                .returns(country, from(CapEntity::getCountry));
+                    .singleElement()
+                    .returns("BE-1", from(CapEntity::getBusinessId))
+                    .returns("Belgian Cap", from(CapEntity::getName))
+                    .returns("This is a Belgian Cap", from(CapEntity::getDescription))
+                    .returns(5, from(CapEntity::getAmount))
+                    .returns(country, from(CapEntity::getCountry));
         }
 
         @Test
         void shouldHandleUnknownCountry() throws Exception {
             mvc.perform(put("/caps")
-                    .contentType(APPLICATION_JSON)
-                    .content(capToUpsert()))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("{\"type\":\"about:blank\",\"title\":\"Bad Request\",\"status\":400,\"detail\":\"Unknown country BE\",\"instance\":\"/caps\"}")); //todo do better
+                            .contentType(APPLICATION_JSON)
+                            .content(capToUpsert()))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string(expectedBadRequestProblemJson()));
         }
     }
 
@@ -152,36 +152,53 @@ class CapIntegrationTest extends IntegrationTest {
             capRepository.save(testCap(country));
 
             mvc.perform(delete("/caps/BE-1"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(""));
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(""));
             assertThat(capRepository.findAll()).isEmpty();
         }
 
         @Test
         void shouldReturnNotFoundWhenCapNotFoundByIdForDelete() throws Exception {
             mvc.perform(delete("/caps/BE-1"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("{\"type\":\"about:blank\",\"title\":\"Not Found\",\"status\":404,\"instance\":\"/caps/BE-1\"}")); //todo do better
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().string(expectedCapNotFoundProblemJson()));
         }
     }
 
     @Language("JSON")
     private String capToUpsert() {
         return """
-            {
-                "business_id": "BE-1",
-                "name": "Belgian Cap",
-                "description": "This is a Belgian Cap",
-                "amount": 5,
-                "country": "BE"
-            }
-            """;
+                {
+                    "business_id": "BE-1",
+                    "name": "Belgian Cap",
+                    "description": "This is a Belgian Cap",
+                    "amount": 5,
+                    "country": "BE"
+                }
+                """;
     }
 
     @Language("JSON")
     private String expectedJsonArray() {
         return """
-            [
+                [
+                    {
+                        "business_id": "BE-1",
+                        "name": "Belgian Cap",
+                        "description": "This is a Belgian Cap",
+                        "amount": 5,
+                        "country": {
+                            "name": "Belgium",
+                            "code": "BE"
+                        }
+                    }
+                ]
+                """;
+    }
+
+    @Language("JSON")
+    private String expectedJsonObject() {
+        return """
                 {
                     "business_id": "BE-1",
                     "name": "Belgian Cap",
@@ -192,24 +209,37 @@ class CapIntegrationTest extends IntegrationTest {
                         "code": "BE"
                     }
                 }
-            ]
-            """;
+                """;
     }
 
     @Language("JSON")
-    private String expectedJsonObject() {
+    private String expectedEmptyJsonArray() {
+        return "[]";
+    }
+
+    @Language("JSON")
+    private String expectedCapNotFoundProblemJson() {
         return """
-            {
-                "business_id": "BE-1",
-                "name": "Belgian Cap",
-                "description": "This is a Belgian Cap",
-                "amount": 5,
-                "country": {
-                    "name": "Belgium",
-                    "code": "BE"
+                {
+                  "type": "about:blank",
+                  "title": "Not Found",
+                  "status": 404,
+                  "instance": "/caps/BE-1"
                 }
-            }
-            """;
+                """;
+    }
+
+    @Language("JSON")
+    private static String expectedBadRequestProblemJson() {
+        return """
+                {
+                  "type": "about:blank",
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Unknown country BE",
+                  "instance": "/caps"
+                }
+                """;
     }
 
     private CapEntity testCap(CountryEntity country) {
