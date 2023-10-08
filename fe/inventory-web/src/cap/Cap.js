@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import {deleteApi} from '../util.js';
 
 class Cap extends React.Component {
     static get propTypes() {
@@ -12,9 +13,15 @@ class Cap extends React.Component {
         return (
             <div>
                 <div>{this.props.cap.name} ({this.props.cap.country.code}): {this.props.cap.amount}</div>
-                <p>{this.props.cap.description}</p>
+                <div>{this.props.cap.description}</div>
+                <p><span onClick={() => this.delete(this.props.cap.business_id)}>Delete</span></p>
             </div>
         )
+    }
+
+    delete(businessId) {
+        deleteApi('caps/' + businessId)
+            .catch(err => alert(err));
     }
 }
 

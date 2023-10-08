@@ -8,6 +8,23 @@ export async function getApi(endpoint) {
     return body;
 }
 
+export async function deleteApi(endpoint) {
+    let url = baseUrl + endpoint;
+    const response = await fetch(url, {
+        method: 'DELETE',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer'
+    });
+    const body = await response.text();
+    if (response.status !== 200) throw Error(body.message);
+}
+
 export async function postApi(endpoint, data) {
     let url = baseUrl + endpoint;
     const response = await fetch(url, {
