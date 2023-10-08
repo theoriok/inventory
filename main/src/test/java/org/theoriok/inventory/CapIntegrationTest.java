@@ -1,14 +1,5 @@
 package org.theoriok.inventory;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.from;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,6 +8,15 @@ import org.theoriok.inventory.persistence.entities.CapEntity;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.persistence.repositories.CapRepository;
 import org.theoriok.inventory.persistence.repositories.CountryRepository;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.from;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class CapIntegrationTest extends IntegrationTest {
 
@@ -77,7 +77,7 @@ class CapIntegrationTest extends IntegrationTest {
         void shouldReturnNotFoundWhenCapNotFoundById() throws Exception {
             mvc.perform(get("/caps/BE-1"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(content().string("{\"type\":\"about:blank\",\"title\":\"Not Found\",\"status\":404,\"instance\":\"/caps/BE-1\"}")); //todo do better
         }
 
         @Test
@@ -139,7 +139,7 @@ class CapIntegrationTest extends IntegrationTest {
                     .contentType(APPLICATION_JSON)
                     .content(capToUpsert()))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Unknown country BE"));
+                .andExpect(content().string("{\"type\":\"about:blank\",\"title\":\"Bad Request\",\"status\":400,\"detail\":\"Unknown country BE\",\"instance\":\"/caps\"}")); //todo do better
         }
     }
 
@@ -161,7 +161,7 @@ class CapIntegrationTest extends IntegrationTest {
         void shouldReturnNotFoundWhenCapNotFoundByIdForDelete() throws Exception {
             mvc.perform(delete("/caps/BE-1"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(content().string("{\"type\":\"about:blank\",\"title\":\"Not Found\",\"status\":404,\"instance\":\"/caps/BE-1\"}")); //todo do better
         }
     }
 
