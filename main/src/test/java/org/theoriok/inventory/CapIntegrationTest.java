@@ -77,7 +77,7 @@ class CapIntegrationTest extends IntegrationTest {
         void shouldReturnNotFoundWhenCapNotFoundById() throws Exception {
             mvc.perform(get("/caps/BE-1"))
                     .andExpect(status().isNotFound())
-                    .andExpect(content().string(expectedCapNotFoundProblemJson()));
+                    .andExpect(content().json(expectedCapNotFoundProblemJson()));
         }
 
         @Test
@@ -139,7 +139,7 @@ class CapIntegrationTest extends IntegrationTest {
                             .contentType(APPLICATION_JSON)
                             .content(capToUpsert()))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string(expectedBadRequestProblemJson()));
+                    .andExpect(content().json(expectedBadRequestProblemJson()));
         }
     }
 
@@ -161,7 +161,7 @@ class CapIntegrationTest extends IntegrationTest {
         void shouldReturnNotFoundWhenCapNotFoundByIdForDelete() throws Exception {
             mvc.perform(delete("/caps/BE-1"))
                     .andExpect(status().isNotFound())
-                    .andExpect(content().string(expectedCapNotFoundProblemJson()));
+                    .andExpect(content().json(expectedCapNotFoundProblemJson()));
         }
     }
 
