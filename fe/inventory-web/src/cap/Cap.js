@@ -14,7 +14,7 @@ class Cap extends React.Component {
             <div>
                 <div>{this.props.cap.name} ({this.props.cap.country.code}): {this.props.cap.amount}</div>
                 <div>{this.props.cap.description}</div>
-                <p><span onClick={() => this.delete(this.props.cap.business_id)}>Delete</span></p>
+                <p><button onClick={() => this.delete(this.props.cap.business_id)}>Delete</button></p>
             </div>
         )
     }
