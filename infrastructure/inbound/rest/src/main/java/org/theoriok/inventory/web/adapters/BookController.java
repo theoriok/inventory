@@ -41,7 +41,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDto> findBookById(@PathVariable String id) {
+    public ResponseEntity<BookDto> findBookById(@PathVariable(name = "id") String id) {
         return findBooks.findById(id)
             .map(FindBooks.SingleResponse::book)
             .map(this::toBookDto)
@@ -50,7 +50,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBookById(@PathVariable String id) {
+    public ResponseEntity<Void> deleteBookById(@PathVariable(name = "id") String id) {
         var deleteResult = deleteBook.delete(id);
         return switch (deleteResult) {
             case DELETED -> ResponseEntity.ok().build();

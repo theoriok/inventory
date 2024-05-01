@@ -41,7 +41,7 @@ public class CapController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<CapDto>> findCaps(@RequestParam(required = false) String country) {
+    public ResponseEntity<Collection<CapDto>> findCaps(@RequestParam(required = false, name="country") String country) {
         var capsResponse = findCaps.findAll(new FindCaps.Request(country));
         return ResponseEntity.ok(toCapDtos(capsResponse));
     }
@@ -53,7 +53,7 @@ public class CapController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CapDto> findCapById(@PathVariable String id) {
+    public ResponseEntity<CapDto> findCapById(@PathVariable(name = "id") String id) {
         return findCaps.findById(id)
                 .map(FindCaps.SingleResponse::cap)
                 .map(this::toCapDto)
@@ -62,7 +62,7 @@ public class CapController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCapById(@PathVariable String id) {
+    public ResponseEntity<Void> deleteCapById(@PathVariable(name = "id") String id) {
         var deleteResult = deleteCap.delete(id);
         return switch (deleteResult) {
             case DELETED -> ResponseEntity.ok().build();

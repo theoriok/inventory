@@ -37,7 +37,7 @@ public class CountryController {
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<CountryDto> findCountryByCode(@PathVariable String code) {
+    public ResponseEntity<CountryDto> findCountryByCode(@PathVariable(name = "code") String code) {
         return findCountries.findByCode(code)
             .map(FindCountries.SingleResponse::country)
             .map(this::toCountryDto)
