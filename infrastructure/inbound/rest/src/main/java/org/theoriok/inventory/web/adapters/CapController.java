@@ -41,7 +41,7 @@ public class CapController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<CapDto>> findCaps(@RequestParam(required = false, name="country") String country) {
+    public ResponseEntity<Collection<CapDto>> findCaps(@RequestParam(required = false, name = "country") String country) {
         var capsResponse = findCaps.findAll(new FindCaps.Request(country));
         return ResponseEntity.ok(toCapDtos(capsResponse));
     }
