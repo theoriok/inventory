@@ -1,8 +1,9 @@
 import React from 'react';
 import {getApi} from '../util.js';
-import Book from './Book.js';
+import BookRow from './BookRow.js';
 import * as _ from 'lodash';
 import {Link} from "react-router-dom";
+import {Table} from "react-bootstrap";
 
 class Books extends React.Component {
     constructor(props) {
@@ -16,10 +17,22 @@ class Books extends React.Component {
         return (
             <div>
                 <h1>All of my Books</h1>
-                {
-                    _.sortBy(this.state.books, "author", "title")
-                        .map((book, i) => <Book key={i} book={book}/>)
-                }
+                <Table striped bordered hover>
+                    <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Title</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        _.sortBy(this.state.books, "author", "title")
+                            .map((book, i) => <BookRow key={i} book={book}/>)
+                    }
+                    </tbody>
+
+                </Table>
                 <p><Link to="/book/add">Add</Link></p>
             </div>
         );
