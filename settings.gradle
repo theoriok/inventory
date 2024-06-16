@@ -1,19 +1,19 @@
 rootProject.name = 'inventory'
 
 include('main')
-project(':main').projectDir = file('main')
+project(':main').projectDir = file('code/main')
 
 include('application-api')
-project(':application-api').projectDir = file('application/api')
+project(':application-api').projectDir = file('code/application/api')
 
 include('application-domain')
-project(':application-domain').projectDir = file('application/domain')
+project(':application-domain').projectDir = file('code/application/domain')
 
 include('application-usecases')
-project(':application-usecases').projectDir = file('application/usecases')
+project(':application-usecases').projectDir = file('code/application/usecases')
 
 include('infrastructure-inbound-rest')
-project(':infrastructure-inbound-rest').projectDir = file('infrastructure/inbound/rest')
+project(':infrastructure-inbound-rest').projectDir = file('code/infrastructure/inbound/rest')
 
 include('infrastructure-outbound-postgres')
-project(':infrastructure-outbound-postgres').projectDir = file('infrastructure/outbound/postgres')
+project(':infrastructure-outbound-postgres').projectDir = file('code/infrastructure/outbound/postgres')
