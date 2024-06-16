@@ -9,7 +9,8 @@ build
 
 /build/
 
-/out/
+**/out/**
+**/generated/**
 
 # Ignore Gradle GUI config
 gradle-app.setting
