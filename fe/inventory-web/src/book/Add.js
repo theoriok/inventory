@@ -1,6 +1,8 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {putApi} from "../util";
+import {redirect} from "react-router-dom";
+import Books from "./Books";
 
 class Add extends React.Component {
 
@@ -35,12 +37,14 @@ class Add extends React.Component {
         e.preventDefault();
         const {business_id, title, description, author} = e.target.elements;
 
-        putApi('books', {
+        return putApi('books', {
             business_id: business_id.value,
             title: title.value,
             description: description.value,
             author: author.value
-        });
+        })
+            .then(() => redirect(Books))
+            .catch(err => err);
     }
 }
 
