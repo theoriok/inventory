@@ -1,14 +1,5 @@
 package org.theoriok.inventory;
 
-import org.intellij.lang.annotations.Language;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.theoriok.inventory.persistence.entities.CapEntity;
-import org.theoriok.inventory.persistence.entities.CountryEntity;
-import org.theoriok.inventory.persistence.repositories.CapRepository;
-import org.theoriok.inventory.persistence.repositories.CountryRepository;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -17,6 +8,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.intellij.lang.annotations.Language;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.theoriok.inventory.persistence.entities.CapEntity;
+import org.theoriok.inventory.persistence.entities.CountryEntity;
+import org.theoriok.inventory.persistence.repositories.CapRepository;
+import org.theoriok.inventory.persistence.repositories.CountryRepository;
 
 class CapIntegrationTest extends IntegrationTest {
 

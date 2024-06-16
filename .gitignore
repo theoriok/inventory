@@ -6,6 +6,7 @@ build
 
 *.iml
 .idea
+!.idea/codestyles/*
 
 /build/
 

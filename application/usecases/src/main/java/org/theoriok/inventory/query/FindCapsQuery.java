@@ -1,7 +1,7 @@
 package org.theoriok.inventory.query;
 
-import org.theoriok.inventory.mappers.CapCommandMapper;
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.mappers.CapCommandMapper;
 import org.theoriok.inventory.port.PersistCapPort;
 
 import java.util.Optional;

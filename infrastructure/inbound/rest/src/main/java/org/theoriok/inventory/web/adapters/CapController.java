@@ -1,5 +1,8 @@
 package org.theoriok.inventory.web.adapters;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 import io.micrometer.core.annotation.Timed;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +24,6 @@ import org.theoriok.inventory.web.dto.UpsertCapDto;
 
 import java.util.Collection;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("/caps")
