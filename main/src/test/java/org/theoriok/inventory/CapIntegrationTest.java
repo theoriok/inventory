@@ -31,7 +31,7 @@ class CapIntegrationTest extends IntegrationTest {
         void shouldReturnEmptyArrayWhenNoCapsFound() throws Exception {
             mvc.perform(get("/caps"))
                     .andExpect(status().isOk())
-                    .andExpect(content().json(expectedEmptyJsonArray()));
+                    .andExpect(content().json("[]"));
         }
 
         @Test
@@ -42,7 +42,7 @@ class CapIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/caps"))
                     .andExpect(status().isOk())
-                    .andExpect(content().json(expectedJsonArray()));
+                    .andExpect(content().json(expectedCaps()));
         }
 
         @Test
@@ -56,7 +56,7 @@ class CapIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/caps?country=BE"))
                     .andExpect(status().isOk())
-                    .andExpect(content().json(expectedJsonArray()));
+                    .andExpect(content().json(expectedCaps()));
         }
 
         @Test
@@ -70,7 +70,7 @@ class CapIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/caps?country=US"))
                     .andExpect(status().isOk())
-                    .andExpect(content().json(expectedEmptyJsonArray()));
+                    .andExpect(content().json("[]"));
         }
 
         @Test
@@ -88,7 +88,7 @@ class CapIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/caps/BE-1"))
                     .andExpect(status().isOk())
-                    .andExpect(content().json(expectedJsonObject()));
+                    .andExpect(content().json(expectedCap()));
         }
     }
 
@@ -179,7 +179,7 @@ class CapIntegrationTest extends IntegrationTest {
     }
 
     @Language("JSON")
-    private String expectedJsonArray() {
+    private String expectedCaps() {
         return """
                 [
                     {
@@ -197,7 +197,7 @@ class CapIntegrationTest extends IntegrationTest {
     }
 
     @Language("JSON")
-    private String expectedJsonObject() {
+    private String expectedCap() {
         return """
                 {
                     "business_id": "BE-1",
@@ -210,11 +210,6 @@ class CapIntegrationTest extends IntegrationTest {
                     }
                 }
                 """;
-    }
-
-    @Language("JSON")
-    private String expectedEmptyJsonArray() {
-        return "[]";
     }
 
     @Language("JSON")

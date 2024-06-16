@@ -36,7 +36,7 @@ class BookIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/books"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedJsonArray()));
+                .andExpect(content().json(expectedBooks()));
         }
 
         @Test
@@ -45,7 +45,7 @@ class BookIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/books/BOOK-1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedJsonObject()));
+                .andExpect(content().json(expectedBook()));
         }
 
         @Test
@@ -120,7 +120,7 @@ class BookIntegrationTest extends IntegrationTest {
     }
 
     @Language("JSON")
-    private String expectedJsonArray() {
+    private String expectedBooks() {
         return """
             [
                 {
@@ -134,7 +134,7 @@ class BookIntegrationTest extends IntegrationTest {
     }
 
     @Language("JSON")
-    private String expectedJsonObject() {
+    private String expectedBook() {
         return """
             {
                 "business_id": "BOOK-1",

@@ -32,7 +32,7 @@ public class CountryIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/countries"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedJsonArray()));
+                .andExpect(content().json(expectedCountries()));
         }
 
         @Test
@@ -49,12 +49,12 @@ public class CountryIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/countries/BE"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedJsonObject()));
+                .andExpect(content().json(expectedCountry()));
         }
     }
 
     @Language("JSON")
-    private String expectedJsonArray() {
+    private String expectedCountries() {
         return """
             [
                 {
@@ -66,7 +66,7 @@ public class CountryIntegrationTest extends IntegrationTest {
     }
 
     @Language("JSON")
-    private String expectedJsonObject() {
+    private String expectedCountry() {
         return """
             {
                 "name": "Belgium",
