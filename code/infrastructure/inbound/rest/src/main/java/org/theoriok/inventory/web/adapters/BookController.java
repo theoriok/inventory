@@ -51,8 +51,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookById(@PathVariable(name = "id") String id) {
-        var deleteResult = deleteBook.delete(id);
-        return switch (deleteResult) {
+        return switch (deleteBook.delete(id)) {
             case DELETED -> ResponseEntity.ok().build();
             case NOT_FOUND -> ResponseEntity.notFound().build();
         };
@@ -66,10 +65,10 @@ public class BookController {
 
     private UpsertBook.Request toUpsertRequest(BookDto bookDto) {
         return new UpsertBook.Request(
-            bookDto.getBusinessId(),
-            bookDto.getTitle(),
-            bookDto.getAuthor(),
-            bookDto.getDescription()
+            bookDto.businessId(),
+            bookDto.title(),
+            bookDto.author(),
+            bookDto.description()
         );
     }
 
@@ -87,5 +86,4 @@ public class BookController {
             book.description()
         );
     }
-
 }

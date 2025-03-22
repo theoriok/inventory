@@ -26,8 +26,7 @@ public class CountryController {
 
     @GetMapping
     public ResponseEntity<Collection<CountryDto>> findCountries() {
-        var countriesResponse = findCountries.findAll();
-        return ResponseEntity.ok(toCountryDtos(countriesResponse));
+        return ResponseEntity.ok(toCountryDtos(findCountries.findAll()));
     }
 
     private List<CountryDto> toCountryDtos(FindCountries.ListResponse countriesResponse) {

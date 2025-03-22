@@ -48,23 +48,22 @@ public class CapController {
 
     private List<CapDto> toCapDtos(FindCaps.ListResponse capsResponse) {
         return capsResponse.caps().stream()
-                .map(this::toCapDto)
-                .toList();
+            .map(this::toCapDto)
+            .toList();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CapDto> findCapById(@PathVariable(name = "id") String id) {
         return findCaps.findById(id)
-                .map(FindCaps.SingleResponse::cap)
-                .map(this::toCapDto)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
+            .map(FindCaps.SingleResponse::cap)
+            .map(this::toCapDto)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCapById(@PathVariable(name = "id") String id) {
-        var deleteResult = deleteCap.delete(id);
-        return switch (deleteResult) {
+        return switch (deleteCap.delete(id)) {
             case DELETED -> ResponseEntity.ok().build();
             case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
         };
@@ -72,40 +71,36 @@ public class CapController {
 
     @PutMapping
     public ResponseEntity<?> upsertCap(@RequestBody UpsertCapDto capDto) {
-        var upsertResult = upsertCap.upsert(toUpsertRequest(capDto));
-        return switch (upsertResult) {
+        return switch (upsertCap.upsert(toUpsertRequest(capDto))) {
             case UPSERTED -> ResponseEntity.noContent().build();
-            case UNKNOWN_COUNTRY -> ResponseEntity.of(
-                    ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.getCountry()))
-            ).build();
+            case UNKNOWN_COUNTRY -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();
         };
     }
 
     private CapDto toCapDto(FindCaps.Cap domainObject) {
         return new CapDto(
-                domainObject.businessId(),
-                domainObject.name(),
-                domainObject.description(),
-                domainObject.amount(),
-                toCountryDto(domainObject.country())
+            domainObject.businessId(),
+            domainObject.name(),
+            domainObject.description(),
+            domainObject.amount(),
+            toCountryDto(domainObject.country())
         );
     }
 
     private CountryDto toCountryDto(FindCaps.Country domainObject) {
         return new CountryDto(
-                domainObject.name(),
-                domainObject.code()
+            domainObject.name(),
+            domainObject.code()
         );
     }
 
     private UpsertCap.Request toUpsertRequest(UpsertCapDto dto) {
         return new UpsertCap.Request(
-                dto.getBusinessId(),
-                dto.getName(),
-                dto.getDescription(),
-                dto.getAmount(),
-                dto.getCountry()
+            dto.businessId(),
+            dto.name(),
+            dto.description(),
+            dto.amount(),
+            dto.country()
         );
     }
-
 }
