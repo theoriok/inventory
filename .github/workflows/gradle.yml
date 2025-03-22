@@ -51,6 +51,7 @@ jobs:
             --enableRetired
             --exclude **/package.json
             --exclude **/package-lock.json
+            --exclude **/yarn.json
       - name: Upload Test results
         uses: actions/upload-artifact@master
         with:
