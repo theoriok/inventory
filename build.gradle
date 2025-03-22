@@ -21,7 +21,7 @@ ext {
     annotationsVersion = '24.1.0'
     checkstyleVersion = "10.21.0"
     pmdVersion = '7.11.0'
-    recordBuilderVersion = '42'
+    recordBuilderVersion = '44'
     problemVersion = '0.29.1'
 }
 
