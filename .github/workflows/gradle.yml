@@ -18,7 +18,7 @@ permissions:
 
 defaults:
   run:
-    working-directory: ./code
+    working-directory: ./be
 
 jobs:
   build:
