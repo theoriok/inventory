@@ -1,0 +1,27 @@
+name: frontend build
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - fe/**
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - fe/**
+
+defaults:
+  run:
+    working-directory: ./fe/inventory-frontend
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dcodeIO/setup-node-nvm@master
+      - run: nvm install
+      - run: corepack enable
+      - run: yarn install
