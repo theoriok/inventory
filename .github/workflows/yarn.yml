@@ -3,8 +3,8 @@ name: frontend build
 on:
   push:
     branches: [ "main" ]
-    paths:
-      - fe/**
+#    paths:
+#      - fe/**
   pull_request:
     branches: [ "main" ]
     paths:
