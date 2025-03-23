@@ -4,11 +4,12 @@ import {AxiosResponse} from "axios";
 
 export const bookApi: BookApi = {
     async fetchBook(business_id: string): Promise<Book> {
-        return baseApi.get(`/books/${business_id}`)
+        const {data: book}: AxiosResponse<Book> = await baseApi.get(`/books/${business_id}`);
+        return book;
     },
 
     async fetchBooks(): Promise<ListResponse<Book>> {
-        const {data}: AxiosResponse<Book[]> = await baseApi.get('/books');
-        return {items: data, total: data.length};
+        const {data: books}: AxiosResponse<Book[]> = await baseApi.get('/books');
+        return {items: books, total: books.length};
     }
 }

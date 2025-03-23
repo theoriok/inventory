@@ -1,26 +1,45 @@
-import {describe, expect, it, vi} from 'vitest';
+import {describe, expect, test, vi} from 'vitest';
 
 import {baseApi} from './base.api.ts';
 import {bookApi} from './book.api.ts';
 import {generateBook} from '../__test__/generators/book.generator.ts';
 
 describe('BookApi', () => {
-    it('returns the books', async () => {
-        const books = [generateBook()];
-        vi.spyOn(baseApi, 'get').mockResolvedValue(books);
+    describe('fetch books', () => {
+        test('should fetch the user info', async () => {
+            vi.spyOn(baseApi, 'get').mockResolvedValue({data: [generateBook()]});
 
-        const result = await bookApi.fetchBooks();
+            await bookApi.fetchBooks();
 
-        expect(result).toEqual({items: books, total: 1});
+            expect(baseApi.get).toHaveBeenCalledWith(`/books`);
+        });
+
+        test('returns the books', async () => {
+            const books = [generateBook()];
+            vi.spyOn(baseApi, 'get').mockResolvedValue({data: books});
+
+            const result = await bookApi.fetchBooks();
+
+            expect(result).toEqual({items: books, total: 1});
+        });
     });
 
-    it('returns a single book', async () => {
-        const book = generateBook();
-        vi.spyOn(baseApi, 'get').mockResolvedValue(book);
+    describe('fetch book by id', () => {
+        test('should fetch the user info', async () => {
+            vi.spyOn(baseApi, 'get').mockResolvedValue({data: generateBook()});
 
-        const result = await bookApi.fetchBook('123');
+            await bookApi.fetchBook('123');
 
-        expect(result).toEqual(book);
+            expect(baseApi.get).toHaveBeenCalledWith(`/books/123`);
+        });
+
+        test('returns a single book', async () => {
+            const book = generateBook();
+            vi.spyOn(baseApi, 'get').mockResolvedValue({data: book});
+
+            const result = await bookApi.fetchBook('123');
+
+            expect(result).toEqual(book);
+        });
     });
-
 });
