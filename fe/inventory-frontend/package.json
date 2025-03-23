@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint inventory-frontend",
+    "lint": "eslint ./src --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest --run --reporter verbose --reporter junit --outputFile junit-report.xml",
+    "test:watch": "vitest watch",
     "preview": "vite preview"
   },
   "dependencies": {
