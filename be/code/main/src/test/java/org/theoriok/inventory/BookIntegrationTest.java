@@ -52,7 +52,7 @@ class BookIntegrationTest extends IntegrationTest {
         void shouldReturnNotFoundWhenBookNotFoundById() throws Exception {
             mvc.perform(get("/books/BOOK-1"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(content().json(expectedBookNotFoundProblemJson()));
         }
     }
 
@@ -107,7 +107,7 @@ class BookIntegrationTest extends IntegrationTest {
         void shouldReturnNotFoundWhenBookNotFoundByIdForDelete() throws Exception {
             mvc.perform(delete("/books/BOOK-1"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(content().json(expectedBookNotFoundProblemJson()));
         }
     }
 
@@ -143,6 +143,18 @@ class BookIntegrationTest extends IntegrationTest {
                 "description": "In a hole under the ground, there lived a Hobbit."
             }
             """;
+    }
+
+    @Language("JSON")
+    private String expectedBookNotFoundProblemJson() {
+        return """
+                {
+                  "type": "about:blank",
+                  "title": "Not Found",
+                  "status": 404,
+                  "instance": "/books/BOOK-1"
+                }
+                """;
     }
 
     @Language("JSON")

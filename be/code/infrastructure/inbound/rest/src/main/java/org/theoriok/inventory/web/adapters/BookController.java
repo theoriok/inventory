@@ -1,6 +1,9 @@
 package org.theoriok.inventory.web.adapters;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 import io.micrometer.core.annotation.Timed;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,14 +49,14 @@ public class BookController {
             .map(FindBooks.SingleResponse::book)
             .map(this::toBookDto)
             .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookById(@PathVariable(name = "id") String id) {
         return switch (deleteBook.delete(id)) {
             case DELETED -> ResponseEntity.ok().build();
-            case NOT_FOUND -> ResponseEntity.notFound().build();
+            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
         };
     }
 

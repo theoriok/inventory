@@ -39,7 +39,7 @@ public class CountryIntegrationTest extends IntegrationTest {
         void shouldReturnNotFoundWhenCountryNotFoundById() throws Exception {
             mvc.perform(get("/countries/BE-1"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(""));
+                .andExpect(content().json(expectedCountryNotFoundProblemJson()));
         }
 
         @Test
@@ -75,10 +75,23 @@ public class CountryIntegrationTest extends IntegrationTest {
             """;
     }
 
+    @Language("JSON")
+    private String expectedCountryNotFoundProblemJson() {
+        return """
+                {
+                  "type": "about:blank",
+                  "title": "Not Found",
+                  "status": 404,
+                  "instance": "/countries/BE-1"
+                }
+                """;
+    }
+
     private CountryEntity testCountry() {
         return testCountry("BE");
     }
 
+    @SuppressWarnings("SameParameterValue")
     private CountryEntity testCountry(String code) {
         return new CountryEntity("Belgium", code);
     }

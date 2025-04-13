@@ -1,6 +1,9 @@
 package org.theoriok.inventory.web.adapters;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 import io.micrometer.core.annotation.Timed;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +44,7 @@ public class CountryController {
             .map(FindCountries.SingleResponse::country)
             .map(this::toCountryDto)
             .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
     }
 
     private CountryDto toCountryDto(FindCountries.Country domainObject) {
