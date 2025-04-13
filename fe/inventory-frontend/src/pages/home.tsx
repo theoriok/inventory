@@ -1,4 +1,4 @@
-import {Table} from "antd";
+import {Empty, Table} from "antd";
 import {FC} from "react";
 import {useBooks} from "../hooks/book.hook.ts";
 
@@ -21,15 +21,18 @@ export const HomePage: FC = () => {
             key: 'description',
         },
     ];
-    console.log(books);
-    const data = [
-        {"title": "Lord of the Rings", "author": "J.R.R. Tolkien", "description": "Best book of the 20th century."},
-        {"title": "Game of Thrones", "author": "George R.R. Martin", "description": "Best book of the 21st century."},
-    ];
     return (
         <>
             <h1>Books</h1>
-            <Table dataSource={data} columns={columns} showHeader={true}></Table>
+            <Table dataSource={books?.items} columns={columns} showHeader={true} locale={{
+                emptyText: (
+                    <Empty
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        description="No Books Available"
+                        data-testid="no-books-message"
+                    />
+                ),
+            }} data-testid="books-table"></Table>
         </>
     );
 };
