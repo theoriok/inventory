@@ -141,7 +141,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/pro-components@npm:^2.8.5":
+"@ant-design/pro-components@npm:2.8.6":
   version: 2.8.6
   resolution: "@ant-design/pro-components@npm:2.8.6"
   dependencies:
@@ -1038,7 +1038,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.23.0, @eslint/js@npm:^9.9.0":
+"@eslint/js@npm:9.23.0":
   version: 9.23.0
   resolution: "@eslint/js@npm:9.23.0"
   checksum: 10c0/4e70869372b6325389e0ab51cac6d3062689807d1cef2c3434857571422ce11dde3c62777af85c382b9f94d937127598d605d2086787f08611351bf99faded81
@@ -1062,7 +1062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@faker-js/faker@npm:^9.5.0":
+"@faker-js/faker@npm:9.6.0":
   version: 9.6.0
   resolution: "@faker-js/faker@npm:9.6.0"
   checksum: 10c0/57f76aba8744ac5f588bfcf55e61ab6f1b61664f0d1cd6cc9d9ae5bf9376bdb48d867487ace638bee393de126257b7fe6ebd602c9efd3346e7ee10e8643f1cdc
@@ -1504,7 +1504,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.66.3":
+"@tanstack/react-query@npm:5.69.0":
   version: 5.69.0
   resolution: "@tanstack/react-query@npm:5.69.0"
   dependencies:
@@ -1515,7 +1515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^10.4.0":
+"@testing-library/dom@npm:10.4.0":
   version: 10.4.0
   resolution: "@testing-library/dom@npm:10.4.0"
   dependencies:
@@ -1531,7 +1531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^6.6.3":
+"@testing-library/jest-dom@npm:6.6.3":
   version: 6.6.3
   resolution: "@testing-library/jest-dom@npm:6.6.3"
   dependencies:
@@ -1546,7 +1546,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^16.3.0":
+"@testing-library/react@npm:16.3.0":
   version: 16.3.0
   resolution: "@testing-library/react@npm:16.3.0"
   dependencies:
@@ -1642,7 +1642,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4":
+"@types/lodash@npm:4.17.16":
   version: 4.17.16
   resolution: "@types/lodash@npm:4.17.16"
   checksum: 10c0/cf017901b8ab1d7aabc86d5189d9288f4f99f19a75caf020c0e2c77b8d4cead4db0d0b842d009b029339f92399f49f34377dd7c2721053388f251778b4c23534
@@ -1795,7 +1795,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^4.3.1":
+"@vitejs/plugin-react@npm:4.3.4":
   version: 4.3.4
   resolution: "@vitejs/plugin-react@npm:4.3.4"
   dependencies:
@@ -2009,7 +2009,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:^5.20.5":
+"antd@npm:5.24.5":
   version: 5.24.5
   resolution: "antd@npm:5.24.5"
   dependencies:
@@ -2106,7 +2106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.7.9":
+"axios@npm:1.8.4":
   version: 1.8.4
   resolution: "axios@npm:1.8.4"
   dependencies:
@@ -2692,7 +2692,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:^5.1.0-rc.0":
+"eslint-plugin-react-hooks@npm:5.2.0":
   version: 5.2.0
   resolution: "eslint-plugin-react-hooks@npm:5.2.0"
   peerDependencies:
@@ -2701,7 +2701,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-refresh@npm:^0.4.9":
+"eslint-plugin-react-refresh@npm:0.4.19":
   version: 0.4.19
   resolution: "eslint-plugin-react-refresh@npm:0.4.19"
   peerDependencies:
@@ -2741,7 +2741,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.9.0":
+"eslint@npm:9.23.0":
   version: 9.23.0
   resolution: "eslint@npm:9.23.0"
   dependencies:
@@ -3108,6 +3108,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"globals@npm:16.0.0":
+  version: 16.0.0
+  resolution: "globals@npm:16.0.0"
+  checksum: 10c0/8906d5f01838df64a81d6c2a7b7214312e2216cf65c5ed1546dc9a7d0febddf55ffa906cf04efd5b01eec2534d6f14859a89535d1a68241832810e41ef3fd5bb
+  languageName: node
+  linkType: hard
+
 "globals@npm:^11.1.0":
   version: 11.12.0
   resolution: "globals@npm:11.12.0"
@@ -3119,13 +3126,6 @@ __metadata:
   version: 14.0.0
   resolution: "globals@npm:14.0.0"
   checksum: 10c0/b96ff42620c9231ad468d4c58ff42afee7777ee1c963013ff8aabe095a451d0ceeb8dcd8ef4cbd64d2538cef45f787a78ba3a9574f4a634438963e334471302d
-  languageName: node
-  linkType: hard
-
-"globals@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "globals@npm:16.0.0"
-  checksum: 10c0/8906d5f01838df64a81d6c2a7b7214312e2216cf65c5ed1546dc9a7d0febddf55ffa906cf04efd5b01eec2534d6f14859a89535d1a68241832810e41ef3fd5bb
   languageName: node
   linkType: hard
 
@@ -3272,31 +3272,31 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inventory-frontend@workspace:."
   dependencies:
-    "@ant-design/pro-components": "npm:^2.8.5"
-    "@eslint/js": "npm:^9.9.0"
-    "@faker-js/faker": "npm:^9.5.0"
-    "@tanstack/react-query": "npm:^5.66.3"
-    "@testing-library/dom": "npm:^10.4.0"
-    "@testing-library/jest-dom": "npm:^6.6.3"
-    "@testing-library/react": "npm:^16.3.0"
-    "@types/lodash": "npm:^4"
+    "@ant-design/pro-components": "npm:2.8.6"
+    "@eslint/js": "npm:9.23.0"
+    "@faker-js/faker": "npm:9.6.0"
+    "@tanstack/react-query": "npm:5.69.0"
+    "@testing-library/dom": "npm:10.4.0"
+    "@testing-library/jest-dom": "npm:6.6.3"
+    "@testing-library/react": "npm:16.3.0"
+    "@types/lodash": "npm:4.17.16"
     "@types/react": "npm:19.0.12"
     "@types/react-dom": "npm:19.0.4"
-    "@vitejs/plugin-react": "npm:^4.3.1"
-    antd: "npm:^5.20.5"
-    axios: "npm:^1.7.9"
-    eslint: "npm:^9.9.0"
-    eslint-plugin-react-hooks: "npm:^5.1.0-rc.0"
-    eslint-plugin-react-refresh: "npm:^0.4.9"
-    globals: "npm:^16.0.0"
-    jsdom: "npm:^26.1.0"
-    lodash: "npm:^4.17.21"
-    react: "npm:^19.0.0"
-    react-dom: "npm:^19.0.0"
-    typescript: "npm:^5.5.3"
-    typescript-eslint: "npm:^8.0.1"
+    "@vitejs/plugin-react": "npm:4.3.4"
+    antd: "npm:5.24.5"
+    axios: "npm:1.8.4"
+    eslint: "npm:9.23.0"
+    eslint-plugin-react-hooks: "npm:5.2.0"
+    eslint-plugin-react-refresh: "npm:0.4.19"
+    globals: "npm:16.0.0"
+    jsdom: "npm:26.1.0"
+    lodash: "npm:4.17.21"
+    react: "npm:19.0.0"
+    react-dom: "npm:19.0.0"
+    typescript: "npm:5.8.2"
+    typescript-eslint: "npm:8.28.0"
     vite: "npm:6.2.6"
-    vitest: "npm:^3.0.0"
+    vitest: "npm:3.1.1"
   languageName: unknown
   linkType: soft
 
@@ -3406,7 +3406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^26.1.0":
+"jsdom@npm:26.1.0":
   version: 26.1.0
   resolution: "jsdom@npm:26.1.0"
   dependencies:
@@ -3529,7 +3529,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.0.1, lodash@npm:^4.17.21":
+"lodash@npm:4.17.21, lodash@npm:^4.0.1, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -4693,7 +4693,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^19.0.0":
+"react-dom@npm:19.0.0":
   version: 19.0.0
   resolution: "react-dom@npm:19.0.0"
   dependencies:
@@ -4739,7 +4739,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.0.0":
+"react@npm:19.0.0":
   version: 19.0.0
   resolution: "react@npm:19.0.0"
   checksum: 10c0/9cad8f103e8e3a16d15cb18a0d8115d8bd9f9e1ce3420310aea381eb42aa0a4f812cf047bb5441349257a05fba8a291515691e3cb51267279b2d2c3253f38471
@@ -5302,7 +5302,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-eslint@npm:^8.0.1":
+"typescript-eslint@npm:8.28.0":
   version: 8.28.0
   resolution: "typescript-eslint@npm:8.28.0"
   dependencies:
@@ -5316,7 +5316,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.5.3":
+"typescript@npm:5.8.2":
   version: 5.8.2
   resolution: "typescript@npm:5.8.2"
   bin:
@@ -5326,7 +5326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.5.3#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>":
   version: 5.8.2
   resolution: "typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"
   bin:
@@ -5505,7 +5505,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^3.0.0":
+"vitest@npm:3.1.1":
   version: 3.1.1
   resolution: "vitest@npm:3.1.1"
   dependencies:
