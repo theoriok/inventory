@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.command.DeleteBook;
 import org.theoriok.inventory.command.UpsertBook;
 import org.theoriok.inventory.query.FindBooks;
@@ -68,7 +69,7 @@ public class BookController {
 
     private UpsertBook.Request toUpsertRequest(BookDto bookDto) {
         return new UpsertBook.Request(
-            bookDto.businessId(),
+            new BookId(bookDto.businessId()),
             bookDto.title(),
             bookDto.author(),
             bookDto.description()
@@ -83,7 +84,7 @@ public class BookController {
 
     private BookDto toBookDto(FindBooks.Book book) {
         return new BookDto(
-            book.businessId(),
+            book.businessId().value(),
             book.title(),
             book.author(),
             book.description()

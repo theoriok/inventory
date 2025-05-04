@@ -32,12 +32,12 @@ public class PersistBookAdapter implements PersistBookPort {
     @Override
     public void upsert(Book book) {
         var entity = bookDomainMapper.toEntity(book);
-        bookRepository.findByBusinessId(book.businessId()).ifPresent(foundEntity -> entity.setId(foundEntity.getId()));
+        bookRepository.findByBusinessId(book.businessId().value()).ifPresent(foundEntity -> entity.setId(foundEntity.getId()));
         bookRepository.save(entity);
     }
 
     @Override
     public void delete(Book book) {
-        bookRepository.delete(bookRepository.findByBusinessId(book.businessId()).orElseThrow());
+        bookRepository.delete(bookRepository.findByBusinessId(book.businessId().value()).orElseThrow());
     }
 }

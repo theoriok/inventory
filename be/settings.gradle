@@ -3,14 +3,17 @@ rootProject.name = 'inventory'
 include('main')
 project(':main').projectDir = file('code/main')
 
+include('vocabulary')
+project(':vocabulary').projectDir = file('code/vocabulary')
+
 include('application-api')
 project(':application-api').projectDir = file('code/application/api')
 
-include('application-domain')
-project(':application-domain').projectDir = file('code/application/domain')
-
 include('application-usecases')
 project(':application-usecases').projectDir = file('code/application/usecases')
+
+include('domain')
+project(':domain').projectDir = file('code/domain')
 
 include('infrastructure-inbound-rest')
 project(':infrastructure-inbound-rest').projectDir = file('code/infrastructure/inbound/rest')

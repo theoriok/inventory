@@ -145,8 +145,8 @@ project(":main") {
 
     dependencies {
         implementation project(":application-api")
-        implementation project(":application-domain")
         implementation project(":application-usecases")
+        implementation project(":domain")
         implementation project(":infrastructure-inbound-rest")
         implementation project(":infrastructure-outbound-postgres")
         implementation 'org.springframework.boot:spring-boot-starter'
@@ -172,14 +172,19 @@ project(":main") {
 
 project(":application-api") {
     apply plugin: 'java-library'
+    dependencies {
+        implementation project(":vocabulary")
+    }
 }
 
-project(":application-domain") {
+project(":domain") {
     apply plugin: 'java-library'
 
     dependencies {
         annotationProcessor "io.soabase.record-builder:record-builder-processor:$recordBuilderVersion"
         compileOnly "io.soabase.record-builder:record-builder-core:$recordBuilderVersion"
+
+        implementation project(":vocabulary")
     }
 }
 
@@ -188,7 +193,8 @@ project(":application-usecases") {
 
     dependencies {
         implementation project(":application-api")
-        implementation project(":application-domain")
+        implementation project(":domain")
+        implementation project(":vocabulary")
         implementation 'org.springframework.boot:spring-boot-starter'
 
         implementation 'org.springframework:spring-context'
@@ -200,6 +206,7 @@ project(":infrastructure-inbound-rest") {
 
     dependencies {
         implementation project(":application-api")
+        implementation project(":vocabulary")
         implementation 'org.apache.logging.log4j:log4j-web'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -212,7 +219,8 @@ project(":infrastructure-outbound-postgres") {
     apply plugin: 'java-library'
 
     dependencies {
-        implementation project(":application-domain")
+        implementation project(":domain")
+        implementation project(":vocabulary")
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'com.fasterxml.jackson.core:jackson-databind'
         runtimeOnly "org.postgresql:postgresql"
