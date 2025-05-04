@@ -4,6 +4,7 @@ import static org.theoriok.inventory.command.DeleteBook.Result.DELETED;
 import static org.theoriok.inventory.command.DeleteBook.Result.NOT_FOUND;
 
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.port.PersistBookPort;
 
 @Component
@@ -15,13 +16,7 @@ public class DeleteBookCommand implements DeleteBook {
     }
 
     @Override
-    public Result delete(String businessId) {
-        return persistBookPort.findById(businessId)
-            .map(book -> {
-                    persistBookPort.delete(book);
-                    return DELETED;
-                }
-            )
-            .orElse(NOT_FOUND);
+    public Result delete(BookId businessId) {
+        return persistBookPort.delete(businessId) ? DELETED : NOT_FOUND;
     }
 }

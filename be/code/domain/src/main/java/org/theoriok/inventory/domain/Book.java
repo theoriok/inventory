@@ -10,4 +10,12 @@ public record Book(
     String author,
     String description
 ) implements BookBuilder.With {
+    public static Book create(BookId bookId, String author, String title, String description) {
+        return BookBuilder.builder()
+            .businessId(bookId)
+            .title(title)
+            .author(author)
+            .description(description)
+            .build();
+    }
 }

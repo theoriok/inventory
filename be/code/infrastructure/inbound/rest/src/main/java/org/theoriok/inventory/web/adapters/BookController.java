@@ -46,8 +46,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookDto> findBookById(@PathVariable(name = "id") String id) {
-        return findBooks.findById(id)
-            .map(FindBooks.SingleResponse::book)
+        return findBooks.findById(new BookId(id))
             .map(this::toBookDto)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
@@ -55,7 +54,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookById(@PathVariable(name = "id") String id) {
-        return switch (deleteBook.delete(id)) {
+        return switch (deleteBook.delete(new BookId(id))) {
             case DELETED -> ResponseEntity.ok().build();
             case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
         };
@@ -76,8 +75,8 @@ public class BookController {
         );
     }
 
-    private List<BookDto> toBookDtos(FindBooks.ListResponse listResponse) {
-        return listResponse.books().stream()
+    private List<BookDto> toBookDtos(List<FindBooks.Book> listResponse) {
+        return listResponse.stream()
             .map(this::toBookDto)
             .toList();
     }

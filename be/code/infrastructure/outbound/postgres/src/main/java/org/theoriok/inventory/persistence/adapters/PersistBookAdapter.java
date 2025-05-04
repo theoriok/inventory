@@ -1,7 +1,9 @@
 package org.theoriok.inventory.persistence.adapters;
 
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.domain.Book;
+import org.theoriok.inventory.persistence.entities.BookEntity;
 import org.theoriok.inventory.persistence.mappers.BookEntityMapper;
 import org.theoriok.inventory.persistence.repositories.BookRepository;
 import org.theoriok.inventory.port.PersistBookPort;
@@ -25,8 +27,8 @@ public class PersistBookAdapter implements PersistBookPort {
     }
 
     @Override
-    public Optional<Book> findById(String businessId) {
-        return bookRepository.findByBusinessId(businessId).map(bookDomainMapper::toDomainObject);
+    public Optional<Book> findById(BookId businessId) {
+        return bookRepository.findByBusinessId(businessId.value()).map(bookDomainMapper::toDomainObject);
     }
 
     @Override
@@ -37,7 +39,9 @@ public class PersistBookAdapter implements PersistBookPort {
     }
 
     @Override
-    public void delete(Book book) {
-        bookRepository.delete(bookRepository.findByBusinessId(book.businessId().value()).orElseThrow());
+    public boolean delete(BookId bookId) {
+        Optional<BookEntity> bookEntity = bookRepository.findByBusinessId(bookId.value());
+        bookEntity.ifPresent(bookRepository::delete);
+        return bookEntity.isPresent();
     }
 }
