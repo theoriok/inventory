@@ -1,30 +1,28 @@
 package org.theoriok.inventory.query;
 
 import org.springframework.stereotype.Component;
-import org.theoriok.inventory.mappers.CountryCommandMapper;
+import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.port.PersistCountryPort;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
 public class FindCountriesQuery implements FindCountries {
     private final PersistCountryPort persistCountryPort;
 
-    private final CountryCommandMapper countryCommandMapper;
-
-    public FindCountriesQuery(PersistCountryPort persistCountryPort, CountryCommandMapper countryCommandMapper) {
+    public FindCountriesQuery(PersistCountryPort persistCountryPort) {
         this.persistCountryPort = persistCountryPort;
-        this.countryCommandMapper = countryCommandMapper;
     }
 
     @Override
-    public ListResponse findAll() {
+    public List<Country> findAll() {
         var countries = persistCountryPort.findAll();
-        return countryCommandMapper.toListResponse(countries);
+        return countries.stream().toList();
     }
 
     @Override
-    public Optional<SingleResponse> findByCode(String code) {
-        return persistCountryPort.findByCode(code).map(countryCommandMapper::toSingleResponse);
+    public Optional<Country> findByCode(String code) {
+        return persistCountryPort.findByCode(code);
     }
 }

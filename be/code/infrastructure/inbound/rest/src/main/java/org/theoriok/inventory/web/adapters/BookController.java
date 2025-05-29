@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.command.DeleteBook;
 import org.theoriok.inventory.command.UpsertBook;
+import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.query.FindBooks;
 import org.theoriok.inventory.web.dto.BookDto;
 
@@ -75,13 +76,13 @@ public class BookController {
         );
     }
 
-    private List<BookDto> toBookDtos(List<FindBooks.Book> listResponse) {
+    private List<BookDto> toBookDtos(List<Book> listResponse) {
         return listResponse.stream()
             .map(this::toBookDto)
             .toList();
     }
 
-    private BookDto toBookDto(FindBooks.Book book) {
+    private BookDto toBookDto(Book book) {
         return new BookDto(
             book.businessId().value(),
             book.title(),

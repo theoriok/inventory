@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.theoriok.inventory.command.DeleteCap;
 import org.theoriok.inventory.command.UpsertCap;
+import org.theoriok.inventory.domain.Cap;
+import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.query.FindCaps;
 import org.theoriok.inventory.web.dto.CapDto;
 import org.theoriok.inventory.web.dto.CountryDto;
@@ -46,8 +48,8 @@ public class CapController {
         return ResponseEntity.ok(toCapDtos(capsResponse));
     }
 
-    private List<CapDto> toCapDtos(FindCaps.ListResponse capsResponse) {
-        return capsResponse.caps().stream()
+    private List<CapDto> toCapDtos(List<Cap> capsResponse) {
+        return capsResponse.stream()
             .map(this::toCapDto)
             .toList();
     }
@@ -55,7 +57,6 @@ public class CapController {
     @GetMapping("/{id}")
     public ResponseEntity<CapDto> findCapById(@PathVariable(name = "id") String id) {
         return findCaps.findById(id)
-            .map(FindCaps.SingleResponse::cap)
             .map(this::toCapDto)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
@@ -77,7 +78,7 @@ public class CapController {
         };
     }
 
-    private CapDto toCapDto(FindCaps.Cap domainObject) {
+    private CapDto toCapDto(Cap domainObject) {
         return new CapDto(
             domainObject.businessId(),
             domainObject.name(),
@@ -87,7 +88,7 @@ public class CapController {
         );
     }
 
-    private CountryDto toCountryDto(FindCaps.Country domainObject) {
+    private CountryDto toCountryDto(Country domainObject) {
         return new CountryDto(
             domainObject.name(),
             domainObject.code()

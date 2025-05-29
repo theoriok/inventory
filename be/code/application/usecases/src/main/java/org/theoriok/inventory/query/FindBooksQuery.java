@@ -2,6 +2,7 @@ package org.theoriok.inventory.query;
 
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.BookId;
+import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.port.PersistBookPort;
 
 import java.util.List;
@@ -17,17 +18,12 @@ public class FindBooksQuery implements FindBooks {
 
     @Override
     public List<Book> findAll() {
-        return persistBookPort.findAll().stream()
-            .map(this::toResponseBook)
-            .toList();
+        return persistBookPort.findAll().stream().toList();
     }
 
     @Override
     public Optional<Book> findById(BookId businessId) {
-        return persistBookPort.findById(businessId).map(this::toResponseBook);
+        return persistBookPort.findById(businessId);
     }
 
-    private FindBooks.Book toResponseBook(org.theoriok.inventory.domain.Book book) {
-        return new FindBooks.Book(book.businessId(), book.title(), book.author(), book.description());
-    }
 }

@@ -173,6 +173,7 @@ project(":main") {
 project(":application-api") {
     apply plugin: 'java-library'
     dependencies {
+        implementation project(":domain")
         implementation project(":vocabulary")
     }
 }
@@ -206,6 +207,7 @@ project(":infrastructure-inbound-rest") {
 
     dependencies {
         implementation project(":application-api")
+        implementation project(":domain")
         implementation project(":vocabulary")
         implementation 'org.apache.logging.log4j:log4j-web'
         implementation 'org.springframework.boot:spring-boot-starter-web'

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.query.FindCountries;
 import org.theoriok.inventory.web.dto.CountryDto;
 
@@ -32,8 +33,8 @@ public class CountryController {
         return ResponseEntity.ok(toCountryDtos(findCountries.findAll()));
     }
 
-    private List<CountryDto> toCountryDtos(FindCountries.ListResponse countriesResponse) {
-        return countriesResponse.countries().stream()
+    private List<CountryDto> toCountryDtos(List<Country> countriesResponse) {
+        return countriesResponse.stream()
             .map(this::toCountryDto)
             .toList();
     }
@@ -41,16 +42,12 @@ public class CountryController {
     @GetMapping("/{code}")
     public ResponseEntity<CountryDto> findCountryByCode(@PathVariable(name = "code") String code) {
         return findCountries.findByCode(code)
-            .map(FindCountries.SingleResponse::country)
             .map(this::toCountryDto)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
     }
 
-    private CountryDto toCountryDto(FindCountries.Country domainObject) {
-        return new CountryDto(
-            domainObject.name(),
-            domainObject.code()
-        );
+    private CountryDto toCountryDto(Country country) {
+        return new CountryDto(country.name(), country.code());
     }
 }

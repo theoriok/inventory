@@ -1,19 +1,13 @@
 package org.theoriok.inventory.query;
 
+import org.theoriok.inventory.domain.Country;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface FindCountries {
-    ListResponse findAll();
+    List<Country> findAll();
 
-    Optional<SingleResponse> findByCode(String id);
+    Optional<Country> findByCode(String id);
 
-    record ListResponse(List<Country> countries) {
-    }
-
-    record SingleResponse(Country country) {
-    }
-
-    record Country(String name, String code) {
-    }
 }
