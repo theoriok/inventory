@@ -24,19 +24,10 @@ public class UpsertCapCommand implements UpsertCap {
     public Result upsert(Request request) {
         return persistCountryPort.findByCode(request.country())
             .map(country -> {
-                var cap = toDomainObject(request).withCountry(country);
+                var cap = Cap.create(request.businessId(), request.name(), request.description(), request.amount(), country);
                 persistCapPort.upsert(cap);
                 return UPSERTED;
             })
             .orElse(UNKNOWN_COUNTRY);
-    }
-
-   private Cap toDomainObject(UpsertCap.Request request) {
-        return CapBuilder.builder()
-            .businessId(request.businessId())
-            .name(request.name())
-            .description(request.description())
-            .amount(request.amount())
-            .build();
     }
 }
