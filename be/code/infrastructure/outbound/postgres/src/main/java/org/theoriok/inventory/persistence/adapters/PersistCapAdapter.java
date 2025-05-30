@@ -1,6 +1,7 @@
 package org.theoriok.inventory.persistence.adapters;
 
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.CapId;
 import org.theoriok.inventory.domain.Cap;
 import org.theoriok.inventory.domain.CapBuilder;
 import org.theoriok.inventory.domain.Country;
@@ -45,19 +46,19 @@ public class PersistCapAdapter implements PersistCapPort {
     @Override
     public void upsert(Cap cap) {
         var entity = toEntity(cap);
-        capRepository.findByBusinessId(cap.businessId()).ifPresent(foundEntity -> entity.setId(foundEntity.getId()));
+        capRepository.findByBusinessId(cap.businessId().value()).ifPresent(foundEntity -> entity.setId(foundEntity.getId()));
         countryRepository.findByCode(cap.country().code()).ifPresentOrElse(entity::setCountry, () -> countryRepository.save(entity.getCountry()));
         capRepository.save(entity);
     }
 
     @Override
     public void delete(Cap cap) {
-        capRepository.delete(capRepository.findByBusinessId(cap.businessId()).orElseThrow());
+        capRepository.delete(capRepository.findByBusinessId(cap.businessId().value()).orElseThrow());
     }
 
     private CapEntity toEntity(Cap domainObject) {
         return new CapEntity(
-            domainObject.businessId(),
+            domainObject.businessId().value(),
             domainObject.name(),
             domainObject.description(),
             domainObject.amount(),
@@ -77,7 +78,7 @@ private    CountryEntity toEntity(Country domainObject) {
 
     private Cap toDomainObject(CapEntity entity) {
         return CapBuilder.builder()
-            .businessId(entity.getBusinessId())
+            .businessId(new CapId(entity.getBusinessId()))
             .name(entity.getName())
             .description(entity.getDescription())
             .amount(entity.getAmount())

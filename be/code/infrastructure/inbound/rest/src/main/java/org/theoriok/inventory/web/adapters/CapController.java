@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.theoriok.inventory.CapId;
 import org.theoriok.inventory.command.DeleteCap;
 import org.theoriok.inventory.command.UpsertCap;
 import org.theoriok.inventory.domain.Cap;
@@ -80,7 +81,7 @@ public class CapController {
 
     private CapDto toCapDto(Cap domainObject) {
         return new CapDto(
-            domainObject.businessId(),
+            domainObject.businessId().value(),
             domainObject.name(),
             domainObject.description(),
             domainObject.amount(),
@@ -97,7 +98,7 @@ public class CapController {
 
     private UpsertCap.Request toUpsertRequest(UpsertCapDto dto) {
         return new UpsertCap.Request(
-            dto.businessId(),
+            new CapId(dto.businessId()),
             dto.name(),
             dto.description(),
             dto.amount(),

@@ -5,7 +5,6 @@ import static org.theoriok.inventory.command.UpsertCap.Result.UPSERTED;
 
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.domain.Cap;
-import org.theoriok.inventory.domain.CapBuilder;
 import org.theoriok.inventory.port.PersistCapPort;
 import org.theoriok.inventory.port.PersistCountryPort;
 
