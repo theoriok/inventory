@@ -188,6 +188,13 @@ project(":domain") {
         implementation project(":vocabulary")
     }
 }
+project(":vocabulary") {
+    apply plugin: 'java-library'
+
+    dependencies {
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+}
 
 project(":application-usecases") {
     apply plugin: 'java-library'

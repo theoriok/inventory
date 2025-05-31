@@ -10,7 +10,6 @@ import org.theoriok.inventory.port.PersistBookPort;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class PersistBookAdapter implements PersistBookPort {
@@ -24,7 +23,7 @@ public class PersistBookAdapter implements PersistBookPort {
     public Collection<Book> findAll() {
         return bookRepository.findAll().stream()
             .map(this::toDomainObject)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
