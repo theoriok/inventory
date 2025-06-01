@@ -6,7 +6,7 @@ buildscript {
     }
 }
 plugins {
-    id 'org.springframework.boot' version '3.4.5' apply false
+    id 'org.springframework.boot' version '3.5.0' apply false
     id 'org.barfuin.gradle.jacocolog' version '3.1.0'
     id "org.sonarqube" version "6.2.0.5505"
 }
@@ -67,6 +67,7 @@ allprojects {
 
             testImplementation 'org.springframework.boot:spring-boot-starter-test'
             testImplementation 'org.springframework.boot:spring-boot-starter-log4j2'
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         }
 
         javadoc {
@@ -190,10 +191,6 @@ project(":domain") {
 }
 project(":vocabulary") {
     apply plugin: 'java-library'
-
-    dependencies {
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    }
 }
 
 project(":application-usecases") {
