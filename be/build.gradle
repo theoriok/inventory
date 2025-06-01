@@ -67,6 +67,7 @@ allprojects {
 
             testImplementation 'org.springframework.boot:spring-boot-starter-test'
             testImplementation 'org.springframework.boot:spring-boot-starter-log4j2'
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         }
 
         javadoc {
@@ -190,10 +191,6 @@ project(":domain") {
 }
 project(":vocabulary") {
     apply plugin: 'java-library'
-
-    dependencies {
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    }
 }
 
 project(":application-usecases") {
