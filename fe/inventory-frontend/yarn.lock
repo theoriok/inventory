@@ -1662,14 +1662,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:5.80.2":
-  version: 5.80.2
-  resolution: "@tanstack/react-query@npm:5.80.2"
+"@tanstack/react-query@npm:5.80.3":
+  version: 5.80.3
+  resolution: "@tanstack/react-query@npm:5.80.3"
   dependencies:
     "@tanstack/query-core": "npm:5.80.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/24898e6583a3afa45a770344cf3d730a12a7e3094975ab65e580f7ae5af8170ce6b43672ee5685c94c54d8040c2c05bfdd99fb7b170c108d59f7a7d801db3a94
+  checksum: 10c0/5c16ddf2702e234063b4c7397804a7bba7f89034216df419b75e2c5b78f00161f123fbdbddefb7acdfcf3cea31ed5676fbc07c98423a36f488be7f803c387997
   languageName: node
   linkType: hard
 
@@ -3487,7 +3487,7 @@ __metadata:
     "@ant-design/pro-components": "npm:2.8.7"
     "@eslint/js": "npm:9.28.0"
     "@faker-js/faker": "npm:9.8.0"
-    "@tanstack/react-query": "npm:5.80.2"
+    "@tanstack/react-query": "npm:5.80.3"
     "@testing-library/dom": "npm:10.4.0"
     "@testing-library/jest-dom": "npm:6.6.3"
     "@testing-library/react": "npm:16.3.0"
