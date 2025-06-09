@@ -23,6 +23,10 @@ describe('list books', () => {
         it('shows the no books message', async () => await waitFor(() =>
             expect(screen.getByTestId('no-books-message')).toBeInTheDocument(),
         ));
+
+        it('shows the add books button', async () => await waitFor(() =>
+            expect(screen.getByTestId('add-books')).toBeInTheDocument(),
+        ));
     });
 
     describe('one book', () => {
@@ -36,8 +40,11 @@ describe('list books', () => {
             expect(booksTable).toHaveTextContent(book.author)
             expect(booksTable).toHaveTextContent(book.description)
         }));
-    });
 
+        it('shows the add books button', async () => await waitFor(() =>
+            expect(screen.getByTestId('add-books')).toBeInTheDocument(),
+        ));
+    });
 });
 
 function given(books: Book[]) {

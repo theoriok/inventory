@@ -1,5 +1,5 @@
-import {Empty, Table} from "antd";
-import {FC} from "react";
+import {Button, Empty, Form, Input, Modal, Table} from "antd";
+import {FC, useState} from "react";
 import {useBooks} from "../hooks/book.hook.ts";
 
 export const HomePage: FC = () => {
@@ -21,6 +21,7 @@ export const HomePage: FC = () => {
             key: 'description',
         },
     ];
+    const [showCreateNewModal, setShowCreateNewModal] = useState<boolean>(false);
     return (
         <>
             <h1>Books</h1>
@@ -33,6 +34,25 @@ export const HomePage: FC = () => {
                     />
                 ),
             }} data-testid="books-table"></Table>
+            <Button data-testid="add-books" onClick={() => setShowCreateNewModal(true)}>Add Book</Button>
+            <Modal
+                title={'Add new Book'}
+                open={showCreateNewModal}
+                onCancel={() => setShowCreateNewModal(false)}
+                footer={'null'}
+            >
+                <Form autoComplete="off">
+                    <Form.Item label={'Title'} htmlFor="title">
+                        <Input id="title" aria-label="title"/>
+                    </Form.Item>
+                    <Form.Item label={'Author'} htmlFor="author">
+                        <Input id="author" aria-label="author"/>
+                    </Form.Item>
+                    <Form.Item label={'Description'} htmlFor="description">
+                        <Input.TextArea id="description" aria-label="description" rows={4}/>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 };
