@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@ant-design/pro-components": "2.8.9",
-    "@tanstack/react-query": "5.80.6",
+    "@tanstack/react-query": "5.80.7",
     "antd": "5.26.0",
     "axios": "1.9.0",
     "lodash": "4.17.21",
