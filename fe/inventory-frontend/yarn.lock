@@ -2221,9 +2221,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:5.26.2":
-  version: 5.26.2
-  resolution: "antd@npm:5.26.2"
+"antd@npm:5.26.3":
+  version: 5.26.3
+  resolution: "antd@npm:5.26.3"
   dependencies:
     "@ant-design/colors": "npm:^7.2.1"
     "@ant-design/cssinjs": "npm:^1.23.0"
@@ -2277,7 +2277,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/ea01ad0fc5055156c7c9576a226e2d3508da9629e4601c3bc207079571eeb970149ab54709cad466fd5447257ccd42959da3588c8195fad478456f74791c8499
+  checksum: 10c0/cd83238bbe7bb02a1b6907c51b4b192905092c33551d701ddcc88925c2aa428e093654eea8a808e8ad1b0496a82a70444bacc5f35a351ecbc012f61bd5d6080a
   languageName: node
   linkType: hard
 
@@ -3514,7 +3514,7 @@ __metadata:
     "@types/react": "npm:19.1.8"
     "@types/react-dom": "npm:19.1.6"
     "@vitejs/plugin-react": "npm:4.6.0"
-    antd: "npm:5.26.2"
+    antd: "npm:5.26.3"
     axios: "npm:1.10.0"
     eslint: "npm:9.29.0"
     eslint-plugin-react-hooks: "npm:5.2.0"
