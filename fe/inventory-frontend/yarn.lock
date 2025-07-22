@@ -122,14 +122,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/pro-card@npm:2.9.9":
-  version: 2.9.9
-  resolution: "@ant-design/pro-card@npm:2.9.9"
+"@ant-design/pro-card@npm:2.10.0":
+  version: 2.10.0
+  resolution: "@ant-design/pro-card@npm:2.10.0"
   dependencies:
     "@ant-design/cssinjs": "npm:^1.21.1"
     "@ant-design/icons": "npm:^5.0.0"
-    "@ant-design/pro-provider": "npm:2.16.1"
-    "@ant-design/pro-utils": "npm:2.17.2"
+    "@ant-design/pro-provider": "npm:2.16.2"
+    "@ant-design/pro-utils": "npm:2.18.0"
     "@babel/runtime": "npm:^7.18.0"
     classnames: "npm:^2.3.2"
     rc-resize-observer: "npm:^1.0.0"
@@ -137,59 +137,59 @@ __metadata:
   peerDependencies:
     antd: ^4.24.15 || ^5.11.2
     react: ">=17.0.0"
-  checksum: 10c0/b2a61b263f2bd439924844905d8536c3cc9a5a71259cc89006b8e1fdb22aa47846282c3c5936b0f7f5ae6b64beec27dda887935bf41a91d22516b5ed090686ce
+  checksum: 10c0/f881441f03f8daaf916ada0c0cf7e4260902fef8a1ef50992d3a0615a38d0e0fe5d168d1eb70be705091fed339929a0903a3a3aa26b1bca75cbae314278ee176
   languageName: node
   linkType: hard
 
-"@ant-design/pro-components@npm:2.8.9":
-  version: 2.8.9
-  resolution: "@ant-design/pro-components@npm:2.8.9"
+"@ant-design/pro-components@npm:2.8.10":
+  version: 2.8.10
+  resolution: "@ant-design/pro-components@npm:2.8.10"
   dependencies:
-    "@ant-design/pro-card": "npm:2.9.9"
-    "@ant-design/pro-descriptions": "npm:2.6.9"
-    "@ant-design/pro-field": "npm:3.0.6"
-    "@ant-design/pro-form": "npm:2.31.9"
-    "@ant-design/pro-layout": "npm:7.22.6"
-    "@ant-design/pro-list": "npm:2.6.9"
-    "@ant-design/pro-provider": "npm:2.16.1"
+    "@ant-design/pro-card": "npm:2.10.0"
+    "@ant-design/pro-descriptions": "npm:2.6.10"
+    "@ant-design/pro-field": "npm:3.1.0"
+    "@ant-design/pro-form": "npm:2.32.0"
+    "@ant-design/pro-layout": "npm:7.22.7"
+    "@ant-design/pro-list": "npm:2.6.10"
+    "@ant-design/pro-provider": "npm:2.16.2"
     "@ant-design/pro-skeleton": "npm:2.2.1"
-    "@ant-design/pro-table": "npm:3.20.1"
-    "@ant-design/pro-utils": "npm:2.17.2"
+    "@ant-design/pro-table": "npm:3.21.0"
+    "@ant-design/pro-utils": "npm:2.18.0"
     "@babel/runtime": "npm:^7.16.3"
   peerDependencies:
     antd: ^4.24.15 || ^5.11.2
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
-  checksum: 10c0/36902f3e5f12e97795fce5da4ce3452364df6fd6b7dc0eb69825a7076b5edd544e84147b9119fe0af8b1e669f69396eca23eee849eecfeeb6c98ee387b696e87
+  checksum: 10c0/0c68d5b05db3c64fccf5ff91c8f904a640f80299de8c56dcbd01494ab821a864e725bc0b3d48863837a72f5a1ff10f04d52101cf44f37bc4fd1678bc293f76c8
   languageName: node
   linkType: hard
 
-"@ant-design/pro-descriptions@npm:2.6.9":
-  version: 2.6.9
-  resolution: "@ant-design/pro-descriptions@npm:2.6.9"
+"@ant-design/pro-descriptions@npm:2.6.10":
+  version: 2.6.10
+  resolution: "@ant-design/pro-descriptions@npm:2.6.10"
   dependencies:
-    "@ant-design/pro-field": "npm:3.0.6"
-    "@ant-design/pro-form": "npm:2.31.9"
-    "@ant-design/pro-provider": "npm:2.16.1"
+    "@ant-design/pro-field": "npm:3.1.0"
+    "@ant-design/pro-form": "npm:2.32.0"
+    "@ant-design/pro-provider": "npm:2.16.2"
     "@ant-design/pro-skeleton": "npm:2.2.1"
-    "@ant-design/pro-utils": "npm:2.17.2"
+    "@ant-design/pro-utils": "npm:2.18.0"
     "@babel/runtime": "npm:^7.18.0"
     rc-resize-observer: "npm:^0.2.3"
     rc-util: "npm:^5.0.6"
   peerDependencies:
     antd: ^4.24.15 || ^5.11.2
     react: ">=17.0.0"
-  checksum: 10c0/0ae29760ce433e79b1dab12ef3596c73a322c8371172f080c50553cbeeb4700dc35e9afe2ce112ba2689ac4605eb166bc4c675f7dffa04592bf97e27e74b7be7
+  checksum: 10c0/fe5c019536f3281ff24b89ca5e1a96f5e7bf6f3013614dd26ca8d7e40e035da34800dbfb5342bec5670f2a1994d1d26f97604a40e8fcf29d5bebd6f6ee7d8139
   languageName: node
   linkType: hard
 
-"@ant-design/pro-field@npm:3.0.6":
-  version: 3.0.6
-  resolution: "@ant-design/pro-field@npm:3.0.6"
+"@ant-design/pro-field@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@ant-design/pro-field@npm:3.1.0"
   dependencies:
     "@ant-design/icons": "npm:^5.0.0"
-    "@ant-design/pro-provider": "npm:2.16.1"
-    "@ant-design/pro-utils": "npm:2.17.2"
+    "@ant-design/pro-provider": "npm:2.16.2"
+    "@ant-design/pro-utils": "npm:2.18.0"
     "@babel/runtime": "npm:^7.18.0"
     "@chenshuai2144/sketch-color": "npm:^1.0.8"
     classnames: "npm:^2.3.2"
@@ -201,18 +201,18 @@ __metadata:
   peerDependencies:
     antd: ^4.24.15 || ^5.11.2
     react: ">=17.0.0"
-  checksum: 10c0/c8a54b3e672b072536ab0d939ef3f5078e25a9f268a309db53fcf86cdecb7563ecc6206d5d3f15c3f9f1b67a5ed91a80c1cb7ad64c91f4b727e0dc7416912716
+  checksum: 10c0/4588d2fc82360bdfd135805db3a1c616d1af9f83c2c7c573cf475838788fa600e64ccaa97962f54ed9ec411c8c090c032d71bea617c4e28e34903fcd4abc08c7
   languageName: node
   linkType: hard
 
-"@ant-design/pro-form@npm:2.31.9":
-  version: 2.31.9
-  resolution: "@ant-design/pro-form@npm:2.31.9"
+"@ant-design/pro-form@npm:2.32.0":
+  version: 2.32.0
+  resolution: "@ant-design/pro-form@npm:2.32.0"
   dependencies:
     "@ant-design/icons": "npm:^5.0.0"
-    "@ant-design/pro-field": "npm:3.0.6"
-    "@ant-design/pro-provider": "npm:2.16.1"
-    "@ant-design/pro-utils": "npm:2.17.2"
+    "@ant-design/pro-field": "npm:3.1.0"
+    "@ant-design/pro-provider": "npm:2.16.2"
+    "@ant-design/pro-utils": "npm:2.18.0"
     "@babel/runtime": "npm:^7.18.0"
     "@chenshuai2144/sketch-color": "npm:^1.0.7"
     "@umijs/use-params": "npm:^1.0.9"
@@ -227,18 +227,18 @@ __metadata:
     rc-field-form: ">=1.22.0"
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
-  checksum: 10c0/ffa2ff4a7245dee3e4f312b9d42ef2c407d0a3737d2ebea3eaf6c6d940f150db10223f31549267e2fcdd51c16fa93fc1bcff0e51f6c55d296043665f0da04d48
+  checksum: 10c0/598e8cc8bfd2dbbcd39d9013ba8ac89a84cff29b1f178e1dabd5095e7eb39509dc077af972432caba9ae4d8393d1b5af0587c4191d8c72df529c7266451256f0
   languageName: node
   linkType: hard
 
-"@ant-design/pro-layout@npm:7.22.6":
-  version: 7.22.6
-  resolution: "@ant-design/pro-layout@npm:7.22.6"
+"@ant-design/pro-layout@npm:7.22.7":
+  version: 7.22.7
+  resolution: "@ant-design/pro-layout@npm:7.22.7"
   dependencies:
     "@ant-design/cssinjs": "npm:^1.21.1"
     "@ant-design/icons": "npm:^5.0.0"
-    "@ant-design/pro-provider": "npm:2.16.1"
-    "@ant-design/pro-utils": "npm:2.17.2"
+    "@ant-design/pro-provider": "npm:2.16.2"
+    "@ant-design/pro-utils": "npm:2.18.0"
     "@babel/runtime": "npm:^7.18.0"
     "@umijs/route-utils": "npm:^4.0.0"
     "@umijs/use-params": "npm:^1.0.9"
@@ -254,20 +254,20 @@ __metadata:
     antd: ^4.24.15 || ^5.11.2
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
-  checksum: 10c0/9b8c0065793f1a02bbd1727b2aa02442bacc7d91ca95860e6ba75636f94c04fff43039c5e8439645bb0f515f748cf4cbf22160a4bd3b8c5e39662e8517862096
+  checksum: 10c0/28336fded9b38debf2456555447d3e5a048907d5dedf7393e40a86f82396cf9cd9edc35755841f57d952419a5a8b39a6dcecf004a5ed9a001422cd4a9feb8667
   languageName: node
   linkType: hard
 
-"@ant-design/pro-list@npm:2.6.9":
-  version: 2.6.9
-  resolution: "@ant-design/pro-list@npm:2.6.9"
+"@ant-design/pro-list@npm:2.6.10":
+  version: 2.6.10
+  resolution: "@ant-design/pro-list@npm:2.6.10"
   dependencies:
     "@ant-design/cssinjs": "npm:^1.21.1"
     "@ant-design/icons": "npm:^5.0.0"
-    "@ant-design/pro-card": "npm:2.9.9"
-    "@ant-design/pro-field": "npm:3.0.6"
-    "@ant-design/pro-table": "npm:3.20.1"
-    "@ant-design/pro-utils": "npm:2.17.2"
+    "@ant-design/pro-card": "npm:2.10.0"
+    "@ant-design/pro-field": "npm:3.1.0"
+    "@ant-design/pro-table": "npm:3.21.0"
+    "@ant-design/pro-utils": "npm:2.18.0"
     "@babel/runtime": "npm:^7.18.0"
     classnames: "npm:^2.3.2"
     dayjs: "npm:^1.11.10"
@@ -277,13 +277,13 @@ __metadata:
     antd: ^4.24.15 || ^5.11.2
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
-  checksum: 10c0/5665b1a835f11be9e9b009085ed5c75becf2b1da3c75d5d2da7df8ec50ab59e03aeb2e4ce227d33268f6f79a48176b59c9f9822412f41fe53527b7a2c284cf2e
+  checksum: 10c0/335a19d0818ee4fa6ba7d0b18422978f873f2051de9f492001a06167e1999e46791a579703209514e064c2713a8962d9324a8decf2af38e2037804dfa9fe5ca7
   languageName: node
   linkType: hard
 
-"@ant-design/pro-provider@npm:2.16.1":
-  version: 2.16.1
-  resolution: "@ant-design/pro-provider@npm:2.16.1"
+"@ant-design/pro-provider@npm:2.16.2":
+  version: 2.16.2
+  resolution: "@ant-design/pro-provider@npm:2.16.2"
   dependencies:
     "@ant-design/cssinjs": "npm:^1.21.1"
     "@babel/runtime": "npm:^7.18.0"
@@ -295,7 +295,7 @@ __metadata:
     antd: ^4.24.15 || ^5.11.2
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
-  checksum: 10c0/0f47fb928ef1ff7eca67a022d8592d5c1021e88c7ab3bbc693ff38abb9496aedb12079825df486420fcdba115e849a385e6d3abc7ded048e68baaaf2ae90b69f
+  checksum: 10c0/abc8dbddb6f6cd4f4cf73d10f7c66b673738776001fc5276855a64d19646b4133d60ce586d432dc49267ff66632698f632216b20d5a6f8e3e825c3122715006b
   languageName: node
   linkType: hard
 
@@ -312,17 +312,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/pro-table@npm:3.20.1":
-  version: 3.20.1
-  resolution: "@ant-design/pro-table@npm:3.20.1"
+"@ant-design/pro-table@npm:3.21.0":
+  version: 3.21.0
+  resolution: "@ant-design/pro-table@npm:3.21.0"
   dependencies:
     "@ant-design/cssinjs": "npm:^1.21.1"
     "@ant-design/icons": "npm:^5.0.0"
-    "@ant-design/pro-card": "npm:2.9.9"
-    "@ant-design/pro-field": "npm:3.0.6"
-    "@ant-design/pro-form": "npm:2.31.9"
-    "@ant-design/pro-provider": "npm:2.16.1"
-    "@ant-design/pro-utils": "npm:2.17.2"
+    "@ant-design/pro-card": "npm:2.10.0"
+    "@ant-design/pro-field": "npm:3.1.0"
+    "@ant-design/pro-form": "npm:2.32.0"
+    "@ant-design/pro-provider": "npm:2.16.2"
+    "@ant-design/pro-utils": "npm:2.18.0"
     "@babel/runtime": "npm:^7.18.0"
     "@dnd-kit/core": "npm:^6.0.8"
     "@dnd-kit/modifiers": "npm:^6.0.1"
@@ -339,16 +339,16 @@ __metadata:
     rc-field-form: ">=1.22.0"
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
-  checksum: 10c0/093e4b50633f37df1aabcbda7d65c3bbf3ebd27f635265c077eb3c90659f9c5763fc912d82c2dcde9beb6728328aa15d64eec36395e5c9d7c131492727c0ff45
+  checksum: 10c0/552132d18c393fa2e967d81281b53a58f1939c0205da43616f7aa2838ada7b947766f432215f5e539c7a7eb0a8661516105322fb55374cb62fd1811c6001726c
   languageName: node
   linkType: hard
 
-"@ant-design/pro-utils@npm:2.17.2":
-  version: 2.17.2
-  resolution: "@ant-design/pro-utils@npm:2.17.2"
+"@ant-design/pro-utils@npm:2.18.0":
+  version: 2.18.0
+  resolution: "@ant-design/pro-utils@npm:2.18.0"
   dependencies:
     "@ant-design/icons": "npm:^5.0.0"
-    "@ant-design/pro-provider": "npm:2.16.1"
+    "@ant-design/pro-provider": "npm:2.16.2"
     "@babel/runtime": "npm:^7.18.0"
     classnames: "npm:^2.3.2"
     dayjs: "npm:^1.11.10"
@@ -361,7 +361,7 @@ __metadata:
     antd: ^4.24.15 || ^5.11.2
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
-  checksum: 10c0/7831ff3d754fddf9c65feed69bde1691b0755e52beda0e703a105b268d6785bebeb7d9000a43a30cbae59fd4cfc13206acae07db3b29b9b3a9fabdcb2a6ab486
+  checksum: 10c0/6f87970394045837bb1e0ca93682a522305f0eddafeec038f31746735c7d1da7c296c32007806d44eccddd64e4db383a63e6990ff83c48b5f2c10898fb459606
   languageName: node
   linkType: hard
 
@@ -3375,7 +3375,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inventory-frontend@workspace:."
   dependencies:
-    "@ant-design/pro-components": "npm:2.8.9"
+    "@ant-design/pro-components": "npm:2.8.10"
     "@eslint/js": "npm:9.30.1"
     "@faker-js/faker": "npm:9.9.0"
     "@tanstack/react-query": "npm:5.81.5"
