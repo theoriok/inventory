@@ -1445,9 +1445,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/trigger@npm:^2.2.7":
-  version: 2.2.7
-  resolution: "@rc-component/trigger@npm:2.2.7"
+"@rc-component/trigger@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@rc-component/trigger@npm:2.3.0"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
     "@rc-component/portal": "npm:^1.1.0"
@@ -1458,7 +1458,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/51e1b0d42503080dad2b3d6a27ddaf49c66b19638eeeb828f183270050cf39c3b50f466b774e2f7d15f07f4856a38aea4311eebe2ed9b93deebad80ff5cfe9ef
+  checksum: 10c0/84a0f3da8beca249ac86d2870ef9e1603ed26ff6b869a545e6d5c3793f23413cf6a11fafe001406a86c49917d31ec105776402dba834f1b79db98305ff8bd2f4
   languageName: node
   linkType: hard
 
@@ -2156,9 +2156,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:5.26.6":
-  version: 5.26.6
-  resolution: "antd@npm:5.26.6"
+"antd@npm:5.27.1":
+  version: 5.27.1
+  resolution: "antd@npm:5.27.1"
   dependencies:
     "@ant-design/colors": "npm:^7.2.1"
     "@ant-design/cssinjs": "npm:^1.23.0"
@@ -2171,7 +2171,7 @@ __metadata:
     "@rc-component/mutate-observer": "npm:^1.1.0"
     "@rc-component/qrcode": "npm:~1.0.0"
     "@rc-component/tour": "npm:~1.15.1"
-    "@rc-component/trigger": "npm:^2.2.7"
+    "@rc-component/trigger": "npm:^2.3.0"
     classnames: "npm:^2.5.1"
     copy-to-clipboard: "npm:^3.3.3"
     dayjs: "npm:^1.11.11"
@@ -2200,8 +2200,8 @@ __metadata:
     rc-steps: "npm:~6.0.1"
     rc-switch: "npm:~4.1.0"
     rc-table: "npm:~7.51.1"
-    rc-tabs: "npm:~15.6.1"
-    rc-textarea: "npm:~1.10.0"
+    rc-tabs: "npm:~15.7.0"
+    rc-textarea: "npm:~1.10.2"
     rc-tooltip: "npm:~6.4.0"
     rc-tree: "npm:~5.13.1"
     rc-tree-select: "npm:~5.27.0"
@@ -2212,7 +2212,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/571bfb9f0e830cfd7253f58b38b4ad8d2179871190a9f84511a67fa816830d887fdb036e4ffb85b7a24d3f38f87423a8f8a1f13c7948952159b09a57d56df5a0
+  checksum: 10c0/a079454fc786425ffc59d0efe94fc32cae54a673d484341a9884a1a60e6b4bb9fea09f6189542cdee1034749e5681c1ffd747abeb69ca660f078c1f6a27e4ea2
   languageName: node
   linkType: hard
 
@@ -3452,7 +3452,7 @@ __metadata:
     "@types/react": "npm:19.1.11"
     "@types/react-dom": "npm:19.1.7"
     "@vitejs/plugin-react": "npm:4.7.0"
-    antd: "npm:5.26.6"
+    antd: "npm:5.27.1"
     axios: "npm:1.11.0"
     eslint: "npm:9.30.1"
     eslint-plugin-react-hooks: "npm:5.2.0"
@@ -4763,9 +4763,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-tabs@npm:~15.6.1":
-  version: 15.6.1
-  resolution: "rc-tabs@npm:15.6.1"
+"rc-tabs@npm:~15.7.0":
+  version: 15.7.0
+  resolution: "rc-tabs@npm:15.7.0"
   dependencies:
     "@babel/runtime": "npm:^7.11.2"
     classnames: "npm:2.x"
@@ -4777,7 +4777,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/b982582902684eae5ec1783af4de1d31bd8c8fc7419dec3abd883abfa51d7a270db01a73bc579341fc84b0c8a92fc2cbd0e8ed272ce31b4ea2ac5979eaf5215c
+  checksum: 10c0/472561f2ec611e9f2a396ba9fec6b83138621651aa2e9fb5a1c68b4da8cb6cab01c23ca71b3940876a595f30c2b8324b8899f93486862271be8eb16a95433764
   languageName: node
   linkType: hard
 
@@ -4794,6 +4794,22 @@ __metadata:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
   checksum: 10c0/aef90816078afa4bae54f152ca8a06834bb86d700e22a30f65979dc45fa5fbb10fe9894ecf2acb10102a3183c5a03b3518134db0df3ba3a32a79fe6de398fde0
+  languageName: node
+  linkType: hard
+
+"rc-textarea@npm:~1.10.2":
+  version: 1.10.2
+  resolution: "rc-textarea@npm:1.10.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.10.1"
+    classnames: "npm:^2.2.1"
+    rc-input: "npm:~1.8.0"
+    rc-resize-observer: "npm:^1.0.0"
+    rc-util: "npm:^5.27.0"
+  peerDependencies:
+    react: ">=16.9.0"
+    react-dom: ">=16.9.0"
+  checksum: 10c0/ccfe7bae33187c382e12bc14e9f2617fe183a4d4e8c0d3b9f71455728172f31a6140d0855ff557b6c658daf31c7ff935a1a347a336f8106ddda84e042ab23448
   languageName: node
   linkType: hard
 
