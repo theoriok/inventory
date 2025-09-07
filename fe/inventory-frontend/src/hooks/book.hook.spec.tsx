@@ -3,7 +3,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {describe, expect, it, vi} from 'vitest';
 import {ReactNode} from 'react';
 
-import {useBooks} from './book.hook';
+import {useBook, useBooks} from './book.hook';
 import {bookApi} from '../api/book.api';
 import {generateBook} from '../__test__/generators/book.generator';
 
@@ -62,4 +62,45 @@ describe('useBooks', () => {
         expect(result.current.isLoading).toBe(true);
         expect(result.current.data).toBeUndefined();
     });
+});
+
+describe('useBook', () => {
+  it('should fetch single book successfully', async () => {
+    const book = generateBook();
+    vi.spyOn(bookApi, 'fetchBook').mockResolvedValue(book);
+
+    const { result } = renderHook(() => useBook('123'), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(result.current.data).toEqual(book);
+    expect(bookApi.fetchBook).toHaveBeenCalledWith('123');
+  });
+
+  it('should handle fetch error', async () => {
+    vi.spyOn(bookApi, 'fetchBook').mockRejectedValue(new Error('Book not found'));
+
+    const { result } = renderHook(() => useBook('invalid-id'), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => {
+      expect(result.current.isError).toBe(true);
+    });
+
+    expect(result.current.error).toBeInstanceOf(Error);
+  });
+
+  it('should start in loading state', () => {
+    const { result } = renderHook(() => useBook('123'), {
+      wrapper: createWrapper(),
+    });
+
+    expect(result.current.isLoading).toBe(true);
+    expect(result.current.data).toBeUndefined();
+  });
 });
