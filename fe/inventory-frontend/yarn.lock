@@ -2304,9 +2304,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:5.27.1":
-  version: 5.27.1
-  resolution: "antd@npm:5.27.1"
+"antd@npm:5.27.3":
+  version: 5.27.3
+  resolution: "antd@npm:5.27.3"
   dependencies:
     "@ant-design/colors": "npm:^7.2.1"
     "@ant-design/cssinjs": "npm:^1.23.0"
@@ -2347,7 +2347,7 @@ __metadata:
     rc-slider: "npm:~11.1.8"
     rc-steps: "npm:~6.0.1"
     rc-switch: "npm:~4.1.0"
-    rc-table: "npm:~7.51.1"
+    rc-table: "npm:~7.52.6"
     rc-tabs: "npm:~15.7.0"
     rc-textarea: "npm:~1.10.2"
     rc-tooltip: "npm:~6.4.0"
@@ -2360,7 +2360,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/a079454fc786425ffc59d0efe94fc32cae54a673d484341a9884a1a60e6b4bb9fea09f6189542cdee1034749e5681c1ffd747abeb69ca660f078c1f6a27e4ea2
+  checksum: 10c0/26ed550278185a2a3ea5e5c9a0aad6ece8e094278c3e412df3914b97ea801770139c5c897016aeb5bf560cc0043847dd495931d7dd6cd6ff104ff121265a95d4
   languageName: node
   linkType: hard
 
@@ -3600,7 +3600,7 @@ __metadata:
     "@types/react": "npm:19.1.12"
     "@types/react-dom": "npm:19.1.9"
     "@vitejs/plugin-react": "npm:4.7.0"
-    antd: "npm:5.27.1"
+    antd: "npm:5.27.3"
     axios: "npm:1.11.0"
     eslint: "npm:9.34.0"
     eslint-plugin-react-hooks: "npm:5.2.0"
@@ -4894,9 +4894,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-table@npm:~7.51.1":
-  version: 7.51.1
-  resolution: "rc-table@npm:7.51.1"
+"rc-table@npm:~7.52.6":
+  version: 7.52.7
+  resolution: "rc-table@npm:7.52.7"
   dependencies:
     "@babel/runtime": "npm:^7.10.1"
     "@rc-component/context": "npm:^1.4.0"
@@ -4907,7 +4907,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/ba6b25b7ff5555c059bdd8d504846839a786eb3eb5701b0ac648fb65e8197ed5a9d046d06881df19f6b1fbe014097f7260cc9e1c25c7644278cc6a53c71198fb
+  checksum: 10c0/b0aa65ad145b9176258cc5ddaed972a4bbb695a514f11adb49c843d16f2e30692c378c9798223741764eb597fdc93985b2e7bc9daccb4b88a568c799ace9c990
   languageName: node
   linkType: hard
 
