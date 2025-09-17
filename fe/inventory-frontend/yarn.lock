@@ -2304,9 +2304,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:5.27.3":
-  version: 5.27.3
-  resolution: "antd@npm:5.27.3"
+"antd@npm:5.27.4":
+  version: 5.27.4
+  resolution: "antd@npm:5.27.4"
   dependencies:
     "@ant-design/colors": "npm:^7.2.1"
     "@ant-design/cssinjs": "npm:^1.23.0"
@@ -2344,10 +2344,10 @@ __metadata:
     rc-resize-observer: "npm:^1.4.3"
     rc-segmented: "npm:~2.7.0"
     rc-select: "npm:~14.16.8"
-    rc-slider: "npm:~11.1.8"
+    rc-slider: "npm:~11.1.9"
     rc-steps: "npm:~6.0.1"
     rc-switch: "npm:~4.1.0"
-    rc-table: "npm:~7.52.6"
+    rc-table: "npm:~7.53.0"
     rc-tabs: "npm:~15.7.0"
     rc-textarea: "npm:~1.10.2"
     rc-tooltip: "npm:~6.4.0"
@@ -2360,7 +2360,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/26ed550278185a2a3ea5e5c9a0aad6ece8e094278c3e412df3914b97ea801770139c5c897016aeb5bf560cc0043847dd495931d7dd6cd6ff104ff121265a95d4
+  checksum: 10c0/cbf19a04b582b598035e2048fa77fc32861c6a63a1fda197d150d731e61ea81df184c18a5406494029c8d05ff553ca87fbcb0012beb81855b7b79be53020c6d3
   languageName: node
   linkType: hard
 
@@ -3600,7 +3600,7 @@ __metadata:
     "@types/react": "npm:19.1.13"
     "@types/react-dom": "npm:19.1.9"
     "@vitejs/plugin-react": "npm:4.7.0"
-    antd: "npm:5.27.3"
+    antd: "npm:5.27.4"
     axios: "npm:1.12.2"
     eslint: "npm:9.34.0"
     eslint-plugin-react-hooks: "npm:5.2.0"
@@ -4852,9 +4852,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-slider@npm:~11.1.8":
-  version: 11.1.8
-  resolution: "rc-slider@npm:11.1.8"
+"rc-slider@npm:~11.1.9":
+  version: 11.1.9
+  resolution: "rc-slider@npm:11.1.9"
   dependencies:
     "@babel/runtime": "npm:^7.10.1"
     classnames: "npm:^2.2.5"
@@ -4862,7 +4862,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/b202599abf85e21234c2cababe9c6f908aa7fcdde9eca413ef96b209838f3b1a33292d1a1bbe571b84bf46f8a5d28d5c1a070f331bddc0504101e9e2a75cf422
+  checksum: 10c0/193c432e2859ba42b2235cc1949de2d929ba70fa4aa5672eaa5da692797f3fe927f8c0b2a75cc45c6b9f666f204f4ed038ccf904273d6cbc39e112f4a00ddd4a
   languageName: node
   linkType: hard
 
@@ -4894,9 +4894,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-table@npm:~7.52.6":
-  version: 7.52.7
-  resolution: "rc-table@npm:7.52.7"
+"rc-table@npm:~7.53.0":
+  version: 7.53.0
+  resolution: "rc-table@npm:7.53.0"
   dependencies:
     "@babel/runtime": "npm:^7.10.1"
     "@rc-component/context": "npm:^1.4.0"
@@ -4907,7 +4907,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/b0aa65ad145b9176258cc5ddaed972a4bbb695a514f11adb49c843d16f2e30692c378c9798223741764eb597fdc93985b2e7bc9daccb4b88a568c799ace9c990
+  checksum: 10c0/0351cc0198dc72646efdb300ff680a897ace570070357dbfea84581d35eede2bf53d0e093d7d2d6442323acc93bba0ef95f5c4c0d3ed8028302f0464883a22ee
   languageName: node
   linkType: hard
 
