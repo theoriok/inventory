@@ -1400,17 +1400,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/qrcode@npm:~1.0.0":
-  version: 1.0.0
-  resolution: "@rc-component/qrcode@npm:1.0.0"
+"@rc-component/qrcode@npm:~1.0.1":
+  version: 1.0.1
+  resolution: "@rc-component/qrcode@npm:1.0.1"
   dependencies:
     "@babel/runtime": "npm:^7.24.7"
     classnames: "npm:^2.3.2"
-    rc-util: "npm:^5.38.0"
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/406dbe13e3b24ca20ef729d5456a329711ac9ca50f20604ff1e1fdbcb3a716408ad453cc083ec87d541096c85e2f512175f0b357075b40f71bea38e2a4f59cbd
+  checksum: 10c0/9d1f8fdf10c1c6774fd8500ccab4c386c21ef9f2f8ce40c5eef59c7c4ff6e296df9b4ebdf6949c2d7a734ac58a4407e7a434fd844f0f951e2000c44c3326828a
   languageName: node
   linkType: hard
 
@@ -2306,9 +2305,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:5.27.4":
-  version: 5.27.4
-  resolution: "antd@npm:5.27.4"
+"antd@npm:5.27.5":
+  version: 5.27.5
+  resolution: "antd@npm:5.27.5"
   dependencies:
     "@ant-design/colors": "npm:^7.2.1"
     "@ant-design/cssinjs": "npm:^1.23.0"
@@ -2319,7 +2318,7 @@ __metadata:
     "@babel/runtime": "npm:^7.26.0"
     "@rc-component/color-picker": "npm:~2.0.1"
     "@rc-component/mutate-observer": "npm:^1.1.0"
-    "@rc-component/qrcode": "npm:~1.0.0"
+    "@rc-component/qrcode": "npm:~1.0.1"
     "@rc-component/tour": "npm:~1.15.1"
     "@rc-component/trigger": "npm:^2.3.0"
     classnames: "npm:^2.5.1"
@@ -2349,7 +2348,7 @@ __metadata:
     rc-slider: "npm:~11.1.9"
     rc-steps: "npm:~6.0.1"
     rc-switch: "npm:~4.1.0"
-    rc-table: "npm:~7.53.0"
+    rc-table: "npm:~7.54.0"
     rc-tabs: "npm:~15.7.0"
     rc-textarea: "npm:~1.10.2"
     rc-tooltip: "npm:~6.4.0"
@@ -2362,7 +2361,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/cbf19a04b582b598035e2048fa77fc32861c6a63a1fda197d150d731e61ea81df184c18a5406494029c8d05ff553ca87fbcb0012beb81855b7b79be53020c6d3
+  checksum: 10c0/eac2f66dbf12a63f2803cc5623e9dcf8617050fe3a7fb9d9327aec5e5a6e0e8daf0764fb7824b3692128d8655e13f1fd5d695386603c55adf9fba780d9e454ef
   languageName: node
   linkType: hard
 
@@ -3602,7 +3601,7 @@ __metadata:
     "@types/react": "npm:19.2.2"
     "@types/react-dom": "npm:19.2.2"
     "@vitejs/plugin-react": "npm:4.7.0"
-    antd: "npm:5.27.4"
+    antd: "npm:5.27.5"
     axios: "npm:1.12.2"
     eslint: "npm:9.37.0"
     eslint-plugin-react-hooks: "npm:5.2.0"
@@ -4896,9 +4895,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rc-table@npm:~7.53.0":
-  version: 7.53.0
-  resolution: "rc-table@npm:7.53.0"
+"rc-table@npm:~7.54.0":
+  version: 7.54.0
+  resolution: "rc-table@npm:7.54.0"
   dependencies:
     "@babel/runtime": "npm:^7.10.1"
     "@rc-component/context": "npm:^1.4.0"
@@ -4909,7 +4908,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/0351cc0198dc72646efdb300ff680a897ace570070357dbfea84581d35eede2bf53d0e093d7d2d6442323acc93bba0ef95f5c4c0d3ed8028302f0464883a22ee
+  checksum: 10c0/bf78af66c97aca8437bcf1f88df81b4171afbf647959c9b3600b246c15f9db8763fa50255749390d7f2c0ba0a6aea4f467f64aa4dd6265d56ebf35ffc0d6b94f
   languageName: node
   linkType: hard
 
