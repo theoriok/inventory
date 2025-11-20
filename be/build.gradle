@@ -6,7 +6,7 @@ buildscript {
     }
 }
 plugins {
-    id 'org.springframework.boot' version '3.5.6' apply false
+    id 'org.springframework.boot' version '3.5.7' apply false
     id 'org.barfuin.gradle.jacocolog' version '3.1.0'
     id "org.sonarqube" version "6.3.1.5724"
 }
