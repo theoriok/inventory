@@ -79,7 +79,6 @@ public class CountryIntegrationTest extends IntegrationTest {
     private String expectedCountryNotFoundProblemJson() {
         return """
                 {
-                  "type": "about:blank",
                   "title": "Not Found",
                   "status": 404,
                   "instance": "/countries/BE-1"
