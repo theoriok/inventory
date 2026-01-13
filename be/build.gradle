@@ -22,7 +22,6 @@ ext {
     checkstyleVersion = "12.1.2"
     pmdVersion = '7.19.0'
     recordBuilderVersion = '51'
-    problemVersion = '0.29.1'
 }
 
 allprojects {
@@ -121,7 +120,6 @@ allprojects {
         dependencies {
             dependency "org.flywaydb:flyway-core:$flywayVersion"
             dependency "org.jetbrains:annotations:$annotationsVersion"
-            dependency "org.zalando:problem-spring-web-starter:$problemVersion"
         }
     }
 
@@ -152,12 +150,13 @@ project(":main") {
         implementation project(":infrastructure-outbound-postgres")
         implementation 'org.springframework.boot:spring-boot-starter'
         implementation "org.springframework.boot:spring-boot-starter-actuator"
+        implementation "org.springframework.boot:spring-boot-starter-flyway"
         implementation 'org.flywaydb:flyway-core'
         implementation "org.flywaydb:flyway-database-postgresql"
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testImplementation 'org.springframework.boot:spring-boot-starter-web'
-        testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
         testImplementation "com.h2database:h2"
         testImplementation 'org.jetbrains:annotations'
     }
@@ -217,7 +216,6 @@ project(":infrastructure-inbound-rest") {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'io.micrometer:micrometer-registry-prometheus'
-        implementation "org.zalando:problem-spring-web-starter"
     }
 }
 

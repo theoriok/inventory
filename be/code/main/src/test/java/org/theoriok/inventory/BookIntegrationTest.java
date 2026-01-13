@@ -149,7 +149,6 @@ class BookIntegrationTest extends IntegrationTest {
     private String expectedBookNotFoundProblemJson() {
         return """
                 {
-                  "type": "about:blank",
                   "title": "Not Found",
                   "status": 404,
                   "instance": "/books/BOOK-1"

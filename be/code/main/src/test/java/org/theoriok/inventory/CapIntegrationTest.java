@@ -216,7 +216,6 @@ class CapIntegrationTest extends IntegrationTest {
     private String expectedCapNotFoundProblemJson() {
         return """
                 {
-                  "type": "about:blank",
                   "title": "Not Found",
                   "status": 404,
                   "instance": "/caps/BE-1"
@@ -228,7 +227,6 @@ class CapIntegrationTest extends IntegrationTest {
     private static String expectedBadRequestProblemJson() {
         return """
                 {
-                  "type": "about:blank",
                   "title": "Bad Request",
                   "status": 400,
                   "detail": "Unknown country BE",
