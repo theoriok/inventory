@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation project(":application-api")
+    implementation project(":domain")
+    implementation project(":vocabulary")
+    implementation 'org.apache.logging.log4j:log4j-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+}

@@ -1,0 +1,8 @@
+apply plugin: 'java-library'
+
+dependencies {
+    annotationProcessor "io.soabase.record-builder:record-builder-processor:$recordBuilderVersion"
+    compileOnly "io.soabase.record-builder:record-builder-core:$recordBuilderVersion"
+    
+    implementation project(":vocabulary")
+}
