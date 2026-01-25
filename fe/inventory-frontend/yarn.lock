@@ -2216,7 +2216,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/util@npm:^1.7.0":
+"@rc-component/util@npm:1.7.0":
   version: 1.7.0
   resolution: "@rc-component/util@npm:1.7.0"
   dependencies:
