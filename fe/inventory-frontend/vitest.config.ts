@@ -6,5 +6,12 @@ export default defineConfig({
     test: {
         environment: 'jsdom',
         setupFiles: './src/setup-test.ts',
+        coverage: {
+            provider: 'v8',
+            reporter: ['text', 'html', 'lcov'],
+            exclude: ['node_modules/', 'src/setup-test.ts']
+        },
+        reporters: ['default', 'junit'],
+        outputFile: 'coverage/test-reporter.xml'
     },
 });
