@@ -5,10 +5,12 @@ on:
     branches: [ main ]
     paths:
       - be/**
+      - .github/workflows/gradle.yml
   pull_request:
     branches: [ main ]
     paths:
       - be/**
+      - .github/workflows/gradle.yml
 
 permissions:
   contents: read
