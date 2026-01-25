@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
+import {defineConfig} from 'vitest/config';
 
 export default defineConfig({
     plugins: [react()],
@@ -10,8 +10,6 @@ export default defineConfig({
             provider: 'v8',
             reporter: ['text', 'html', 'lcov'],
             exclude: ['node_modules/', 'src/setup-test.ts']
-        },
-        reporters: ['default', 'junit'],
-        outputFile: 'coverage/test-reporter.xml'
+        }
     },
 });
