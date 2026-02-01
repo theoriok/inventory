@@ -15,7 +15,7 @@ beforeAll(() => {
     Element.prototype.scrollIntoView = vi.fn(); // see https://github.com/jsdom/jsdom/issues/1695#issuecomment-449931788
     
     // Mock ResizeObserver
-    global.ResizeObserver = class ResizeObserver {
+    (globalThis as any).ResizeObserver = class ResizeObserver {
         observe() {}
         unobserve() {}
         disconnect() {}
