@@ -39,6 +39,8 @@ paths:
       responses:
         '204':
           description: No-content
+        '400':
+          description: Unknown country
   /caps/{id}:
     get:
       tags:
@@ -74,7 +76,7 @@ paths:
           description: OK
         '404':
           description: Cap not found
-  /coutries:
+  /countries:
     get:
       tags:
         - country-controller
