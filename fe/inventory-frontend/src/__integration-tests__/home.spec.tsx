@@ -1,4 +1,5 @@
 import {render, screen, waitFor} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
 import {generateBook} from '../__test__/generators/book.generator.ts';
@@ -44,6 +45,20 @@ describe('list books', () => {
         it('shows the add books button', async () => await waitFor(() =>
             expect(screen.getByTestId('add-books')).toBeInTheDocument(),
         ));
+
+        it('opens modal when add book button is clicked', async () => {
+            const user = userEvent.setup();
+            await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+            
+            await user.click(screen.getByTestId('add-books'));
+            
+            await waitFor(() => {
+                expect(screen.getByText('Add new Book')).toBeInTheDocument();
+                expect(screen.getByLabelText('title')).toBeInTheDocument();
+                expect(screen.getByLabelText('author')).toBeInTheDocument();
+                expect(screen.getByLabelText('description')).toBeInTheDocument();
+            });
+        });
     });
 });
 

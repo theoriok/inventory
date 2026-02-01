@@ -1,5 +1,5 @@
-import { cleanup } from '@testing-library/react';
-import { afterEach, beforeAll, vi } from 'vitest';
+import {cleanup} from '@testing-library/react';
+import {afterEach, beforeAll, vi} from 'vitest';
 
 import '@testing-library/jest-dom/vitest';
 
@@ -13,6 +13,13 @@ beforeAll(() => {
     const { getComputedStyle } = window;
     window.getComputedStyle = (elt) => getComputedStyle(elt);
     Element.prototype.scrollIntoView = vi.fn(); // see https://github.com/jsdom/jsdom/issues/1695#issuecomment-449931788
+    
+    // Mock ResizeObserver
+    global.ResizeObserver = class ResizeObserver {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    };
 });
 
 Object.defineProperty(window, 'matchMedia', {
