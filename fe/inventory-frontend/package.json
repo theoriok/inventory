@@ -45,6 +45,6 @@
   },
   "packageManager": "yarn@4.12.0",
   "resolutions": {
-    "@rc-component/util": "1.7.0"
+    "@rc-component/util": "1.8.1"
   }
 }
