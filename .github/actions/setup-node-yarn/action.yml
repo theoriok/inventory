@@ -1,0 +1,14 @@
+name: 'Setup Node and Yarn'
+description: 'Sets up Node.js with Yarn via corepack'
+runs:
+  using: "composite"
+  steps:
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: './fe/inventory-frontend/.nvmrc'
+        cache: 'yarn'
+        cache-dependency-path: './fe/inventory-frontend/yarn.lock'

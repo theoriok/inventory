@@ -17,43 +17,51 @@ defaults:
     working-directory: ./fe/inventory-frontend
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - run: corepack enable
-      - uses: actions/setup-node@v6
-        with:
-          node-version-file: './fe/inventory-frontend/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './fe/inventory-frontend/yarn.lock'
+      - uses: ./.github/actions/setup-node-yarn
       - run: yarn install
+      - uses: actions/upload-artifact@v4
+        with:
+          name: node-modules
+          path: fe/inventory-frontend/node_modules
+
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-node-yarn
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-modules
+          path: fe/inventory-frontend/node_modules
       - run: yarn build
 
   lint:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - run: corepack enable
-      - uses: actions/setup-node@v6
+      - uses: ./.github/actions/setup-node-yarn
+      - uses: actions/download-artifact@v4
         with:
-          node-version-file: './fe/inventory-frontend/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './fe/inventory-frontend/yarn.lock'
-      - run: yarn install
+          name: node-modules
+          path: fe/inventory-frontend/node_modules
       - run: yarn lint
 
   test:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - run: corepack enable
-      - uses: actions/setup-node@v6
+      - uses: ./.github/actions/setup-node-yarn
+      - uses: actions/download-artifact@v4
         with:
-          node-version-file: './fe/inventory-frontend/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './fe/inventory-frontend/yarn.lock'
-      - run: yarn install
+          name: node-modules
+          path: fe/inventory-frontend/node_modules
       - run: yarn test:coverage
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
