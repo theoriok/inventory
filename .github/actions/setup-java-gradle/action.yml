@@ -12,4 +12,5 @@ runs:
       uses: gradle/actions/setup-gradle@v3
     - name: Grant Permissions to gradlew
       shell: bash
+      working-directory: ./be
       run: chmod +x gradlew
