@@ -29,24 +29,84 @@ jobs:
         with:
           java-version: '25'
           distribution: 'corretto'
-      - name: Grant Permissions to gradlew
-        run: chmod +x gradlew
-      - name: Build with Gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - run: ./gradlew assemble
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'corretto'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - run: ./gradlew test jacocoAggregatedReport
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: be/build/reports/jacocoAggregatedReport.xml
+
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'corretto'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - run: ./gradlew checkstyleMain checkstyleTest pmdMain pmdTest
+
+  sonar:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'corretto'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          path: be/build/reports/
+      - run: ./gradlew sonar
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew clean build jacocoAggregatedReport sonar --info
+      - name: SonarQube Quality Gate check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        with:
+          scanMetadataReportFile: ./be/build/sonar/report-task.txt
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
       - name: Dependency check
         uses: dependency-check/Dependency-Check_Action@main
         env:
-          # actions/setup-java@v1 changes JAVA_HOME so it needs to be reset to match the depcheck image
           JAVA_HOME: /opt/jdk
         id: Depcheck
         with:
-          project: 'test'
+          project: 'inventory-backend'
           path: '.'
           format: 'HTML'
-          out: 'reports' # this is the default, no need to specify unless you wish to override it
+          out: 'reports'
           args: >
             --failOnCVSS 10
             --enableRetired
@@ -54,15 +114,7 @@ jobs:
             --exclude **/package-lock.json
             --exclude **/yarn.lock
       - name: Upload Test results
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
           name: Depcheck report
           path: ${{github.workspace}}/reports
-      - name: SonarQube Quality Gate check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        with:
-          scanMetadataReportFile: ./be/build/sonar/report-task.txt
-        # Force to fail step after specific time
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
