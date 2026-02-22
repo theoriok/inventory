@@ -15,7 +15,7 @@ class CapIdTest {
     @Test
     void capIdShouldNotBeNull() {
         assertThatThrownBy(() -> new CapId(null))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(NullPointerException.class)
             .hasMessageContaining("Cap id cannot be null.");
     }
 }

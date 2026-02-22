@@ -132,11 +132,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Book'
+              $ref: '#/components/schemas/UpsertBook'
         required: true
       responses:
         '204':
           description: No-content
+        '400':
+          description: Validation failed
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /books/{id}:
     get:
       tags:
@@ -174,6 +180,26 @@ paths:
           description: Book not found
 components:
   schemas:
+    UpsertBook:
+      type: object
+      required:
+        - business_id
+        - title
+        - author
+        - description
+      properties:
+        business_id:
+          type: string
+          maxLength: 255
+        title:
+          type: string
+          maxLength: 255
+        author:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 5000
     UpsertCap:
       type: object
       properties:
@@ -220,3 +246,25 @@ components:
           type: string
         description:
           type: string
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Bad Request"
+        status:
+          type: integer
+          example: 400
+        detail:
+          type: string
+          example: "Validation failed"
+        instance:
+          type: string
+          example: "/books"
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            businessId: "must not be blank"
+            title: "size must be between 0 and 255"

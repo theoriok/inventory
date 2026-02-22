@@ -3,6 +3,7 @@ package org.theoriok.inventory.web.adapters;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import io.micrometer.core.annotation.Timed;
+import jakarta.validation.Valid;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +20,7 @@ import org.theoriok.inventory.command.UpsertBook;
 import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.query.FindBooks;
 import org.theoriok.inventory.web.dto.BookDto;
+import org.theoriok.inventory.web.dto.UpsertBookDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -62,12 +64,12 @@ public class BookController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> upsertBook(@RequestBody BookDto bookDto) {
+    public ResponseEntity<Void> upsertBook(@Valid @RequestBody UpsertBookDto bookDto) {
         upsertBook.upsert(toUpsertRequest(bookDto));
         return ResponseEntity.noContent().build();
     }
 
-    private UpsertBook.Request toUpsertRequest(BookDto bookDto) {
+    private UpsertBook.Request toUpsertRequest(UpsertBookDto bookDto) {
         return new UpsertBook.Request(
             new BookId(bookDto.businessId()),
             bookDto.title(),
