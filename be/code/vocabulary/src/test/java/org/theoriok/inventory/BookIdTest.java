@@ -15,7 +15,7 @@ class BookIdTest {
     @Test
     void bookIdShouldNotBeNull() {
         assertThatThrownBy(() -> new BookId(null))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(NullPointerException.class)
             .hasMessageContaining("Book id cannot be null.");
     }
 }
