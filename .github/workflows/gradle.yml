@@ -25,11 +25,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-java-gradle
-      - run: ./gradlew assemble
-      - uses: actions/upload-artifact@v4
+      - uses: actions/cache@v4
         with:
-          name: build-output
           path: be/**/build
+          key: gradle-build-${{ github.sha }}
+          restore-keys: |
+            gradle-build-
+      - run: ./gradlew assemble
 
   test:
     needs: build
@@ -37,18 +39,18 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/download-artifact@v4
+      - uses: actions/cache@v4
         with:
-          name: build-output
-          path: be
+          path: be/**/build
+          key: gradle-build-${{ github.sha }}
       - run: ./gradlew test jacocoAggregatedReport
-      - uses: actions/upload-artifact@v4
+      - uses: actions/cache@v4
         with:
-          name: test-results
           path: |
             be/**/build/test-results
             be/**/build/reports
             be/build/reports/jacocoAggregatedReport.xml
+          key: gradle-test-${{ github.sha }}
 
   lint:
     needs: build
@@ -56,10 +58,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/download-artifact@v4
+      - uses: actions/cache@v4
         with:
-          name: build-output
-          path: be
+          path: be/**/build
+          key: gradle-build-${{ github.sha }}
       - run: ./gradlew checkstyleMain checkstyleTest pmdMain pmdTest
 
   sonar:
@@ -70,14 +72,17 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/download-artifact@v4
+      - uses: actions/cache@v4
         with:
-          name: build-output
-          path: be
-      - uses: actions/download-artifact@v4
+          path: be/**/build
+          key: gradle-build-${{ github.sha }}
+      - uses: actions/cache@v4
         with:
-          name: test-results
-          path: be
+          path: |
+            be/**/build/test-results
+            be/**/build/reports
+            be/build/reports/jacocoAggregatedReport.xml
+          key: gradle-test-${{ github.sha }}
       - run: ./gradlew sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
