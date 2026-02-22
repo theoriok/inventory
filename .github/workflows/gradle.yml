@@ -103,7 +103,7 @@ jobs:
         uses: dependency-check/Dependency-Check_Action@main
         env:
           JAVA_HOME: /opt/jdk
-        id: Dependency check
+        id: Dependency_check
         with:
           project: 'inventory-backend'
           path: '.'
