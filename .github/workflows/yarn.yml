@@ -26,11 +26,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: yarn-install
-          path: |
-            fe/inventory-frontend/node_modules
-            fe/inventory-frontend/.yarn/cache
-            fe/inventory-frontend/.yarn/install-state.gz
-            fe/inventory-frontend/.pnp.*
+          path: fe/inventory-frontend
 
   build:
     needs: setup
