@@ -103,7 +103,7 @@ jobs:
         uses: dependency-check/Dependency-Check_Action@main
         env:
           JAVA_HOME: /opt/jdk
-        id: Depcheck
+        id: Dependency check
         with:
           project: 'inventory-backend'
           path: '.'
@@ -118,5 +118,5 @@ jobs:
       - name: Upload Test results
         uses: actions/upload-artifact@v4
         with:
-          name: Depcheck report
+          name: Dependency check report
           path: ${{github.workspace}}/reports
