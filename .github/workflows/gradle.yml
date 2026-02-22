@@ -6,11 +6,13 @@ on:
     paths:
       - be/**
       - .github/workflows/gradle.yml
+      - .github/actions/setup-java-gradle/action.yml
   pull_request:
     branches: [ main ]
     paths:
       - be/**
       - .github/workflows/gradle.yml
+      - .github/actions/setup-java-gradle/action.yml
 
 permissions:
   contents: read

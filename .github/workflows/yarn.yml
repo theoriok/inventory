@@ -6,11 +6,13 @@ on:
     paths:
       - fe/**
       - .github/workflows/yarn.yml
+      - .github/actions/setup-node-yarn/action.yml
   pull_request:
     branches: [ "main" ]
     paths:
       - fe/**
       - .github/workflows/yarn.yml
+      - .github/actions/setup-node-yarn/action.yml
 
 defaults:
   run:
