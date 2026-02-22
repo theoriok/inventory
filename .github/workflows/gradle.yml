@@ -29,6 +29,10 @@ jobs:
       - uses: ./.github/actions/setup-java-gradle
       - uses: actions/cache@v4
         with:
+          path: ~/.gradle/wrapper/dists
+          key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+      - uses: actions/cache@v4
+        with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
           restore-keys: |
@@ -41,6 +45,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-java-gradle
+      - uses: actions/cache@v4
+        with:
+          path: ~/.gradle/wrapper/dists
+          key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
       - uses: actions/cache@v4
         with:
           path: be/**/build
@@ -62,6 +70,10 @@ jobs:
       - uses: ./.github/actions/setup-java-gradle
       - uses: actions/cache@v4
         with:
+          path: ~/.gradle/wrapper/dists
+          key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+      - uses: actions/cache@v4
+        with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
       - run: ./gradlew checkstyleMain checkstyleTest pmdMain pmdTest
@@ -74,6 +86,10 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-java-gradle
+      - uses: actions/cache@v4
+        with:
+          path: ~/.gradle/wrapper/dists
+          key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
       - uses: actions/cache@v4
         with:
           path: be/**/build

@@ -8,11 +8,6 @@ runs:
       with:
         java-version: '25'
         distribution: 'corretto'
-    - name: Cache Gradle wrapper
-      uses: actions/cache@v4
-      with:
-        path: be/gradle/wrapper/dists
-        key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
     - name: Grant Permissions to gradlew
