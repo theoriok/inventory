@@ -59,6 +59,30 @@ describe('list books', () => {
                 expect(screen.getByLabelText('description')).toBeInTheDocument();
             });
         });
+
+        it('closes modal when cancel is clicked', async () => {
+            const user = userEvent.setup();
+            await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+            
+            await user.click(screen.getByTestId('add-books'));
+            await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+            
+            await user.click(screen.getByRole('button', { name: 'Close' }));
+            
+            await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+        });
+
+        it('closes modal when escape key is pressed', async () => {
+            const user = userEvent.setup();
+            await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+            
+            await user.click(screen.getByTestId('add-books'));
+            await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+            
+            await user.keyboard('{Escape}');
+            
+            await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+        });
     });
 });
 
