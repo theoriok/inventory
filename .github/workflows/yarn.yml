@@ -17,7 +17,7 @@ defaults:
     working-directory: ./fe/inventory-frontend
 
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -27,13 +27,29 @@ jobs:
           path: |
             fe/inventory-frontend/.yarn/cache
             fe/inventory-frontend/.yarn/install-state.gz
+            fe/inventory-frontend/node_modules
           key: yarn-${{ runner.os }}-${{ hashFiles('fe/inventory-frontend/yarn.lock') }}
           restore-keys: |
             yarn-${{ runner.os }}-
       - run: yarn install --immutable
+
+  build:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-node-yarn
+      - uses: actions/cache@v4
+        with:
+          path: |
+            fe/inventory-frontend/.yarn/cache
+            fe/inventory-frontend/.yarn/install-state.gz
+            fe/inventory-frontend/node_modules
+          key: yarn-${{ runner.os }}-${{ hashFiles('fe/inventory-frontend/yarn.lock') }}
       - run: yarn build
 
   lint:
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -43,13 +59,12 @@ jobs:
           path: |
             fe/inventory-frontend/.yarn/cache
             fe/inventory-frontend/.yarn/install-state.gz
+            fe/inventory-frontend/node_modules
           key: yarn-${{ runner.os }}-${{ hashFiles('fe/inventory-frontend/yarn.lock') }}
-          restore-keys: |
-            yarn-${{ runner.os }}-
-      - run: yarn install --immutable
       - run: yarn lint
 
   test:
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -59,10 +74,8 @@ jobs:
           path: |
             fe/inventory-frontend/.yarn/cache
             fe/inventory-frontend/.yarn/install-state.gz
+            fe/inventory-frontend/node_modules
           key: yarn-${{ runner.os }}-${{ hashFiles('fe/inventory-frontend/yarn.lock') }}
-          restore-keys: |
-            yarn-${{ runner.os }}-
-      - run: yarn install --immutable
       - run: yarn test:coverage
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
