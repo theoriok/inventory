@@ -3605,12 +3605,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-refresh@npm:0.5.1":
-  version: 0.5.1
-  resolution: "eslint-plugin-react-refresh@npm:0.5.1"
+"eslint-plugin-react-refresh@npm:0.5.2":
+  version: 0.5.2
+  resolution: "eslint-plugin-react-refresh@npm:0.5.2"
   peerDependencies:
     eslint: ^9 || ^10
-  checksum: 10c0/e24f6beb18c858056da3209d25184df7b5791cd8a2581e73cad135a316d552e4fa550173b6fac9ee362ed181bf73ad39d04fd80e03c18d7e7fa8cbbb716e1f07
+  checksum: 10c0/6e5b1b8ad673535ea1134fa16ecda986c389a045b87ca935e6c5f69070b1889218f3116bfb8b793ec10f37c286f28904d0b5b1d62a76760e465aa32e73e6010e
   languageName: node
   linkType: hard
 
@@ -4181,7 +4181,7 @@ __metadata:
     axios: "npm:1.13.5"
     eslint: "npm:9.39.3"
     eslint-plugin-react-hooks: "npm:7.0.1"
-    eslint-plugin-react-refresh: "npm:0.5.1"
+    eslint-plugin-react-refresh: "npm:0.5.2"
     globals: "npm:17.3.0"
     jsdom: "npm:27.4.0"
     lodash: "npm:4.17.23"
