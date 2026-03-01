@@ -7,7 +7,7 @@ buildscript {
 }
 plugins {
     id 'org.springframework.boot' version '4.0.3' apply false
-    id 'org.barfuin.gradle.jacocolog' version '3.1.0'
+    id 'jacoco-report-aggregation'
     id "org.sonarqube" version "7.2.2.6593"
     id 'org.openapi.generator' version '7.20.0' apply false
 }
@@ -52,12 +52,7 @@ allprojects {
         useJUnitPlatform()
     }
 
-    tasks.matching { task -> (task.name == 'jacocoAggregatedReport') }.forEach { task ->
-        task.reports {
-            xml.required = true
-            xml.outputLocation = file("build/reports/jacocoAggregatedReport.xml")
-        }
-    }
+
 
     pluginManager.withPlugin('java-library') {
 
@@ -146,8 +141,26 @@ sonarqube {
         property "sonar.organization", "theorioksoft"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${project.rootDir}/build/reports/jacocoAggregatedReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.rootDir}/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
         property "sonar.tests", "src/test"
         property "sonar.coverage.exclusions", "**/config/**,**/exception/**,**/persistence/entities/**"
+    }
+}
+
+dependencies {
+    jacocoAggregation project(':main')
+    jacocoAggregation project(':vocabulary')
+    jacocoAggregation project(':application-api')
+    jacocoAggregation project(':application-usecases')
+    jacocoAggregation project(':domain')
+    jacocoAggregation project(':infrastructure-inbound-rest')
+    jacocoAggregation project(':infrastructure-outbound-postgres')
+}
+
+reporting {
+    reports {
+        testCodeCoverageReport(JacocoCoverageReport) {
+            testType = TestSuiteType.UNIT_TEST
+        }
     }
 }

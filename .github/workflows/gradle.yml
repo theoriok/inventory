@@ -53,13 +53,13 @@ jobs:
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
-      - run: ./gradlew test jacocoAggregatedReport
+      - run: ./gradlew test testCodeCoverageReport
       - uses: actions/cache@v5
         with:
           path: |
             be/**/build/test-results
             be/**/build/reports
-            be/build/reports/jacocoAggregatedReport.xml
+            be/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
           key: gradle-test-${{ github.sha }}
 
   lint:
@@ -99,7 +99,7 @@ jobs:
           path: |
             be/**/build/test-results
             be/**/build/reports
-            be/build/reports/jacocoAggregatedReport.xml
+            be/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
           key: gradle-test-${{ github.sha }}
       - run: ./gradlew sonar
         env:
