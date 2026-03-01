@@ -10,48 +10,53 @@ import {App} from '../App.tsx';
 afterEach(() => {
     window.location.hash = '/';
 });
+describe('home', () => {
+    describe('list books', () => {
+        describe('no books', () => {
+            beforeEach(async () => given([]));
 
-describe('list books', () => {
-    describe('no books', () => {
-        beforeEach(async () => given([]));
+            it('has a title', async () => await waitFor(() => {
+                const titleHeading = screen.getByRole('heading');
+                expect(titleHeading).toBeInTheDocument()
+                expect(titleHeading).toHaveTextContent("Books")
+            }));
 
-        it('has a title', async () => await waitFor(() => {
-            const titleHeading = screen.getByRole('heading');
-            expect(titleHeading).toBeInTheDocument()
-            expect(titleHeading).toHaveTextContent("Books")
-        }));
+            it('shows the no books message', async () => await waitFor(() =>
+                expect(screen.getByTestId('no-books-message')).toBeInTheDocument(),
+            ));
 
-        it('shows the no books message', async () => await waitFor(() =>
-            expect(screen.getByTestId('no-books-message')).toBeInTheDocument(),
-        ));
+            it('shows the add books button', async () => await waitFor(() =>
+                expect(screen.getByTestId('add-books')).toBeInTheDocument(),
+            ));
+        });
 
-        it('shows the add books button', async () => await waitFor(() =>
-            expect(screen.getByTestId('add-books')).toBeInTheDocument(),
-        ));
+        describe('one book', () => {
+            const book = generateBook();
+            beforeEach(async () => given([book]));
+
+            it('shows the book', async () => await waitFor(() => {
+                const booksTable = screen.getByTestId('books-table');
+                expect(booksTable).toBeInTheDocument()
+                expect(booksTable).toHaveTextContent(book.title)
+                expect(booksTable).toHaveTextContent(book.author)
+                expect(booksTable).toHaveTextContent(book.description)
+            }));
+
+            it('shows the add books button', async () => await waitFor(() =>
+                expect(screen.getByTestId('add-books')).toBeInTheDocument(),
+            ));
+        });
     });
 
-    describe('one book', () => {
-        const book = generateBook();
-        beforeEach(async () => given([book]));
-
-        it('shows the book', async () => await waitFor(() => {
-            const booksTable = screen.getByTestId('books-table');
-            expect(booksTable).toBeInTheDocument()
-            expect(booksTable).toHaveTextContent(book.title)
-            expect(booksTable).toHaveTextContent(book.author)
-            expect(booksTable).toHaveTextContent(book.description)
-        }));
-
-        it('shows the add books button', async () => await waitFor(() =>
-            expect(screen.getByTestId('add-books')).toBeInTheDocument(),
-        ));
+    describe('add book', () => {
+        beforeEach(async () => given([]));
 
         it('opens modal when add book button is clicked', async () => {
             const user = userEvent.setup();
             await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
-            
+
             await user.click(screen.getByTestId('add-books'));
-            
+
             await waitFor(() => {
                 expect(screen.getByText('Add new Book')).toBeInTheDocument();
                 expect(screen.getByLabelText('title')).toBeInTheDocument();
@@ -63,24 +68,24 @@ describe('list books', () => {
         it('closes modal when cancel is clicked', async () => {
             const user = userEvent.setup();
             await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
-            
+
             await user.click(screen.getByTestId('add-books'));
             await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
-            
-            await user.click(screen.getByRole('button', { name: 'Close' }));
-            
+
+            await user.click(screen.getByRole('button', {name: 'Close'}));
+
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
 
         it('closes modal when escape key is pressed', async () => {
             const user = userEvent.setup();
             await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
-            
+
             await user.click(screen.getByTestId('add-books'));
             await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
-            
+
             await user.keyboard('{Escape}');
-            
+
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
     });
