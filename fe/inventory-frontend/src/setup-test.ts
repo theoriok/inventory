@@ -13,12 +13,25 @@ beforeAll(() => {
     const { getComputedStyle } = window;
     window.getComputedStyle = (elt) => getComputedStyle(elt);
     Element.prototype.scrollIntoView = vi.fn(); // see https://github.com/jsdom/jsdom/issues/1695#issuecomment-449931788
-    
+
     // Mock ResizeObserver
     globalThis.ResizeObserver = class ResizeObserver {
         observe() {}
         unobserve() {}
         disconnect() {}
+    };
+
+    // Mock transitionend events for jsdom v28+
+    // jsdom v28 added TransitionEvent but doesn't fire transitionend events
+    const originalAddEventListener = Element.prototype.addEventListener;
+    Element.prototype.addEventListener = function(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) {
+        originalAddEventListener.call(this, type, listener, options);
+        if (type === 'transitionend') {
+            setTimeout(() => {
+                const event = new TransitionEvent('transitionend', { bubbles: true });
+                this.dispatchEvent(event);
+            }, 0);
+        }
     };
 });
 
