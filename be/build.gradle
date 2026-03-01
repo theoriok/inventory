@@ -156,11 +156,3 @@ dependencies {
     jacocoAggregation project(':infrastructure-inbound-rest')
     jacocoAggregation project(':infrastructure-outbound-postgres')
 }
-
-reporting {
-    reports {
-        testCodeCoverageReport(JacocoCoverageReport) {
-            testType = TestSuiteType.UNIT_TEST
-        }
-    }
-}
