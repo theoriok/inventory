@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import io.micrometer.core.annotation.Timed;
+import jakarta.validation.Valid;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -72,7 +73,7 @@ public class CapController {
     }
 
     @PutMapping
-    public ResponseEntity<?> upsertCap(@RequestBody UpsertCapDto capDto) {
+    public ResponseEntity<?> upsertCap(@Valid @RequestBody UpsertCapDto capDto) {
         return switch (upsertCap.upsert(toUpsertRequest(capDto))) {
             case UPSERTED -> ResponseEntity.noContent().build();
             case UNKNOWN_COUNTRY -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();

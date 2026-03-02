@@ -40,7 +40,11 @@ paths:
         '204':
           description: No-content
         '400':
-          description: Unknown country
+          description: Validation failed or unknown country
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /caps/{id}:
     get:
       tags:
@@ -202,18 +206,29 @@ components:
           maxLength: 5000
     UpsertCap:
       type: object
+      required:
+        - business_id
+        - name
+        - description
+        - amount
+        - country
       properties:
         business_id:
           type: string
+          maxLength: 255
         name:
           type: string
+          maxLength: 255
         description:
           type: string
+          maxLength: 5000
         amount:
           type: integer
           format: int32
+          minimum: 1
         country:
           type: string
+          maxLength: 10
     Cap:
       type: object
       properties:
