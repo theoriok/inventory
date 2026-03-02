@@ -117,6 +117,35 @@ describe('home', () => {
 
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
+
+        it('adds book to table when form is filled and saved', async () => {
+            const user = userEvent.setup();
+            const newBook = generateBook({business_id: undefined});
+
+            await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+            await user.click(screen.getByTestId('add-books'));
+            await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+            await user.type(screen.getByLabelText('title'), newBook.title);
+            await user.type(screen.getByLabelText('author'), newBook.author);
+            await user.type(screen.getByLabelText('description'), newBook.description);
+
+            await user.click(screen.getByRole('button', {name: 'Save'}));
+
+            await waitFor(() => {
+                expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+                
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                const dataRows = rows.slice(1);
+                expect(dataRows).toHaveLength(1);
+                
+                const cells = within(dataRows[0]).getAllByRole('cell');
+                expect(cells[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent(newBook.title);
+                expect(cells[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent(newBook.author);
+                expect(cells[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent(newBook.description);
+            });
+        });
     });
 });
 
