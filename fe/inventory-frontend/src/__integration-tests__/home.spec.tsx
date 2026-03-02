@@ -1,4 +1,4 @@
-import {render, screen, waitFor} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 
@@ -6,6 +6,7 @@ import {generateBook} from '../__test__/generators/book.generator.ts';
 import {bookApi} from '../api/book.api.ts';
 import {Book,} from '../api/book.api.types.ts';
 import {App} from '../App.tsx';
+import {BOOK_TABLE} from './constants.ts';
 
 afterEach(() => {
     window.location.hash = '/';
@@ -21,6 +22,15 @@ describe('home', () => {
                 expect(titleHeading).toHaveTextContent("Books")
             }));
 
+            it('shows the table headers', async () => await waitFor(() => {
+                const booksTable = screen.getByTestId('books-table');
+                
+                const headers = within(booksTable).getAllByRole('columnheader');
+                expect(headers[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent('Title');
+                expect(headers[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent('Author');
+                expect(headers[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent('Description');
+            }));
+
             it('shows the no books message', async () => await waitFor(() =>
                 expect(screen.getByTestId('no-books-message')).toBeInTheDocument(),
             ));
@@ -32,15 +42,34 @@ describe('home', () => {
 
         describe('one book', () => {
             const book = generateBook();
+            
             beforeEach(async () => given([book]));
 
-            it('shows the book', async () => await waitFor(() => {
+            it('shows the table headers', async () => await waitFor(() => {
                 const booksTable = screen.getByTestId('books-table');
-                expect(booksTable).toBeInTheDocument()
-                expect(booksTable).toHaveTextContent(book.title)
-                expect(booksTable).toHaveTextContent(book.author)
-                expect(booksTable).toHaveTextContent(book.description)
+                
+                const headers = within(booksTable).getAllByRole('columnheader');
+                expect(headers[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent('Title');
+                expect(headers[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent('Author');
+                expect(headers[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent('Description');
             }));
+
+            it('shows the book data', async () => await waitFor(() => {
+                const booksTable = screen.getByTestId('books-table');
+                
+                const rows = within(booksTable).getAllByRole('row');
+                const dataRows = rows.slice(1);
+                expect(dataRows).toHaveLength(1);
+                
+                const cells = within(dataRows[0]).getAllByRole('cell');
+                expect(cells[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent(book.title);
+                expect(cells[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent(book.author);
+                expect(cells[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent(book.description);
+            }));
+
+            it('does not show the no books message', async () => await waitFor(() =>
+                expect(screen.queryByTestId('no-books-message')).not.toBeInTheDocument(),
+            ));
 
             it('shows the add books button', async () => await waitFor(() =>
                 expect(screen.getByTestId('add-books')).toBeInTheDocument(),
