@@ -40,7 +40,11 @@ paths:
         '204':
           description: No-content
         '400':
-          description: Unknown country
+          description: Validation failed or unknown country
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /caps/{id}:
     get:
       tags:
@@ -132,11 +136,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Book'
+              $ref: '#/components/schemas/UpsertBook'
         required: true
       responses:
         '204':
           description: No-content
+        '400':
+          description: Validation failed
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /books/{id}:
     get:
       tags:
@@ -174,20 +184,51 @@ paths:
           description: Book not found
 components:
   schemas:
-    UpsertCap:
+    UpsertBook:
       type: object
+      required:
+        - business_id
+        - title
+        - author
+        - description
       properties:
         business_id:
           type: string
-        name:
+          maxLength: 255
+        title:
           type: string
+          maxLength: 255
+        author:
+          type: string
+          maxLength: 255
         description:
           type: string
+          maxLength: 5000
+    UpsertCap:
+      type: object
+      required:
+        - business_id
+        - name
+        - description
+        - amount
+        - country
+      properties:
+        business_id:
+          type: string
+          maxLength: 255
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 5000
         amount:
           type: integer
           format: int32
+          minimum: 1
         country:
           type: string
+          maxLength: 10
     Cap:
       type: object
       properties:
@@ -220,3 +261,25 @@ components:
           type: string
         description:
           type: string
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Bad Request"
+        status:
+          type: integer
+          example: 400
+        detail:
+          type: string
+          example: "Validation failed"
+        instance:
+          type: string
+          example: "/books"
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            businessId: "must not be blank"
+            title: "size must be between 0 and 255"
