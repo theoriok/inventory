@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,7 +31,7 @@ public class ExceptionHandlingAdvice {
     public ResponseEntity<ProblemDetail> handleValidationException(MethodArgumentNotValidException ex) {
         var problemDetail = ProblemDetail.forStatusAndDetail(ex.getStatusCode(), "Validation failed");
         var errors = ex.getBindingResult().getFieldErrors().stream()
-            .collect(toMap(org.springframework.validation.FieldError::getField, org.springframework.validation.FieldError::getDefaultMessage));
+            .collect(toMap(FieldError::getField, FieldError::getDefaultMessage));
         problemDetail.setProperty("errors", errors);
         return ResponseEntity.of(problemDetail).build();
     }

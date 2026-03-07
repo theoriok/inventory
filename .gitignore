@@ -26,3 +26,5 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 /node_modules/
+
+**/.kiro/settings/**
