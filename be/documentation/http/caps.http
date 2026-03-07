@@ -1,0 +1,26 @@
+### Get all caps
+GET {{baseUrl}}/caps
+Accept: application/json
+
+### Get caps by country
+GET {{baseUrl}}/caps?country=BE
+Accept: application/json
+
+### Get cap by ID
+GET {{baseUrl}}/caps/cap-123
+Accept: application/json
+
+### Create/Update cap
+PUT {{baseUrl}}/caps
+Content-Type: application/json
+
+{
+  "business_id": "cap-123",
+  "name": "Sample Cap",
+  "description": "A sample cap description",
+  "amount": 5,
+  "country": "BE"
+}
+
+### Delete cap by ID
+DELETE {{baseUrl}}/caps/cap-123

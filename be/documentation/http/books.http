@@ -1,0 +1,21 @@
+### Get all books
+GET {{baseUrl}}/books
+Accept: application/json
+
+### Get book by ID
+GET {{baseUrl}}/books/book-123
+Accept: application/json
+
+### Create/Update book
+PUT {{baseUrl}}/books
+Content-Type: application/json
+
+{
+  "business_id": "book-123",
+  "title": "Sample Book Title",
+  "author": "John Doe",
+  "description": "A sample book description"
+}
+
+### Delete book by ID
+DELETE {{baseUrl}}/books/book-123

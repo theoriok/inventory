@@ -1,0 +1,7 @@
+### Get all countries
+GET {{baseUrl}}/countries
+Accept: application/json
+
+### Get country by code
+GET {{baseUrl}}/countries/BE
+Accept: application/json
