@@ -9,9 +9,11 @@ import java.util.Optional;
 public interface PersistBookPort {
     Collection<Book> findAll();
 
-    Optional<Book> findById(BookId businessId);
+    Optional<Book> findById(BookId id);
 
-    void upsert(Book book);
+    Book create(Book book);
 
-    boolean delete(BookId bookId);
+    boolean update(Book book);
+
+    boolean delete(BookId id);
 }

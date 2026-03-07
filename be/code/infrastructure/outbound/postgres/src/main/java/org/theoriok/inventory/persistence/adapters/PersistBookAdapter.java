@@ -27,36 +27,43 @@ public class PersistBookAdapter implements PersistBookPort {
     }
 
     @Override
-    public Optional<Book> findById(BookId businessId) {
-        return bookRepository.findByBusinessId(businessId.value()).map(this::toDomainObject);
+    public Optional<Book> findById(BookId id) {
+        return bookRepository.findById(id.toUuid()).map(this::toDomainObject);
     }
 
     @Override
-    public void upsert(Book book) {
+    public Book create(Book book) {
         var entity = toEntity(book);
-        bookRepository.findByBusinessId(book.businessId().value()).ifPresent(foundEntity -> entity.setId(foundEntity.getId()));
         bookRepository.save(entity);
+        return book;
     }
 
     @Override
-    public boolean delete(BookId bookId) {
-        Optional<BookEntity> bookEntity = bookRepository.findByBusinessId(bookId.value());
+    public boolean update(Book book) {
+        var entity = toEntity(book);
+        bookRepository.save(entity);
+        return true;
+    }
+
+    @Override
+    public boolean delete(BookId id) {
+        Optional<BookEntity> bookEntity = bookRepository.findById(id.toUuid());
         bookEntity.ifPresent(bookRepository::delete);
         return bookEntity.isPresent();
     }
 
-    private BookEntity toEntity(Book domainObject) {
+    private BookEntity toEntity(Book book) {
         return new BookEntity(
-            domainObject.businessId().value(),
-            domainObject.title(),
-            domainObject.author(),
-            domainObject.description()
+            book.id().toUuid(),
+            book.title(),
+            book.author(),
+            book.description()
         );
     }
 
     private Book toDomainObject(BookEntity entity) {
         return BookBuilder.builder()
-            .businessId(new BookId(entity.getBusinessId()))
+            .id(BookId.from(entity.getId()))
             .title(entity.getTitle())
             .author(entity.getAuthor())
             .description(entity.getDescription())

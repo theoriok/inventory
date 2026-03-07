@@ -5,17 +5,17 @@ import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.port.PersistBookPort;
 
 @Component
-public class UpsertBookCommand implements UpsertBook {
+public class CreateBookCommand implements CreateBook {
 
     private final PersistBookPort persistBookPort;
 
-    public UpsertBookCommand(PersistBookPort persistBookPort) {
+    public CreateBookCommand(PersistBookPort persistBookPort) {
         this.persistBookPort = persistBookPort;
     }
 
     @Override
-    public void upsert(Request request) {
-        var book = Book.create(request.businessId(), request.author(), request.title(), request.description());
-        persistBookPort.upsert(book);
+    public Book create(Request request) {
+        var book = Book.create(request.id(), request.title(), request.author(), request.description());
+        return persistBookPort.create(book);
     }
 }

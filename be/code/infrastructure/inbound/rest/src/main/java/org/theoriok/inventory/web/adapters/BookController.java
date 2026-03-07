@@ -4,23 +4,27 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import io.micrometer.core.annotation.Timed;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.theoriok.inventory.BookId;
+import org.theoriok.inventory.command.CreateBook;
 import org.theoriok.inventory.command.DeleteBook;
-import org.theoriok.inventory.command.UpsertBook;
+import org.theoriok.inventory.command.UpdateBook;
 import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.query.FindBooks;
 import org.theoriok.inventory.web.dto.BookDto;
-import org.theoriok.inventory.web.dto.UpsertBookDto;
+import org.theoriok.inventory.web.dto.CreateBookDto;
+import org.theoriok.inventory.web.dto.UpdateBookDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,12 +36,14 @@ import java.util.List;
 public class BookController {
 
     private final FindBooks findBooks;
-    private final UpsertBook upsertBook;
+    private final CreateBook createBook;
+    private final UpdateBook updateBook;
     private final DeleteBook deleteBook;
 
-    public BookController(FindBooks findBooks, UpsertBook upsertBook, DeleteBook deleteBook) {
+    public BookController(FindBooks findBooks, CreateBook createBook, UpdateBook updateBook, DeleteBook deleteBook) {
         this.findBooks = findBooks;
-        this.upsertBook = upsertBook;
+        this.createBook = createBook;
+        this.updateBook = updateBook;
         this.deleteBook = deleteBook;
     }
 
@@ -63,15 +69,32 @@ public class BookController {
         };
     }
 
-    @PutMapping
-    public ResponseEntity<Void> upsertBook(@Valid @RequestBody UpsertBookDto bookDto) {
-        upsertBook.upsert(toUpsertRequest(bookDto));
-        return ResponseEntity.noContent().build();
+    @PostMapping
+    public ResponseEntity<BookDto> createBook(@Valid @RequestBody CreateBookDto bookDto) {
+        var book = createBook.create(toCreateRequest(bookDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toBookDto(book));
     }
 
-    private UpsertBook.Request toUpsertRequest(UpsertBookDto bookDto) {
-        return new UpsertBook.Request(
-            new BookId(bookDto.businessId()),
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateBook(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateBookDto bookDto) {
+        return switch (updateBook.update(toUpdateRequest(id, bookDto))) {
+            case UPDATED -> ResponseEntity.noContent().build();
+            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
+        };
+    }
+
+    private CreateBook.Request toCreateRequest(CreateBookDto bookDto) {
+        return new CreateBook.Request(
+            BookId.randomBookId(),
+            bookDto.title(),
+            bookDto.author(),
+            bookDto.description()
+        );
+    }
+
+    private UpdateBook.Request toUpdateRequest(String id, UpdateBookDto bookDto) {
+        return new UpdateBook.Request(
+            new BookId(id),
             bookDto.title(),
             bookDto.author(),
             bookDto.description()
@@ -86,7 +109,7 @@ public class BookController {
 
     private BookDto toBookDto(Book book) {
         return new BookDto(
-            book.businessId().value(),
+            book.id().value(),
             book.title(),
             book.author(),
             book.description()

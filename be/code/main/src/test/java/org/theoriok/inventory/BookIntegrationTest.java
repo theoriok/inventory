@@ -1,11 +1,13 @@
 package org.theoriok.inventory;
 
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.theoriok.inventory.persistence.entities.BookEntity;
 import org.theoriok.inventory.persistence.repositories.BookRepository;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 class BookIntegrationTest extends IntegrationTest {
@@ -38,85 +41,79 @@ class BookIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnBookWhenBookFound() throws Exception {
-            bookRepository.save(testBook());
+            var book = bookRepository.save(testBook());
 
             mvc.perform(get("/books"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedBooks()));
+                .andExpect(content().json(expectedBooks(book.getId())));
         }
 
         @Test
         void shouldReturnBookWhenBookFoundById() throws Exception {
-            bookRepository.save(testBook());
+            var book = bookRepository.save(testBook());
 
-            mvc.perform(get("/books/BOOK-1"))
+            mvc.perform(get("/books/" + book.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedBook()));
+                .andExpect(content().json(expectedBook(book.getId())));
         }
 
         @Test
         void shouldReturnNotFoundWhenBookNotFoundById() throws Exception {
-            mvc.perform(get("/books/BOOK-1"))
+            var randomId = UUID.randomUUID();
+            mvc.perform(get("/books/" + randomId))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(expectedBookNotFoundProblemJson()));
+                .andExpect(content().json(expectedBookNotFoundProblemJson(randomId)));
         }
 
         @Language("JSON")
-        private String expectedBooks() {
+        private String expectedBooks(UUID id) {
             return """
             [
                 {
-                    "business_id": "BOOK-1",
+                    "id": "%s",
                     "title": "The Hobbit",
                     "author": "JRR Tolkien",
                     "description": "In a hole under the ground, there lived a Hobbit."
                 }
             ]
-            """;
+            """.formatted(id);
         }
 
         @Language("JSON")
-        private String expectedBook() {
+        private String expectedBook(UUID id) {
             return """
             {
-                "business_id": "BOOK-1",
+                "id": "%s",
                 "title": "The Hobbit",
                 "author": "JRR Tolkien",
                 "description": "In a hole under the ground, there lived a Hobbit."
             }
-            """;
+            """.formatted(id);
         }
     }
 
     @Nested
-    class Upsert {
+    class Create {
         @Test
-        void shouldInsertNewBook() throws Exception {
-            mvc.perform(put("/books")
+        void shouldCreateNewBook() throws Exception {
+            var result = mvc.perform(post("/books")
                     .contentType(APPLICATION_JSON)
-                    .content(bookToUpsert()))
-                .andExpect(status().isNoContent());
+                    .content(bookToCreate()))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+            assertThatJson(result.getResponse().getContentAsString())
+                .isEqualTo("""
+                {
+                    "id": "${json-unit.any-string}",
+                    "title": "The Hobbit",
+                    "author": "JRR Tolkien",
+                    "description": "In a hole under the ground, there lived a Hobbit."
+                }
+                """);
 
             assertThat(bookRepository.findAll())
                 .singleElement()
-                .returns("BOOK-1", from(BookEntity::getBusinessId))
-                .returns("The Hobbit", from(BookEntity::getTitle))
-                .returns("JRR Tolkien", from(BookEntity::getAuthor))
-                .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
-        }
-
-        @Test
-        void shouldUpdateExistingBook() throws Exception {
-            bookRepository.save(testBookWithSameIdButDifferentDescription());
-
-            mvc.perform(put("/books")
-                    .contentType(APPLICATION_JSON)
-                    .content(bookToUpsert()))
-                .andExpect(status().isNoContent());
-
-            assertThat(bookRepository.findAll())
-                .singleElement()
-                .returns("BOOK-1", from(BookEntity::getBusinessId))
                 .returns("The Hobbit", from(BookEntity::getTitle))
                 .returns("JRR Tolkien", from(BookEntity::getAuthor))
                 .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
@@ -125,7 +122,7 @@ class BookIntegrationTest extends IntegrationTest {
         @ParameterizedTest
         @MethodSource("invalidBookData")
         void shouldValidateFields(String invalidBookJson, String expectedProblemJson) throws Exception {
-            mvc.perform(put("/books")
+            mvc.perform(post("/books")
                     .contentType(APPLICATION_JSON)
                     .content(invalidBookJson))
                 .andExpect(status().isBadRequest())
@@ -134,15 +131,15 @@ class BookIntegrationTest extends IntegrationTest {
 
         private static Stream<Arguments> invalidBookData() {
             return Stream.of(
-                arguments(bookToUpsertWithNulls(), expectedBlankValidationProblemJson()),
-                arguments(bookToUpsertWithBlankStrings(), expectedBlankValidationProblemJson()),
-                arguments(bookToUpsertWithWhitespace(), expectedBlankValidationProblemJson()),
-                arguments(bookToUpsertWithFieldsTooLong(), expectedMaxLengthValidationProblemJson())
+                arguments(bookToCreateWithNulls(), expectedBlankValidationProblemJson()),
+                arguments(bookToCreateWithBlankStrings(), expectedBlankValidationProblemJson()),
+                arguments(bookToCreateWithWhitespace(), expectedBlankValidationProblemJson()),
+                arguments(bookToCreateWithFieldsTooLong(), expectedMaxLengthValidationProblemJson())
             );
         }
 
         @Language("JSON")
-        private static String bookToUpsertWithNulls() {
+        private static String bookToCreateWithNulls() {
             return """
                 {
                 
@@ -151,10 +148,9 @@ class BookIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private static String bookToUpsertWithBlankStrings() {
+        private static String bookToCreateWithBlankStrings() {
             return """
                 {
-                    "business_id": "",
                     "title": "",
                     "author": "",
                     "description": ""
@@ -163,10 +159,9 @@ class BookIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private static String bookToUpsertWithWhitespace() {
+        private static String bookToCreateWithWhitespace() {
             return """
                 {
-                    "business_id": "   ",
                     "title": "   ",
                     "author": "   ",
                     "description": "   "
@@ -175,10 +170,9 @@ class BookIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private String bookToUpsert() {
+        private String bookToCreate() {
             return """
                 {
-                    "business_id": "BOOK-1",
                     "title": "The Hobbit",
                     "author": "JRR Tolkien",
                     "description": "In a hole under the ground, there lived a Hobbit."
@@ -187,16 +181,14 @@ class BookIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private static String bookToUpsertWithFieldsTooLong() {
+        private static String bookToCreateWithFieldsTooLong() {
             return """
                 {
-                    "business_id": "%s",
                     "title": "%s",
                     "author": "%s",
                     "description": "%s"
                 }
                 """.formatted(
-                "A".repeat(256),
                 "B".repeat(256),
                 "C".repeat(256),
                 "D".repeat(5001)
@@ -212,7 +204,6 @@ class BookIntegrationTest extends IntegrationTest {
               "detail": "Validation failed",
               "instance": "/books",
               "errors": {
-                "businessId": "must not be blank",
                 "title": "must not be blank",
                 "author": "must not be blank",
                 "description": "must not be blank"
@@ -230,7 +221,6 @@ class BookIntegrationTest extends IntegrationTest {
               "detail": "Validation failed",
               "instance": "/books",
               "errors": {
-                "businessId": "size must be between 0 and 255",
                 "title": "size must be between 0 and 255",
                 "author": "size must be between 0 and 255",
                 "description": "size must be between 0 and 5000"
@@ -241,12 +231,161 @@ class BookIntegrationTest extends IntegrationTest {
     }
 
     @Nested
+    class Update {
+        @Test
+        void shouldUpdateExistingBook() throws Exception {
+            var book = bookRepository.save(testBookWithDifferentDescription());
+
+            mvc.perform(put("/books/" + book.getId())
+                    .contentType(APPLICATION_JSON)
+                    .content(bookToUpdate()))
+                .andExpect(status().isNoContent());
+
+            assertThat(bookRepository.findAll())
+                .singleElement()
+                .returns("The Hobbit", from(BookEntity::getTitle))
+                .returns("JRR Tolkien", from(BookEntity::getAuthor))
+                .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
+        }
+
+        @Test
+        void shouldReturnNotFoundWhenUpdatingNonExistentBook() throws Exception {
+            var randomId = UUID.randomUUID();
+            mvc.perform(put("/books/" + randomId)
+                    .contentType(APPLICATION_JSON)
+                    .content(bookToUpdate()))
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(expectedBookNotFoundProblemJsonForUpdate(randomId)));
+        }
+
+        @ParameterizedTest
+        @MethodSource("invalidBookData")
+        void shouldValidateFields(String invalidBookJson, String expectedProblemJson) throws Exception {
+            var book = bookRepository.save(testBook());
+            mvc.perform(put("/books/" + book.getId())
+                    .contentType(APPLICATION_JSON)
+                    .content(invalidBookJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(expectedProblemJson));
+        }
+
+        private static Stream<Arguments> invalidBookData() {
+            return Stream.of(
+                arguments(bookToUpdateWithNulls(), expectedBlankValidationProblemJson()),
+                arguments(bookToUpdateWithBlankStrings(), expectedBlankValidationProblemJson()),
+                arguments(bookToUpdateWithWhitespace(), expectedBlankValidationProblemJson()),
+                arguments(bookToUpdateWithFieldsTooLong(), expectedMaxLengthValidationProblemJson())
+            );
+        }
+
+        @Language("JSON")
+        private static String bookToUpdateWithNulls() {
+            return """
+                {
+                
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String bookToUpdateWithBlankStrings() {
+            return """
+                {
+                    "title": "",
+                    "author": "",
+                    "description": ""
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String bookToUpdateWithWhitespace() {
+            return """
+                {
+                    "title": "   ",
+                    "author": "   ",
+                    "description": "   "
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private String bookToUpdate() {
+            return """
+                {
+                    "title": "The Hobbit",
+                    "author": "JRR Tolkien",
+                    "description": "In a hole under the ground, there lived a Hobbit."
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String bookToUpdateWithFieldsTooLong() {
+            return """
+                {
+                    "title": "%s",
+                    "author": "%s",
+                    "description": "%s"
+                }
+                """.formatted(
+                "B".repeat(256),
+                "C".repeat(256),
+                "D".repeat(5001)
+            );
+        }
+
+        @Language("JSON")
+        private static String expectedBlankValidationProblemJson() {
+            return """
+            {
+              "title": "Bad Request",
+              "status": 400,
+              "detail": "Validation failed",
+              "errors": {
+                "title": "must not be blank",
+                "author": "must not be blank",
+                "description": "must not be blank"
+              }
+            }
+            """;
+        }
+
+        @Language("JSON")
+        private static String expectedMaxLengthValidationProblemJson() {
+            return """
+            {
+              "title": "Bad Request",
+              "status": 400,
+              "detail": "Validation failed",
+              "errors": {
+                "title": "size must be between 0 and 255",
+                "author": "size must be between 0 and 255",
+                "description": "size must be between 0 and 5000"
+              }
+            }
+            """;
+        }
+
+        @Language("JSON")
+        private String expectedBookNotFoundProblemJsonForUpdate(UUID id) {
+            return """
+                {
+                  "title": "Not Found",
+                  "status": 404,
+                  "instance": "/books/%s"
+                }
+                """.formatted(id);
+        }
+    }
+
+    @Nested
     class Delete {
         @Test
         void shouldDeleteBookWhenBookFoundById() throws Exception {
-            bookRepository.save(testBook());
+            var book = bookRepository.save(testBook());
 
-            mvc.perform(delete("/books/BOOK-1"))
+            mvc.perform(delete("/books/" + book.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
             assertThat(bookRepository.findAll()).isEmpty();
@@ -254,28 +393,29 @@ class BookIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnNotFoundWhenBookNotFoundByIdForDelete() throws Exception {
-            mvc.perform(delete("/books/BOOK-1"))
+            var randomId = UUID.randomUUID();
+            mvc.perform(delete("/books/" + randomId))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(expectedBookNotFoundProblemJson()));
+                .andExpect(content().json(expectedBookNotFoundProblemJson(randomId)));
         }
     }
 
     private BookEntity testBook() {
-        return new BookEntity("BOOK-1", "The Hobbit", "JRR Tolkien", "In a hole under the ground, there lived a Hobbit.");
+        return new BookEntity(UUID.randomUUID(), "The Hobbit", "JRR Tolkien", "In a hole under the ground, there lived a Hobbit.");
     }
 
-    private BookEntity testBookWithSameIdButDifferentDescription() {
-        return new BookEntity("BOOK-1", "The Hobbit", "JRR Tolkien", "INSERT DESCRIPTION HERE");
+    private BookEntity testBookWithDifferentDescription() {
+        return new BookEntity(UUID.randomUUID(), "The Hobbit", "JRR Tolkien", "INSERT DESCRIPTION HERE");
     }
 
     @Language("JSON")
-    private String expectedBookNotFoundProblemJson() {
+    private String expectedBookNotFoundProblemJson(UUID id) {
         return """
             {
               "title": "Not Found",
               "status": 404,
-              "instance": "/books/BOOK-1"
+              "instance": "/books/%s"
             }
-            """;
+            """.formatted(id);
     }
 }

@@ -5,14 +5,23 @@ import org.theoriok.inventory.BookId;
 
 @RecordBuilder
 public record Book(
-    BookId businessId,
+    BookId id,
     String title,
     String author,
     String description
 ) implements BookBuilder.With {
-    public static Book create(BookId bookId, String author, String title, String description) {
+    public static Book create(BookId id, String title, String author, String description) {
         return BookBuilder.builder()
-            .businessId(bookId)
+            .id(id)
+            .title(title)
+            .author(author)
+            .description(description)
+            .build();
+    }
+
+    public Book update(String title, String author, String description) {
+        return BookBuilder.builder()
+            .id(this.id)
             .title(title)
             .author(author)
             .description(description)

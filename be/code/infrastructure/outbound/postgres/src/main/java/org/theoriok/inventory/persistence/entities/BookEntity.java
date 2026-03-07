@@ -6,7 +6,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -15,12 +14,8 @@ import java.util.UUID;
 @Entity
 public class BookEntity implements Serializable {
     @Id
-    @UuidGenerator
-    @Column(updatable = false, nullable = false, columnDefinition = "uuid DEFAULT gen_random_uuid()")
+    @Column(updatable = false, nullable = false)
     private UUID id;
-
-    @Column(nullable = false, unique = true)
-    private String businessId;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
@@ -31,8 +26,8 @@ public class BookEntity implements Serializable {
     public BookEntity() {
     }
 
-    public BookEntity(String businessId, String title, String author, String description) {
-        this.businessId = businessId;
+    public BookEntity(UUID id, String title, String author, String description) {
+        this.id = id;
         this.description = description;
         this.title = title;
         this.author = author;
@@ -46,20 +41,28 @@ public class BookEntity implements Serializable {
         this.id = id;
     }
 
-    public String getBusinessId() {
-        return businessId;
-    }
-
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAuthor() {
         return author;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -75,6 +78,7 @@ public class BookEntity implements Serializable {
         return new EqualsBuilder()
             .append(title, bookEntity.title)
             .append(author, bookEntity.author)
+            .append(description, bookEntity.description)
             .isEquals();
     }
 
@@ -83,6 +87,7 @@ public class BookEntity implements Serializable {
         return new HashCodeBuilder(17, 37)
             .append(title)
             .append(author)
+            .append(description)
             .toHashCode();
     }
 }
