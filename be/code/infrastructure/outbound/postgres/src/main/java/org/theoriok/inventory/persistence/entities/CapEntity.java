@@ -8,7 +8,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -17,12 +16,9 @@ import java.util.UUID;
 @Entity
 public class CapEntity implements Serializable {
     @Id
-    @UuidGenerator
-    @Column(updatable = false, nullable = false, columnDefinition = "uuid DEFAULT gen_random_uuid()")
+    @Column(updatable = false, nullable = false)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
-    private String businessId;
     @Column(nullable = false)
     private String name;
     @Column(columnDefinition = "text")
@@ -36,8 +32,8 @@ public class CapEntity implements Serializable {
     public CapEntity() {
     }
 
-    public CapEntity(String businessId, String name, String description, int amount, CountryEntity country) {
-        this.businessId = businessId;
+    public CapEntity(UUID id, String name, String description, int amount, CountryEntity country) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.amount = amount;
@@ -50,10 +46,6 @@ public class CapEntity implements Serializable {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getBusinessId() {
-        return businessId;
     }
 
     public String getName() {

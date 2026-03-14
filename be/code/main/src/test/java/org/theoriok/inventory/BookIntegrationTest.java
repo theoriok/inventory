@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.theoriok.inventory.persistence.entities.BookEntity;
 import org.theoriok.inventory.persistence.repositories.BookRepository;
 
-import java.util.UUID;
 import java.util.stream.Stream;
 
 class BookIntegrationTest extends IntegrationTest {
@@ -45,7 +44,7 @@ class BookIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/books"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedBooks(book.getId())));
+                .andExpect(content().json(expectedBooks(BookId.from(book.getId()))));
         }
 
         @Test
@@ -54,19 +53,19 @@ class BookIntegrationTest extends IntegrationTest {
 
             mvc.perform(get("/books/" + book.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedBook(book.getId())));
+                .andExpect(content().json(expectedBook(BookId.from(book.getId()))));
         }
 
         @Test
         void shouldReturnNotFoundWhenBookNotFoundById() throws Exception {
-            var randomId = UUID.randomUUID();
-            mvc.perform(get("/books/" + randomId))
+            var randomId = BookId.randomBookId();
+            mvc.perform(get("/books/" + randomId.value()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(expectedBookNotFoundProblemJson(randomId)));
         }
 
         @Language("JSON")
-        private String expectedBooks(UUID id) {
+        private String expectedBooks(BookId id) {
             return """
             [
                 {
@@ -76,11 +75,11 @@ class BookIntegrationTest extends IntegrationTest {
                     "description": "In a hole under the ground, there lived a Hobbit."
                 }
             ]
-            """.formatted(id);
+            """.formatted(id.value());
         }
 
         @Language("JSON")
-        private String expectedBook(UUID id) {
+        private String expectedBook(BookId id) {
             return """
             {
                 "id": "%s",
@@ -88,7 +87,7 @@ class BookIntegrationTest extends IntegrationTest {
                 "author": "JRR Tolkien",
                 "description": "In a hole under the ground, there lived a Hobbit."
             }
-            """.formatted(id);
+            """.formatted(id.value());
         }
     }
 
@@ -250,8 +249,8 @@ class BookIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnNotFoundWhenUpdatingNonExistentBook() throws Exception {
-            var randomId = UUID.randomUUID();
-            mvc.perform(put("/books/" + randomId)
+            var randomId = BookId.randomBookId();
+            mvc.perform(put("/books/" + randomId.value())
                     .contentType(APPLICATION_JSON)
                     .content(bookToUpdate()))
                 .andExpect(status().isNotFound())
@@ -266,7 +265,7 @@ class BookIntegrationTest extends IntegrationTest {
                     .contentType(APPLICATION_JSON)
                     .content(invalidBookJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json(expectedProblemJson));
+                .andExpect(content().json(expectedProblemJson.formatted(book.getId())));
         }
 
         private static Stream<Arguments> invalidBookData() {
@@ -342,6 +341,7 @@ class BookIntegrationTest extends IntegrationTest {
               "title": "Bad Request",
               "status": 400,
               "detail": "Validation failed",
+              "instance": "/books/%s",
               "errors": {
                 "title": "must not be blank",
                 "author": "must not be blank",
@@ -358,6 +358,7 @@ class BookIntegrationTest extends IntegrationTest {
               "title": "Bad Request",
               "status": 400,
               "detail": "Validation failed",
+              "instance": "/books/%s",
               "errors": {
                 "title": "size must be between 0 and 255",
                 "author": "size must be between 0 and 255",
@@ -368,14 +369,14 @@ class BookIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private String expectedBookNotFoundProblemJsonForUpdate(UUID id) {
+        private String expectedBookNotFoundProblemJsonForUpdate(BookId id) {
             return """
                 {
                   "title": "Not Found",
                   "status": 404,
                   "instance": "/books/%s"
                 }
-                """.formatted(id);
+                """.formatted(id.value());
         }
     }
 
@@ -393,29 +394,29 @@ class BookIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnNotFoundWhenBookNotFoundByIdForDelete() throws Exception {
-            var randomId = UUID.randomUUID();
-            mvc.perform(delete("/books/" + randomId))
+            var randomId =BookId.randomBookId();
+            mvc.perform(delete("/books/" + randomId.value()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(expectedBookNotFoundProblemJson(randomId)));
         }
     }
 
     private BookEntity testBook() {
-        return new BookEntity(UUID.randomUUID(), "The Hobbit", "JRR Tolkien", "In a hole under the ground, there lived a Hobbit.");
+        return new BookEntity(BookId.randomBookId().toUuid(), "The Hobbit", "JRR Tolkien", "In a hole under the ground, there lived a Hobbit.");
     }
 
     private BookEntity testBookWithDifferentDescription() {
-        return new BookEntity(UUID.randomUUID(), "The Hobbit", "JRR Tolkien", "INSERT DESCRIPTION HERE");
+        return new BookEntity(BookId.randomBookId().toUuid(), "The Hobbit", "JRR Tolkien", "INSERT DESCRIPTION HERE");
     }
 
     @Language("JSON")
-    private String expectedBookNotFoundProblemJson(UUID id) {
+    private String expectedBookNotFoundProblemJson(BookId id) {
         return """
             {
               "title": "Not Found",
               "status": 404,
               "instance": "/books/%s"
             }
-            """.formatted(id);
+            """.formatted(id.value());
     }
 }

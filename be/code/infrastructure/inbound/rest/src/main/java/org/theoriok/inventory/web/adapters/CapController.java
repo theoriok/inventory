@@ -5,26 +5,30 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import io.micrometer.core.annotation.Timed;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.theoriok.inventory.CapId;
+import org.theoriok.inventory.command.CreateCap;
 import org.theoriok.inventory.command.DeleteCap;
-import org.theoriok.inventory.command.UpsertCap;
+import org.theoriok.inventory.command.UpdateCap;
 import org.theoriok.inventory.domain.Cap;
 import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.query.FindCaps;
 import org.theoriok.inventory.web.dto.CapDto;
 import org.theoriok.inventory.web.dto.CountryDto;
-import org.theoriok.inventory.web.dto.UpsertCapDto;
+import org.theoriok.inventory.web.dto.CreateCapDto;
+import org.theoriok.inventory.web.dto.UpdateCapDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -34,12 +38,14 @@ import java.util.List;
 @Timed
 @CrossOrigin(origins = "http://localhost:3000")
 public class CapController {
-    private final UpsertCap upsertCap;
+    private final CreateCap createCap;
+    private final UpdateCap updateCap;
     private final FindCaps findCaps;
     private final DeleteCap deleteCap;
 
-    public CapController(UpsertCap upsertCap, FindCaps findCaps, DeleteCap deleteCap) {
-        this.upsertCap = upsertCap;
+    public CapController(CreateCap createCap, UpdateCap updateCap, FindCaps findCaps, DeleteCap deleteCap) {
+        this.createCap = createCap;
+        this.updateCap = updateCap;
         this.findCaps = findCaps;
         this.deleteCap = deleteCap;
     }
@@ -50,15 +56,9 @@ public class CapController {
         return ResponseEntity.ok(toCapDtos(capsResponse));
     }
 
-    private List<CapDto> toCapDtos(List<Cap> capsResponse) {
-        return capsResponse.stream()
-            .map(this::toCapDto)
-            .toList();
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<CapDto> findCapById(@PathVariable(name = "id") String id) {
-        return findCaps.findById(id)
+        return findCaps.findById(new CapId(id))
             .map(this::toCapDto)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
@@ -66,18 +66,53 @@ public class CapController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCapById(@PathVariable(name = "id") String id) {
-        return switch (deleteCap.delete(id)) {
+        return switch (deleteCap.delete(new CapId(id))) {
             case DELETED -> ResponseEntity.ok().build();
             case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
         };
     }
 
-    @PutMapping
-    public ResponseEntity<?> upsertCap(@Valid @RequestBody UpsertCapDto capDto) {
-        return switch (upsertCap.upsert(toUpsertRequest(capDto))) {
-            case UPSERTED -> ResponseEntity.noContent().build();
+    @PostMapping
+    public ResponseEntity<?> createCap(@Valid @RequestBody CreateCapDto capDto) {
+        return switch (createCap.create(toCreateRequest(capDto))) {
+            case CREATED -> ResponseEntity.status(HttpStatus.CREATED).build();
             case UNKNOWN_COUNTRY -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();
         };
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCap(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateCapDto capDto) {
+        return switch (updateCap.update(toUpdateRequest(id, capDto))) {
+            case UPDATED -> ResponseEntity.noContent().build();
+            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
+            case UNKNOWN_COUNTRY -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();
+        };
+    }
+
+    private CreateCap.Request toCreateRequest(CreateCapDto capDto) {
+        return new CreateCap.Request(
+            CapId.randomCapId(),
+            capDto.name(),
+            capDto.description(),
+            capDto.amount(),
+            capDto.country()
+        );
+    }
+
+    private UpdateCap.Request toUpdateRequest(String id, UpdateCapDto capDto) {
+        return new UpdateCap.Request(
+            new CapId(id),
+            capDto.name(),
+            capDto.description(),
+            capDto.amount(),
+            capDto.country()
+        );
+    }
+
+    private List<CapDto> toCapDtos(List<Cap> capsResponse) {
+        return capsResponse.stream()
+            .map(this::toCapDto)
+            .toList();
     }
 
     private CapDto toCapDto(Cap domainObject) {
@@ -94,16 +129,6 @@ public class CapController {
         return new CountryDto(
             domainObject.name(),
             domainObject.code()
-        );
-    }
-
-    private UpsertCap.Request toUpsertRequest(UpsertCapDto dto) {
-        return new UpsertCap.Request(
-            new CapId(dto.businessId()),
-            dto.name(),
-            dto.description(),
-            dto.amount(),
-            dto.country()
         );
     }
 }

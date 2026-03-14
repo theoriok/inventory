@@ -1,5 +1,6 @@
 package org.theoriok.inventory.port;
 
+import org.theoriok.inventory.CapId;
 import org.theoriok.inventory.domain.Cap;
 
 import java.util.Collection;
@@ -10,9 +11,11 @@ public interface PersistCapPort {
 
     Collection<Cap> findAllByCountry(String country);
 
-    Optional<Cap> findById(String businessId);
+    Optional<Cap> findById(CapId id);
 
-    void upsert(Cap cap);
+    Cap create(Cap cap);
 
-    void delete(Cap cap);
+    void update(Cap cap);
+
+    boolean delete(CapId id);
 }

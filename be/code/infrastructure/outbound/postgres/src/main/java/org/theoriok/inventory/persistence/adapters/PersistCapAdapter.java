@@ -27,38 +27,45 @@ public class PersistCapAdapter implements PersistCapPort {
 
     @Override
     public Collection<Cap> findAll() {
-        var capEntities = capRepository.findAll();
-        return toDomainObjects(capEntities);
+        return toDomainObjects(capRepository.findAll());
     }
 
     @Override
     public Collection<Cap> findAllByCountry(String country) {
-        var capEntities = capRepository.findAllByCountry_code(country);
-        return toDomainObjects(capEntities);
+        return toDomainObjects(capRepository.findAllByCountry_code(country));
     }
 
     @Override
-    public Optional<Cap> findById(String businessId) {
-        return capRepository.findByBusinessId(businessId)
+    public Optional<Cap> findById(CapId id) {
+        return capRepository.findById(id.toUuid())
             .map(this::toDomainObject);
     }
 
     @Override
-    public void upsert(Cap cap) {
+    public Cap create(Cap cap) {
         var entity = toEntity(cap);
-        capRepository.findByBusinessId(cap.businessId().value()).ifPresent(foundEntity -> entity.setId(foundEntity.getId()));
-        countryRepository.findByCode(cap.country().code()).ifPresentOrElse(entity::setCountry, () -> countryRepository.save(entity.getCountry()));
+        countryRepository.findByCode(cap.country().code()).ifPresent(entity::setCountry);
+        capRepository.save(entity);
+        return cap;
+    }
+
+    @Override
+    public void update(Cap cap) {
+        var entity = toEntity(cap);
+        countryRepository.findByCode(cap.country().code()).ifPresent(entity::setCountry);
         capRepository.save(entity);
     }
 
     @Override
-    public void delete(Cap cap) {
-        capRepository.delete(capRepository.findByBusinessId(cap.businessId().value()).orElseThrow());
+    public boolean delete(CapId id) {
+        Optional<CapEntity> capEntity = capRepository.findById(id.toUuid());
+        capEntity.ifPresent(capRepository::delete);
+        return capEntity.isPresent();
     }
 
     private CapEntity toEntity(Cap domainObject) {
         return new CapEntity(
-            domainObject.businessId().value(),
+            domainObject.businessId().toUuid(),
             domainObject.name(),
             domainObject.description(),
             domainObject.amount(),
@@ -66,11 +73,11 @@ public class PersistCapAdapter implements PersistCapPort {
         );
     }
 
-private    CountryEntity toEntity(Country domainObject) {
+    private CountryEntity toEntity(Country domainObject) {
         return new CountryEntity(domainObject.name(), domainObject.code());
     }
 
-    Collection<Cap> toDomainObjects(Collection<CapEntity> entities) {
+    private Collection<Cap> toDomainObjects(Collection<CapEntity> entities) {
         return entities.stream()
             .map(this::toDomainObject)
             .toList();
@@ -78,7 +85,7 @@ private    CountryEntity toEntity(Country domainObject) {
 
     private Cap toDomainObject(CapEntity entity) {
         return CapBuilder.builder()
-            .businessId(new CapId(entity.getBusinessId()))
+            .businessId(CapId.from(entity.getId()))
             .name(entity.getName())
             .description(entity.getDescription())
             .amount(entity.getAmount())

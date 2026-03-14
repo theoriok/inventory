@@ -1,30 +1,30 @@
 package org.theoriok.inventory.command;
 
-import static org.theoriok.inventory.command.UpsertCap.Result.UNKNOWN_COUNTRY;
-import static org.theoriok.inventory.command.UpsertCap.Result.UPSERTED;
+import static org.theoriok.inventory.command.CreateCap.Result.CREATED;
+import static org.theoriok.inventory.command.CreateCap.Result.UNKNOWN_COUNTRY;
 
 import org.theoriok.inventory.domain.Cap;
 import org.theoriok.inventory.port.PersistCapPort;
 import org.theoriok.inventory.port.PersistCountryPort;
 
 @Command
-public class UpsertCapCommand implements UpsertCap {
+public class CreateCapCommand implements CreateCap {
 
     private final PersistCapPort persistCapPort;
     private final PersistCountryPort persistCountryPort;
 
-    public UpsertCapCommand(PersistCapPort persistCapPort, PersistCountryPort persistCountryPort) {
+    public CreateCapCommand(PersistCapPort persistCapPort, PersistCountryPort persistCountryPort) {
         this.persistCapPort = persistCapPort;
         this.persistCountryPort = persistCountryPort;
     }
 
     @Override
-    public Result upsert(Request request) {
+    public Result create(Request request) {
         return persistCountryPort.findByCode(request.country())
             .map(country -> {
-                var cap = Cap.create(request.businessId(), request.name(), request.description(), request.amount(), country);
-                persistCapPort.upsert(cap);
-                return UPSERTED;
+                var cap = Cap.create(request.id(), request.name(), request.description(), request.amount(), country);
+                persistCapPort.create(cap);
+                return CREATED;
             })
             .orElse(UNKNOWN_COUNTRY);
     }

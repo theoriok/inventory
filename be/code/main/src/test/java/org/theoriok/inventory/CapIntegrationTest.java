@@ -6,6 +6,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,35 +45,35 @@ class CapIntegrationTest extends IntegrationTest {
         void shouldReturnCapWhenCapFound() throws Exception {
             var country = testCountry();
             countryRepository.save(country);
-            capRepository.save(testCap(country));
+            var cap = capRepository.save(testCap(country));
 
             mvc.perform(get("/caps"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedCaps()));
+                .andExpect(content().json(expectedCaps(CapId.from(cap.getId()))));
         }
 
         @Test
         void shouldReturnCapsByCountry() throws Exception {
             var country = testCountry("BE");
             countryRepository.save(country);
-            capRepository.save(testCap(country, "BE-1"));
+            var cap = capRepository.save(testCap(country));
             var differentCountry = testCountry("NL");
             countryRepository.save(differentCountry);
-            capRepository.save(testCap(differentCountry, "NL-2"));
+            capRepository.save(testCap(differentCountry));
 
             mvc.perform(get("/caps?country=BE"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedCaps()));
+                .andExpect(content().json(expectedCaps(CapId.from(cap.getId()))));
         }
 
         @Test
         void shouldReturnEmptyArrayWhenNoCapsFoundForCountry() throws Exception {
             var country = testCountry("BE");
             countryRepository.save(country);
-            capRepository.save(testCap(country, "BE-1"));
+            capRepository.save(testCap(country));
             var differentCountry = testCountry("NL");
             countryRepository.save(differentCountry);
-            capRepository.save(testCap(differentCountry, "NL-2"));
+            capRepository.save(testCap(differentCountry));
 
             mvc.perform(get("/caps?country=US"))
                 .andExpect(status().isOk())
@@ -81,28 +82,29 @@ class CapIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnNotFoundWhenCapNotFoundById() throws Exception {
-            mvc.perform(get("/caps/BE-1"))
+            var randomId = CapId.randomCapId();
+            mvc.perform(get("/caps/" + randomId.value()))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(expectedCapNotFoundProblemJson()));
+                .andExpect(content().json(expectedCapNotFoundProblemJson(randomId)));
         }
 
         @Test
         void shouldReturnCapWhenCapFoundById() throws Exception {
             var country = testCountry();
             countryRepository.save(country);
-            capRepository.save(testCap(country));
+            var cap = capRepository.save(testCap(country));
 
-            mvc.perform(get("/caps/BE-1"))
+            mvc.perform(get("/caps/" + cap.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedCap()));
+                .andExpect(content().json(expectedCap(CapId.from(cap.getId()))));
         }
 
         @Language("JSON")
-        private String expectedCaps() {
+        private String expectedCaps(CapId id) {
             return """
                 [
                     {
-                        "business_id": "BE-1",
+                        "id": "%s",
                         "name": "Belgian Cap",
                         "description": "This is a Belgian Cap",
                         "amount": 5,
@@ -112,14 +114,14 @@ class CapIntegrationTest extends IntegrationTest {
                         }
                     }
                 ]
-                """;
+                """.formatted(id.value());
         }
 
         @Language("JSON")
-        private String expectedCap() {
+        private String expectedCap(CapId id) {
             return """
                 {
-                    "business_id": "BE-1",
+                    "id": "%s",
                     "name": "Belgian Cap",
                     "description": "This is a Belgian Cap",
                     "amount": 5,
@@ -128,45 +130,24 @@ class CapIntegrationTest extends IntegrationTest {
                         "code": "BE"
                     }
                 }
-                """;
+                """.formatted(id.value());
         }
     }
 
     @Nested
-    class Upsert {
+    class Create {
         @Test
-        void shouldInsertNewCap() throws Exception {
+        void shouldCreateNewCap() throws Exception {
             var country = testCountry();
             countryRepository.save(country);
 
-            mvc.perform(put("/caps")
+            mvc.perform(post("/caps")
                     .contentType(APPLICATION_JSON)
-                    .content(capToUpsert()))
-                .andExpect(status().isNoContent());
+                    .content(capToCreate()))
+                .andExpect(status().isCreated());
 
             assertThat(capRepository.findAll())
                 .singleElement()
-                .returns("BE-1", from(CapEntity::getBusinessId))
-                .returns("Belgian Cap", from(CapEntity::getName))
-                .returns("This is a Belgian Cap", from(CapEntity::getDescription))
-                .returns(5, from(CapEntity::getAmount))
-                .returns(country, from(CapEntity::getCountry));
-        }
-
-        @Test
-        void shouldUpdateExistingCap() throws Exception {
-            var country = testCountry();
-            countryRepository.save(country);
-            capRepository.save(testCapWithSameIdButDifferentValues(country));
-
-            mvc.perform(put("/caps")
-                    .contentType(APPLICATION_JSON)
-                    .content(capToUpsert()))
-                .andExpect(status().isNoContent());
-
-            assertThat(capRepository.findAll())
-                .singleElement()
-                .returns("BE-1", from(CapEntity::getBusinessId))
                 .returns("Belgian Cap", from(CapEntity::getName))
                 .returns("This is a Belgian Cap", from(CapEntity::getDescription))
                 .returns(5, from(CapEntity::getAmount))
@@ -175,9 +156,9 @@ class CapIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldHandleUnknownCountry() throws Exception {
-            mvc.perform(put("/caps")
+            mvc.perform(post("/caps")
                     .contentType(APPLICATION_JSON)
-                    .content(capToUpsert()))
+                    .content(capToCreate()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(expectedBadRequestProblemJson()));
         }
@@ -185,7 +166,7 @@ class CapIntegrationTest extends IntegrationTest {
         @ParameterizedTest
         @MethodSource("invalidCapData")
         void shouldValidateFields(String invalidCapJson, String expectedProblemJson) throws Exception {
-            mvc.perform(put("/caps")
+            mvc.perform(post("/caps")
                     .contentType(APPLICATION_JSON)
                     .content(invalidCapJson))
                 .andExpect(status().isBadRequest())
@@ -194,19 +175,18 @@ class CapIntegrationTest extends IntegrationTest {
 
         private static Stream<Arguments> invalidCapData() {
             return Stream.of(
-                arguments(capToUpsertWithNulls(), expectedBlankValidationProblemJson()),
-                arguments(capToUpsertWithBlankStrings(), expectedBlankValidationProblemJson()),
-                arguments(capToUpsertWithWhitespace(), expectedBlankValidationProblemJson()),
-                arguments(capToUpsertWithFieldsTooLong(), expectedMaxLengthValidationProblemJson()),
-                arguments(capToUpsertWithNegativeAmount(), expectedPositiveAmountValidationProblemJson())
+                arguments(capToCreateWithNulls(), expectedBlankValidationProblemJson()),
+                arguments(capToCreateWithBlankStrings(), expectedBlankValidationProblemJson()),
+                arguments(capToCreateWithWhitespace(), expectedBlankValidationProblemJson()),
+                arguments(capToCreateWithFieldsTooLong(), expectedMaxLengthValidationProblemJson()),
+                arguments(capToCreateWithNegativeAmount(), expectedPositiveAmountValidationProblemJson())
             );
         }
 
         @Language("JSON")
-        private String capToUpsert() {
+        private String capToCreate() {
             return """
                 {
-                    "business_id": "BE-1",
                     "name": "Belgian Cap",
                     "description": "This is a Belgian Cap",
                     "amount": 5,
@@ -216,7 +196,7 @@ class CapIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private static String capToUpsertWithNulls() {
+        private static String capToCreateWithNulls() {
             return """
                 {
                 
@@ -225,10 +205,9 @@ class CapIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private static String capToUpsertWithBlankStrings() {
+        private static String capToCreateWithBlankStrings() {
             return """
                 {
-                    "business_id": "",
                     "name": "",
                     "description": "",
                     "amount": 1,
@@ -238,10 +217,9 @@ class CapIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private static String capToUpsertWithWhitespace() {
+        private static String capToCreateWithWhitespace() {
             return """
                 {
-                    "business_id": "   ",
                     "name": "   ",
                     "description": "   ",
                     "amount": 1,
@@ -251,17 +229,15 @@ class CapIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private static String capToUpsertWithFieldsTooLong() {
+        private static String capToCreateWithFieldsTooLong() {
             return """
                 {
-                    "business_id": "%s",
                     "name": "%s",
                     "description": "%s",
                     "amount": 1,
                     "country": "%s"
                 }
                 """.formatted(
-                "A".repeat(256),
                 "B".repeat(256),
                 "C".repeat(5001),
                 "D".repeat(256)
@@ -269,10 +245,9 @@ class CapIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private static String capToUpsertWithNegativeAmount() {
+        private static String capToCreateWithNegativeAmount() {
             return """
                 {
-                    "business_id": "BE-1",
                     "name": "Belgian Cap",
                     "description": "This is a Belgian Cap",
                     "amount": -1,
@@ -290,7 +265,6 @@ class CapIntegrationTest extends IntegrationTest {
                   "detail": "Validation failed",
                   "instance": "/caps",
                   "errors": {
-                    "businessId": "must not be blank",
                     "name": "must not be blank",
                     "description": "must not be blank",
                     "country": "must not be blank"
@@ -308,7 +282,6 @@ class CapIntegrationTest extends IntegrationTest {
                   "detail": "Validation failed",
                   "instance": "/caps",
                   "errors": {
-                    "businessId": "size must be between 0 and 255",
                     "name": "size must be between 0 and 255",
                     "description": "size must be between 0 and 5000",
                     "country": "size must be between 0 and 10"
@@ -346,14 +319,216 @@ class CapIntegrationTest extends IntegrationTest {
     }
 
     @Nested
+    class Update {
+        @Test
+        void shouldUpdateExistingCap() throws Exception {
+            var country = testCountry();
+            countryRepository.save(country);
+            var cap = capRepository.save(testCap(country));
+
+            mvc.perform(put("/caps/" + cap.getId())
+                    .contentType(APPLICATION_JSON)
+                    .content(capToUpdate()))
+                .andExpect(status().isNoContent());
+
+            assertThat(capRepository.findAll())
+                .singleElement()
+                .returns(cap.getId(), from(CapEntity::getId))
+                .returns("Updated Cap", from(CapEntity::getName))
+                .returns("Updated description", from(CapEntity::getDescription))
+                .returns(10, from(CapEntity::getAmount))
+                .returns(country, from(CapEntity::getCountry));
+        }
+
+        @Test
+        void shouldReturnNotFoundWhenUpdatingNonExistentCap() throws Exception {
+            var randomId = CapId.randomCapId();
+            mvc.perform(put("/caps/" + randomId.value())
+                    .contentType(APPLICATION_JSON)
+                    .content(capToUpdate()))
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(expectedCapNotFoundProblemJson(randomId)));
+        }
+
+        @Test
+        void shouldHandleUnknownCountry() throws Exception {
+            var country = testCountry();
+            countryRepository.save(country);
+            var cap = capRepository.save(testCap(country));
+
+            mvc.perform(put("/caps/" + cap.getId())
+                    .contentType(APPLICATION_JSON)
+                    .content(capToUpdateWithUnknownCountry()))
+                .andExpect(status().isBadRequest());
+        }
+
+        @ParameterizedTest
+        @MethodSource("invalidCapData")
+        void shouldValidateFields(String invalidCapJson, String expectedProblemJson) throws Exception {
+            var country = testCountry();
+            countryRepository.save(country);
+            var cap = capRepository.save(testCap(country));
+            mvc.perform(put("/caps/" + cap.getId())
+                    .contentType(APPLICATION_JSON)
+                    .content(invalidCapJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(expectedProblemJson.formatted(cap.getId())));
+        }
+
+        private static Stream<Arguments> invalidCapData() {
+            return Stream.of(
+                arguments(capToUpdateWithNulls(), expectedBlankValidationProblemJson()),
+                arguments(capToUpdateWithBlankStrings(), expectedBlankValidationProblemJson()),
+                arguments(capToUpdateWithWhitespace(), expectedBlankValidationProblemJson()),
+                arguments(capToUpdateWithFieldsTooLong(), expectedMaxLengthValidationProblemJson()),
+                arguments(capToUpdateWithNegativeAmount(), expectedPositiveAmountValidationProblemJson())
+            );
+        }
+
+        @Language("JSON")
+        private String capToUpdate() {
+            return """
+                {
+                    "name": "Updated Cap",
+                    "description": "Updated description",
+                    "amount": 10,
+                    "country": "BE"
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private String capToUpdateWithUnknownCountry() {
+            return """
+                {
+                    "name": "Updated Cap",
+                    "description": "Updated description",
+                    "amount": 10,
+                    "country": "XX"
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String capToUpdateWithNulls() {
+            return """
+                {
+                
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String capToUpdateWithBlankStrings() {
+            return """
+                {
+                    "name": "",
+                    "description": "",
+                    "amount": 1,
+                    "country": ""
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String capToUpdateWithWhitespace() {
+            return """
+                {
+                    "name": "   ",
+                    "description": "   ",
+                    "amount": 1,
+                    "country": "   "
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String capToUpdateWithFieldsTooLong() {
+            return """
+                {
+                    "name": "%s",
+                    "description": "%s",
+                    "amount": 1,
+                    "country": "%s"
+                }
+                """.formatted(
+                "B".repeat(256),
+                "C".repeat(5001),
+                "D".repeat(256)
+            );
+        }
+
+        @Language("JSON")
+        private static String capToUpdateWithNegativeAmount() {
+            return """
+                {
+                    "name": "Belgian Cap",
+                    "description": "This is a Belgian Cap",
+                    "amount": -1,
+                    "country": "BE"
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String expectedBlankValidationProblemJson() {
+            return """
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/caps/%s",
+                  "errors": {
+                    "name": "must not be blank",
+                    "description": "must not be blank",
+                    "country": "must not be blank"
+                  }
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String expectedMaxLengthValidationProblemJson() {
+            return """
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/caps/%s",
+                  "errors": {
+                    "name": "size must be between 0 and 255",
+                    "description": "size must be between 0 and 5000",
+                    "country": "size must be between 0 and 10"
+                  }
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String expectedPositiveAmountValidationProblemJson() {
+            return """
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/caps/%s",
+                  "errors": {
+                    "amount": "must be greater than 0"
+                  }
+                }
+                """;
+        }
+    }
+
+    @Nested
     class Delete {
         @Test
         void shouldDeleteCapWhenCapFoundById() throws Exception {
             var country = testCountry();
             countryRepository.save(country);
-            capRepository.save(testCap(country));
+            var cap = capRepository.save(testCap(country));
 
-            mvc.perform(delete("/caps/BE-1"))
+            mvc.perform(delete("/caps/" + cap.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
             assertThat(capRepository.findAll()).isEmpty();
@@ -361,33 +536,26 @@ class CapIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnNotFoundWhenCapNotFoundByIdForDelete() throws Exception {
-            mvc.perform(delete("/caps/BE-1"))
+            var randomId = CapId.randomCapId();
+            mvc.perform(delete("/caps/" + randomId.value()))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(expectedCapNotFoundProblemJson()));
+                .andExpect(content().json(expectedCapNotFoundProblemJson(randomId)));
         }
     }
 
     @Language("JSON")
-    private String expectedCapNotFoundProblemJson() {
+    private String expectedCapNotFoundProblemJson(CapId id) {
         return """
             {
               "title": "Not Found",
               "status": 404,
-              "instance": "/caps/BE-1"
+              "instance": "/caps/%s"
             }
-            """;
+            """.formatted(id.value());
     }
 
     private CapEntity testCap(CountryEntity country) {
-        return testCap(country, "BE-1");
-    }
-
-    private CapEntity testCap(CountryEntity country, String businessId) {
-        return new CapEntity(businessId, "Belgian Cap", "This is a Belgian Cap", 5, country);
-    }
-
-    private CapEntity testCapWithSameIdButDifferentValues(CountryEntity country) {
-        return new CapEntity("BE-1", "Jupiler", "Stella Artois en al", 1, country);
+        return new CapEntity(CapId.randomCapId().toUuid(), "Belgian Cap", "This is a Belgian Cap", 5, country);
     }
 
     private CountryEntity testCountry() {

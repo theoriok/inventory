@@ -3,7 +3,7 @@ package org.theoriok.inventory.web.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record CapDto(
-    @JsonProperty("business_id") String businessId,
+    @JsonProperty("id") String id,
     @JsonProperty("name") String name,
     @JsonProperty("description") String description,
     @JsonProperty("amount") int amount,

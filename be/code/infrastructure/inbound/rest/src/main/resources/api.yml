@@ -26,19 +26,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Cap'
-    put:
+    post:
       tags:
         - cap-controller
-      operationId: upsertCap
+      operationId: createCap
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpsertCap'
+              $ref: '#/components/schemas/CreateCap'
         required: true
       responses:
-        '204':
-          description: No-content
+        '201':
+          description: Created
         '400':
           description: Validation failed or unknown country
           content:
@@ -63,6 +63,33 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Cap'
+        '404':
+          description: Cap not found
+    put:
+      tags:
+        - cap-controller
+      operationId: updateCap
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCap'
+        required: true
+      responses:
+        '204':
+          description: No-content
+        '400':
+          description: Validation failed or unknown country
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
         '404':
           description: Cap not found
     delete:
@@ -247,18 +274,35 @@ components:
         description:
           type: string
           maxLength: 5000
-    UpsertCap:
+    CreateCap:
       type: object
       required:
-        - business_id
         - name
         - description
         - amount
         - country
       properties:
-        business_id:
+        name:
           type: string
           maxLength: 255
+        description:
+          type: string
+          maxLength: 5000
+        amount:
+          type: integer
+          format: int32
+          minimum: 1
+        country:
+          type: string
+          maxLength: 10
+    UpdateCap:
+      type: object
+      required:
+        - name
+        - description
+        - amount
+        - country
+      properties:
         name:
           type: string
           maxLength: 255
@@ -275,7 +319,7 @@ components:
     Cap:
       type: object
       properties:
-        business_id:
+        id:
           type: string
         name:
           type: string

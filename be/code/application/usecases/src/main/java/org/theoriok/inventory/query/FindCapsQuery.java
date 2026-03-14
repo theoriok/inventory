@@ -1,5 +1,6 @@
 package org.theoriok.inventory.query;
 
+import org.theoriok.inventory.CapId;
 import org.theoriok.inventory.domain.Cap;
 import org.theoriok.inventory.port.PersistCapPort;
 
@@ -23,7 +24,7 @@ public class FindCapsQuery implements FindCaps {
     }
 
     @Override
-    public Optional<Cap> findById(String businessId) {
-        return persistCapPort.findById(businessId);
+    public Optional<Cap> findById(CapId id) {
+        return persistCapPort.findById(id);
     }
 }

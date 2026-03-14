@@ -20,4 +20,14 @@ public record Cap(
             .country(country)
             .build();
     }
+
+    public Cap update(String name, String description, int amount, Country country) {
+        return CapBuilder.builder()
+            .businessId(this.businessId)
+            .name(name)
+            .description(description)
+            .amount(amount)
+            .country(country)
+            .build();
+    }
 }

@@ -10,15 +10,25 @@ Accept: application/json
 GET {{baseUrl}}/caps/cap-123
 Accept: application/json
 
-### Create/Update cap
-PUT {{baseUrl}}/caps
+### Create cap
+POST {{baseUrl}}/caps
 Content-Type: application/json
 
 {
-  "business_id": "cap-123",
   "name": "Sample Cap",
   "description": "A sample cap description",
   "amount": 5,
+  "country": "BE"
+}
+
+### Update cap
+PUT {{baseUrl}}/caps/cap-123
+Content-Type: application/json
+
+{
+  "name": "Updated Cap",
+  "description": "An updated cap description",
+  "amount": 10,
   "country": "BE"
 }
 
