@@ -116,6 +116,8 @@ allprojects {
         dependencies {
             dependency "org.flywaydb:flyway-core:$flywayVersion"
             dependency "org.jetbrains:annotations:$annotationsVersion"
+            dependency "com.tngtech.archunit:archunit-junit5:1.4.1"
+            dependency "com.tngtech.archunit:archunit-junit5-engine:1.4.1"
         }
     }
 

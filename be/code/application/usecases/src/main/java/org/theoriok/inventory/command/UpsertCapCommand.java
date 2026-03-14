@@ -3,14 +3,11 @@ package org.theoriok.inventory.command;
 import static org.theoriok.inventory.command.UpsertCap.Result.UNKNOWN_COUNTRY;
 import static org.theoriok.inventory.command.UpsertCap.Result.UPSERTED;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.theoriok.inventory.domain.Cap;
 import org.theoriok.inventory.port.PersistCapPort;
 import org.theoriok.inventory.port.PersistCountryPort;
 
-@Transactional
-@Component
+@Command
 public class UpsertCapCommand implements UpsertCap {
 
     private final PersistCapPort persistCapPort;

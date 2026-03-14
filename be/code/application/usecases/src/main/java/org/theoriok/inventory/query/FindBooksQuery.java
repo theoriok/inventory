@@ -1,7 +1,5 @@
 package org.theoriok.inventory.query;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.port.PersistBookPort;
@@ -9,8 +7,7 @@ import org.theoriok.inventory.port.PersistBookPort;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional(readOnly = true)
-@Component
+@Query
 public class FindBooksQuery implements FindBooks {
     private final PersistBookPort persistBookPort;
 

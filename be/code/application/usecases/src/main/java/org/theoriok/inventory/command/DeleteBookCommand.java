@@ -3,13 +3,10 @@ package org.theoriok.inventory.command;
 import static org.theoriok.inventory.command.DeleteBook.Result.DELETED;
 import static org.theoriok.inventory.command.DeleteBook.Result.NOT_FOUND;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.port.PersistBookPort;
 
-@Transactional
-@Component
+@Command
 public class DeleteBookCommand implements DeleteBook {
     private final PersistBookPort persistBookPort;
 
