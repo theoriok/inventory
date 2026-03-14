@@ -4,8 +4,10 @@ import static org.theoriok.inventory.command.DeleteCap.Result.DELETED;
 import static org.theoriok.inventory.command.DeleteCap.Result.NOT_FOUND;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.theoriok.inventory.port.PersistCapPort;
 
+@Transactional
 @Component
 public class DeleteCapCommand implements DeleteCap {
     private final PersistCapPort persistCapPort;

@@ -1,9 +1,11 @@
 package org.theoriok.inventory.command;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.port.PersistBookPort;
 
+@Transactional
 @Component
 public class CreateBookCommand implements CreateBook {
 

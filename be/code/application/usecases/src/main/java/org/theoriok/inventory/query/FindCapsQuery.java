@@ -1,12 +1,14 @@
 package org.theoriok.inventory.query;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.theoriok.inventory.domain.Cap;
 import org.theoriok.inventory.port.PersistCapPort;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional(readOnly = true)
 @Component
 public class FindCapsQuery implements FindCaps {
     private final PersistCapPort persistCapPort;
