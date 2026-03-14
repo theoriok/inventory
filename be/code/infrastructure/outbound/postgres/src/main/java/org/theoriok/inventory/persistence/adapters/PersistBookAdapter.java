@@ -39,10 +39,9 @@ public class PersistBookAdapter implements PersistBookPort {
     }
 
     @Override
-    public boolean update(Book book) {
+    public void update(Book book) {
         var entity = toEntity(book);
         bookRepository.save(entity);
-        return true;
     }
 
     @Override

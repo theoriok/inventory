@@ -13,7 +13,7 @@ public interface PersistBookPort {
 
     Book create(Book book);
 
-    boolean update(Book book);
+    void update(Book book);
 
     boolean delete(BookId id);
 }
