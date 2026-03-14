@@ -2,10 +2,10 @@ package org.theoriok.inventory;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
-import com.tngtech.archunit.lang.ArchRule;
 import org.theoriok.inventory.command.Command;
 import org.theoriok.inventory.query.Query;
 
@@ -13,16 +13,22 @@ import org.theoriok.inventory.query.Query;
 class AnnotationArchTest {
 
     @ArchTest
-    static final ArchRule commandClassesShouldBeAnnotatedWithCommand = classes()
-        .that().resideInAPackage("org.theoriok.inventory.command")
-        .and().areNotInterfaces()
-        .and().areNotMemberClasses()
-        .should().beAnnotatedWith(Command.class);
+    void commandClassesShouldBeAnnotatedWithCommand(JavaClasses classes) {
+        classes()
+            .that().resideInAPackage("org.theoriok.inventory.command")
+            .and().areNotInterfaces()
+            .and().areNotMemberClasses()
+            .should().beAnnotatedWith(Command.class)
+            .check(classes);
+    }
 
     @ArchTest
-    static final ArchRule queryClassesShouldBeAnnotatedWithQuery = classes()
-        .that().resideInAPackage("org.theoriok.inventory.query")
-        .and().areNotInterfaces()
-        .and().areNotMemberClasses()
-        .should().beAnnotatedWith(Query.class);
+    void queryClassesShouldBeAnnotatedWithQuery(JavaClasses classes) {
+        classes()
+            .that().resideInAPackage("org.theoriok.inventory.query")
+            .and().areNotInterfaces()
+            .and().areNotMemberClasses()
+            .should().beAnnotatedWith(Query.class)
+            .check(classes);
+    }
 }
