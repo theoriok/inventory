@@ -2,7 +2,7 @@ import {describe, expect, test, vi} from 'vitest';
 
 import {baseApi} from './base.api.ts';
 import {bookApi} from './book.api.ts';
-import {generateBook} from '../__test__/generators/book.generator.ts';
+import {generateBook, generateCreateBook} from '../__test__/generators/book.generator.ts';
 
 describe('BookApi', () => {
     describe('fetch books', () => {
@@ -40,6 +40,28 @@ describe('BookApi', () => {
             const result = await bookApi.fetchBook('123');
 
             expect(result).toEqual(book);
+        });
+    });
+
+    describe('create book', () => {
+        test('should post to /books', async () => {
+            const createBook = generateCreateBook();
+            const createdBook = generateBook();
+            vi.spyOn(baseApi, 'post').mockResolvedValue({data: createdBook});
+
+            await bookApi.createBook(createBook);
+
+            expect(baseApi.post).toHaveBeenCalledWith('/books', createBook);
+        });
+
+        test('returns the created book', async () => {
+            const createBook = generateCreateBook();
+            const createdBook = generateBook();
+            vi.spyOn(baseApi, 'post').mockResolvedValue({data: createdBook});
+
+            const result = await bookApi.createBook(createBook);
+
+            expect(result).toEqual(createdBook);
         });
     });
 });
