@@ -16,6 +16,7 @@
 - Follow existing code conventions — look at how similar things are already done in the codebase before writing new code.
 - When classes are in the same package, don't add unnecessary imports.
 - Keep code minimal. Don't add boilerplate or defensive code that isn't needed.
+- When rewriting a file with `create`, preserve all existing imports. Don't drop imports that were already there.
 
 ## Architecture
 
@@ -31,6 +32,7 @@
 - Always verify full response bodies.
 - When expected JSON needs a dynamic ID, use `%s` placeholders and `.formatted()` at the call site.
 - Don't delete or modify tests if they fail unless explicitly asked. Usually the tests fail because the production code is wrong.
+- When a production code change affects API responses (e.g. adding a response body), update the corresponding tests in the same change.
 
 ## Planning
 
