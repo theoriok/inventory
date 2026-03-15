@@ -5,11 +5,13 @@ import static java.util.Comparator.comparing;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import java.util.List;
 
@@ -18,6 +20,14 @@ import java.util.List;
 @org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 @EnableJpaRepositories
 abstract class IntegrationTest {
+
+    @ServiceConnection
+    // renovate: datasource=docker depName=postgres
+    static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:18.2-alpine");
+
+    static {
+        POSTGRES.start();
+    }
 
     @Autowired
     MockMvc mvc;

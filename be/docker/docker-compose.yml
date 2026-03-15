@@ -1,9 +1,9 @@
 services:
   db:
-    image: postgres:18.3
+    image: postgres:18.2
     restart: always
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       - POSTGRES_user=postgres
       - POSTGRES_PASSWORD=postgres

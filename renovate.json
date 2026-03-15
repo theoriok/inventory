@@ -5,6 +5,14 @@
   ],
   "prConcurrentLimit": 1,
   "rangeStrategy": "pin",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["\\.java$"],
+      "matchStrings": ["renovate:\\s*datasource=docker\\s+depName=(?<depName>\\S+)\\n\\s*.+\"\\k<depName>:(?<currentValue>[\\w.-]+)\""],
+      "datasourceTemplate": "docker"
+    }
+  ],
   "packageRules": [
     {
       "matchUpdateTypes": [
@@ -14,6 +22,11 @@
         "digest"
       ],
       "automerge": true
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchDepNames": ["postgres"],
+      "groupName": "postgres"
     }
   ]
 }
