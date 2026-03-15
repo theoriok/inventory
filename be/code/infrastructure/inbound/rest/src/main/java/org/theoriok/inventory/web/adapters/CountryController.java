@@ -14,7 +14,6 @@ import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.query.FindCountries;
 import org.theoriok.inventory.web.dto.CountryDto;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -29,7 +28,7 @@ public class CountryController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<CountryDto>> findCountries() {
+    public ResponseEntity<List<CountryDto>> findCountries() {
         return ResponseEntity.ok(toCountryDtos(findCountries.findAll()));
     }
 

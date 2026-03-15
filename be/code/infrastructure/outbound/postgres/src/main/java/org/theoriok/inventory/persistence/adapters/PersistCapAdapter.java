@@ -13,7 +13,7 @@ import org.theoriok.inventory.persistence.repositories.CapRepository;
 import org.theoriok.inventory.persistence.repositories.CountryRepository;
 import org.theoriok.inventory.port.PersistCapPort;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -29,12 +29,12 @@ public class PersistCapAdapter implements PersistCapPort {
     }
 
     @Override
-    public Collection<Cap> findAll() {
+    public List<Cap> findAll() {
         return toDomainObjects(capRepository.findAll());
     }
 
     @Override
-    public Collection<Cap> findAllByCountry(String country) {
+    public List<Cap> findAllByCountry(String country) {
         return toDomainObjects(capRepository.findAllByCountryCode(country));
     }
 
@@ -72,7 +72,7 @@ public class PersistCapAdapter implements PersistCapPort {
         );
     }
 
-    private Collection<Cap> toDomainObjects(Collection<CapEntity> entities) {
+    private List<Cap> toDomainObjects(List<CapEntity> entities) {
         return entities.stream()
             .map(this::toDomainObject)
             .toList();

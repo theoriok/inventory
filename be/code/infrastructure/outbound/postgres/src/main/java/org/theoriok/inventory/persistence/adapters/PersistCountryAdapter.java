@@ -7,7 +7,7 @@ import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.persistence.repositories.CountryRepository;
 import org.theoriok.inventory.port.PersistCountryPort;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -19,7 +19,7 @@ public class PersistCountryAdapter implements PersistCountryPort {
     }
 
     @Override
-    public Collection<Country> findAll() {
+    public List<Country> findAll() {
         return countryRepository.findAll().stream()
             .map(this::toDomainObject)
             .toList();

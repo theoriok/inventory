@@ -9,7 +9,7 @@ import org.theoriok.inventory.persistence.entities.BookEntity;
 import org.theoriok.inventory.persistence.repositories.BookRepository;
 import org.theoriok.inventory.port.PersistBookPort;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -23,7 +23,7 @@ public class PersistBookAdapter implements PersistBookPort {
     }
 
     @Override
-    public Collection<Book> findAll() {
+    public List<Book> findAll() {
         return bookRepository.findAll().stream()
             .map(this::toDomainObject)
             .toList();

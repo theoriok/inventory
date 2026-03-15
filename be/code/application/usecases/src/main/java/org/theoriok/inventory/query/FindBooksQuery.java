@@ -17,7 +17,7 @@ public class FindBooksQuery implements FindBooks {
 
     @Override
     public List<Book> findAll() {
-        return persistBookPort.findAll().stream().toList();
+        return persistBookPort.findAll();
     }
 
     @Override

@@ -2,11 +2,11 @@ package org.theoriok.inventory.port;
 
 import org.theoriok.inventory.domain.Country;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface PersistCountryPort {
-    Collection<Country> findAll();
+    List<Country> findAll();
 
     Optional<Country> findByCode(String code);
 }

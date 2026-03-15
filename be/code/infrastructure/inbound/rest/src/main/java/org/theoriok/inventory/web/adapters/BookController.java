@@ -26,7 +26,6 @@ import org.theoriok.inventory.web.dto.BookDto;
 import org.theoriok.inventory.web.dto.CreateBookDto;
 import org.theoriok.inventory.web.dto.UpdateBookDto;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -48,7 +47,7 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<BookDto>> findBooks() {
+    public ResponseEntity<List<BookDto>> findBooks() {
         var booksResponse = findBooks.findAll();
         return ResponseEntity.ok(toBookDtos(booksResponse));
     }

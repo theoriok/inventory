@@ -16,8 +16,7 @@ public class FindCountriesQuery implements FindCountries {
 
     @Override
     public List<Country> findAll() {
-        var countries = persistCountryPort.findAll();
-        return countries.stream().toList();
+        return persistCountryPort.findAll();
     }
 
     @Override

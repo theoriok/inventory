@@ -30,7 +30,6 @@ import org.theoriok.inventory.web.dto.CountryDto;
 import org.theoriok.inventory.web.dto.CreateCapDto;
 import org.theoriok.inventory.web.dto.UpdateCapDto;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -51,7 +50,7 @@ public class CapController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<CapDto>> findCaps(@RequestParam(required = false, name = "country") String country) {
+    public ResponseEntity<List<CapDto>> findCaps(@RequestParam(required = false, name = "country") String country) {
         var capsResponse = findCaps.findAll(new FindCaps.Request(country));
         return ResponseEntity.ok(toCapDtos(capsResponse));
     }
