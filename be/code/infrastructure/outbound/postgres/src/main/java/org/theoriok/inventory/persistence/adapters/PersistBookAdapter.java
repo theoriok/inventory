@@ -1,5 +1,6 @@
 package org.theoriok.inventory.persistence.adapters;
 
+import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.domain.Book;
@@ -14,9 +15,11 @@ import java.util.Optional;
 @Component
 public class PersistBookAdapter implements PersistBookPort {
     private final BookRepository bookRepository;
+    private final JdbcAggregateTemplate jdbcAggregateTemplate;
 
-    public PersistBookAdapter(BookRepository bookRepository) {
+    public PersistBookAdapter(BookRepository bookRepository, JdbcAggregateTemplate jdbcAggregateTemplate) {
         this.bookRepository = bookRepository;
+        this.jdbcAggregateTemplate = jdbcAggregateTemplate;
     }
 
     @Override
@@ -33,15 +36,13 @@ public class PersistBookAdapter implements PersistBookPort {
 
     @Override
     public Book create(Book book) {
-        var entity = toEntity(book);
-        bookRepository.save(entity);
+        jdbcAggregateTemplate.insert(toEntity(book));
         return book;
     }
 
     @Override
     public void update(Book book) {
-        var entity = toEntity(book);
-        bookRepository.save(entity);
+        jdbcAggregateTemplate.update(toEntity(book));
     }
 
     @Override
@@ -62,10 +63,10 @@ public class PersistBookAdapter implements PersistBookPort {
 
     private Book toDomainObject(BookEntity entity) {
         return BookBuilder.builder()
-            .id(BookId.from(entity.getId()))
-            .title(entity.getTitle())
-            .author(entity.getAuthor())
-            .description(entity.getDescription())
+            .id(BookId.from(entity.id()))
+            .title(entity.title())
+            .author(entity.author())
+            .description(entity.description())
             .build();
     }
 }

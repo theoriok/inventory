@@ -21,16 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.theoriok.inventory.persistence.entities.CapEntity;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.persistence.repositories.CapRepository;
-import org.theoriok.inventory.persistence.repositories.CountryRepository;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 class CapIntegrationTest extends IntegrationTest {
 
     @Autowired
     private CapRepository capRepository;
-    @Autowired
-    private CountryRepository countryRepository;
 
     @Nested
     class Find {
@@ -44,36 +42,36 @@ class CapIntegrationTest extends IntegrationTest {
         @Test
         void shouldReturnCapWhenCapFound() throws Exception {
             var country = testCountry();
-            countryRepository.save(country);
-            var cap = capRepository.save(testCap(country));
+            jdbcAggregateTemplate.insert(country);
+            var cap = jdbcAggregateTemplate.insert(testCap(country));
 
             mvc.perform(get("/caps"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedCaps(CapId.from(cap.getId()))));
+                .andExpect(content().json(expectedCaps(CapId.from(cap.id()))));
         }
 
         @Test
         void shouldReturnCapsByCountry() throws Exception {
             var country = testCountry("BE");
-            countryRepository.save(country);
-            var cap = capRepository.save(testCap(country));
+            jdbcAggregateTemplate.insert(country);
+            var cap = jdbcAggregateTemplate.insert(testCap(country));
             var differentCountry = testCountry("NL");
-            countryRepository.save(differentCountry);
-            capRepository.save(testCap(differentCountry));
+            jdbcAggregateTemplate.insert(differentCountry);
+            jdbcAggregateTemplate.insert(testCap(differentCountry));
 
             mvc.perform(get("/caps?country=BE"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedCaps(CapId.from(cap.getId()))));
+                .andExpect(content().json(expectedCaps(CapId.from(cap.id()))));
         }
 
         @Test
         void shouldReturnEmptyArrayWhenNoCapsFoundForCountry() throws Exception {
             var country = testCountry("BE");
-            countryRepository.save(country);
-            capRepository.save(testCap(country));
+            jdbcAggregateTemplate.insert(country);
+            jdbcAggregateTemplate.insert(testCap(country));
             var differentCountry = testCountry("NL");
-            countryRepository.save(differentCountry);
-            capRepository.save(testCap(differentCountry));
+            jdbcAggregateTemplate.insert(differentCountry);
+            jdbcAggregateTemplate.insert(testCap(differentCountry));
 
             mvc.perform(get("/caps?country=US"))
                 .andExpect(status().isOk())
@@ -91,12 +89,12 @@ class CapIntegrationTest extends IntegrationTest {
         @Test
         void shouldReturnCapWhenCapFoundById() throws Exception {
             var country = testCountry();
-            countryRepository.save(country);
-            var cap = capRepository.save(testCap(country));
+            jdbcAggregateTemplate.insert(country);
+            var cap = jdbcAggregateTemplate.insert(testCap(country));
 
-            mvc.perform(get("/caps/" + cap.getId()))
+            mvc.perform(get("/caps/" + cap.id()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedCap(CapId.from(cap.getId()))));
+                .andExpect(content().json(expectedCap(CapId.from(cap.id()))));
         }
 
         @Language("JSON")
@@ -139,7 +137,7 @@ class CapIntegrationTest extends IntegrationTest {
         @Test
         void shouldCreateNewCap() throws Exception {
             var country = testCountry();
-            countryRepository.save(country);
+            jdbcAggregateTemplate.insert(country);
 
             mvc.perform(post("/caps")
                     .contentType(APPLICATION_JSON)
@@ -148,10 +146,10 @@ class CapIntegrationTest extends IntegrationTest {
 
             assertThat(capRepository.findAll())
                 .singleElement()
-                .returns("Belgian Cap", from(CapEntity::getName))
-                .returns("This is a Belgian Cap", from(CapEntity::getDescription))
-                .returns(5, from(CapEntity::getAmount))
-                .returns(country, from(CapEntity::getCountry));
+                .returns("Belgian Cap", from(CapEntity::name))
+                .returns("This is a Belgian Cap", from(CapEntity::description))
+                .returns(5, from(CapEntity::amount))
+                .returns(country.code(), from(CapEntity::countryCode));
         }
 
         @Test
@@ -323,21 +321,21 @@ class CapIntegrationTest extends IntegrationTest {
         @Test
         void shouldUpdateExistingCap() throws Exception {
             var country = testCountry();
-            countryRepository.save(country);
-            var cap = capRepository.save(testCap(country));
+            jdbcAggregateTemplate.insert(country);
+            var cap = jdbcAggregateTemplate.insert(testCap(country));
 
-            mvc.perform(put("/caps/" + cap.getId())
+            mvc.perform(put("/caps/" + cap.id())
                     .contentType(APPLICATION_JSON)
                     .content(capToUpdate()))
                 .andExpect(status().isNoContent());
 
             assertThat(capRepository.findAll())
                 .singleElement()
-                .returns(cap.getId(), from(CapEntity::getId))
-                .returns("Updated Cap", from(CapEntity::getName))
-                .returns("Updated description", from(CapEntity::getDescription))
-                .returns(10, from(CapEntity::getAmount))
-                .returns(country, from(CapEntity::getCountry));
+                .returns(cap.id(), from(CapEntity::id))
+                .returns("Updated Cap", from(CapEntity::name))
+                .returns("Updated description", from(CapEntity::description))
+                .returns(10, from(CapEntity::amount))
+                .returns(country.code(), from(CapEntity::countryCode));
         }
 
         @Test
@@ -353,10 +351,10 @@ class CapIntegrationTest extends IntegrationTest {
         @Test
         void shouldHandleUnknownCountry() throws Exception {
             var country = testCountry();
-            countryRepository.save(country);
-            var cap = capRepository.save(testCap(country));
+            jdbcAggregateTemplate.insert(country);
+            var cap = jdbcAggregateTemplate.insert(testCap(country));
 
-            mvc.perform(put("/caps/" + cap.getId())
+            mvc.perform(put("/caps/" + cap.id())
                     .contentType(APPLICATION_JSON)
                     .content(capToUpdateWithUnknownCountry()))
                 .andExpect(status().isBadRequest());
@@ -366,13 +364,13 @@ class CapIntegrationTest extends IntegrationTest {
         @MethodSource("invalidCapData")
         void shouldValidateFields(String invalidCapJson, String expectedProblemJson) throws Exception {
             var country = testCountry();
-            countryRepository.save(country);
-            var cap = capRepository.save(testCap(country));
-            mvc.perform(put("/caps/" + cap.getId())
+            jdbcAggregateTemplate.insert(country);
+            var cap = jdbcAggregateTemplate.insert(testCap(country));
+            mvc.perform(put("/caps/" + cap.id())
                     .contentType(APPLICATION_JSON)
                     .content(invalidCapJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json(expectedProblemJson.formatted(cap.getId())));
+                .andExpect(content().json(expectedProblemJson.formatted(cap.id())));
         }
 
         private static Stream<Arguments> invalidCapData() {
@@ -525,10 +523,10 @@ class CapIntegrationTest extends IntegrationTest {
         @Test
         void shouldDeleteCapWhenCapFoundById() throws Exception {
             var country = testCountry();
-            countryRepository.save(country);
-            var cap = capRepository.save(testCap(country));
+            jdbcAggregateTemplate.insert(country);
+            var cap = jdbcAggregateTemplate.insert(testCap(country));
 
-            mvc.perform(delete("/caps/" + cap.getId()))
+            mvc.perform(delete("/caps/" + cap.id()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
             assertThat(capRepository.findAll()).isEmpty();
@@ -555,7 +553,7 @@ class CapIntegrationTest extends IntegrationTest {
     }
 
     private CapEntity testCap(CountryEntity country) {
-        return new CapEntity(CapId.randomCapId().toUuid(), "Belgian Cap", "This is a Belgian Cap", 5, country);
+        return new CapEntity(CapId.randomCapId().toUuid(), "Belgian Cap", "This is a Belgian Cap", 5, country.code());
     }
 
     private CountryEntity testCountry() {
@@ -563,6 +561,6 @@ class CapIntegrationTest extends IntegrationTest {
     }
 
     private CountryEntity testCountry(String code) {
-        return new CountryEntity("Belgium", code);
+        return new CountryEntity(UUID.randomUUID(), "Belgium", code);
     }
 }

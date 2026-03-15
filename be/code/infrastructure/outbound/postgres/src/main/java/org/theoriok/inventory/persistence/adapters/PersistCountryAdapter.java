@@ -20,8 +20,9 @@ public class PersistCountryAdapter implements PersistCountryPort {
 
     @Override
     public Collection<Country> findAll() {
-        var countries = countryRepository.findAll();
-        return countries.stream().map(this::toDomainObject).toList();
+        return countryRepository.findAll().stream()
+            .map(this::toDomainObject)
+            .toList();
     }
 
     @Override
@@ -32,8 +33,8 @@ public class PersistCountryAdapter implements PersistCountryPort {
 
     private Country toDomainObject(CountryEntity entity) {
         return CountryBuilder.builder()
-            .name(entity.getName())
-            .code(entity.getCode())
+            .name(entity.name())
+            .code(entity.code())
             .build();
     }
 }

@@ -40,20 +40,20 @@ class BookIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnBookWhenBookFound() throws Exception {
-            var book = bookRepository.save(testBook());
+            var book = jdbcAggregateTemplate.insert(testBook());
 
             mvc.perform(get("/books"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedBooks(BookId.from(book.getId()))));
+                .andExpect(content().json(expectedBooks(BookId.from(book.id()))));
         }
 
         @Test
         void shouldReturnBookWhenBookFoundById() throws Exception {
-            var book = bookRepository.save(testBook());
+            var book = jdbcAggregateTemplate.insert(testBook());
 
-            mvc.perform(get("/books/" + book.getId()))
+            mvc.perform(get("/books/" + book.id()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedBook(BookId.from(book.getId()))));
+                .andExpect(content().json(expectedBook(BookId.from(book.id()))));
         }
 
         @Test
@@ -113,9 +113,9 @@ class BookIntegrationTest extends IntegrationTest {
 
             assertThat(bookRepository.findAll())
                 .singleElement()
-                .returns("The Hobbit", from(BookEntity::getTitle))
-                .returns("JRR Tolkien", from(BookEntity::getAuthor))
-                .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
+                .returns("The Hobbit", from(BookEntity::title))
+                .returns("JRR Tolkien", from(BookEntity::author))
+                .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::description));
         }
 
         @ParameterizedTest
@@ -233,18 +233,18 @@ class BookIntegrationTest extends IntegrationTest {
     class Update {
         @Test
         void shouldUpdateExistingBook() throws Exception {
-            var book = bookRepository.save(testBookWithDifferentDescription());
+            var book = jdbcAggregateTemplate.insert(testBookWithDifferentDescription());
 
-            mvc.perform(put("/books/" + book.getId())
+            mvc.perform(put("/books/" + book.id())
                     .contentType(APPLICATION_JSON)
                     .content(bookToUpdate()))
                 .andExpect(status().isNoContent());
 
             assertThat(bookRepository.findAll())
                 .singleElement()
-                .returns("The Hobbit", from(BookEntity::getTitle))
-                .returns("JRR Tolkien", from(BookEntity::getAuthor))
-                .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::getDescription));
+                .returns("The Hobbit", from(BookEntity::title))
+                .returns("JRR Tolkien", from(BookEntity::author))
+                .returns("In a hole under the ground, there lived a Hobbit.", from(BookEntity::description));
         }
 
         @Test
@@ -260,12 +260,12 @@ class BookIntegrationTest extends IntegrationTest {
         @ParameterizedTest
         @MethodSource("invalidBookData")
         void shouldValidateFields(String invalidBookJson, String expectedProblemJson) throws Exception {
-            var book = bookRepository.save(testBook());
-            mvc.perform(put("/books/" + book.getId())
+            var book = jdbcAggregateTemplate.insert(testBook());
+            mvc.perform(put("/books/" + book.id())
                     .contentType(APPLICATION_JSON)
                     .content(invalidBookJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json(expectedProblemJson.formatted(book.getId())));
+                .andExpect(content().json(expectedProblemJson.formatted(book.id())));
         }
 
         private static Stream<Arguments> invalidBookData() {
@@ -384,9 +384,9 @@ class BookIntegrationTest extends IntegrationTest {
     class Delete {
         @Test
         void shouldDeleteBookWhenBookFoundById() throws Exception {
-            var book = bookRepository.save(testBook());
+            var book = jdbcAggregateTemplate.insert(testBook());
 
-            mvc.perform(delete("/books/" + book.getId()))
+            mvc.perform(delete("/books/" + book.id()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
             assertThat(bookRepository.findAll()).isEmpty();

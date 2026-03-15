@@ -7,14 +7,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
-import org.theoriok.inventory.persistence.repositories.CountryRepository;
+
+import java.util.UUID;
 
 public class CountryIntegrationTest extends IntegrationTest {
-
-    @Autowired
-    private CountryRepository countryRepository;
 
     @Nested
     class Find {
@@ -28,7 +25,7 @@ public class CountryIntegrationTest extends IntegrationTest {
         @Test
         void shouldReturnCountryWhenCountryFound() throws Exception {
             var country = testCountry();
-            countryRepository.save(country);
+            jdbcAggregateTemplate.insert(country);
 
             mvc.perform(get("/countries"))
                 .andExpect(status().isOk())
@@ -45,7 +42,7 @@ public class CountryIntegrationTest extends IntegrationTest {
         @Test
         void shouldReturnCountryWhenCountryFoundById() throws Exception {
             var country = testCountry("BE");
-            countryRepository.save(country);
+            jdbcAggregateTemplate.insert(country);
 
             mvc.perform(get("/countries/BE"))
                 .andExpect(status().isOk())
@@ -92,6 +89,6 @@ public class CountryIntegrationTest extends IntegrationTest {
 
     @SuppressWarnings("SameParameterValue")
     private CountryEntity testCountry(String code) {
-        return new CountryEntity("Belgium", code);
+        return new CountryEntity(UUID.randomUUID(), "Belgium", code);
     }
 }

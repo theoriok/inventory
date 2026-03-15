@@ -1,14 +1,11 @@
 package org.theoriok.inventory.persistence.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.theoriok.inventory.persistence.entities.CapEntity;
 
 import java.util.Collection;
 import java.util.UUID;
 
-@Repository
-public interface CapRepository extends JpaRepository<CapEntity, UUID> {
-    @SuppressWarnings("PMD.MethodNamingConventions")
-    Collection<CapEntity> findAllByCountry_code(String country);
+public interface CapRepository extends ListCrudRepository<CapEntity, UUID> {
+    Collection<CapEntity> findAllByCountryCode(String countryCode);
 }

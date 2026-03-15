@@ -1,5 +1,6 @@
 package org.theoriok.inventory.persistence.adapters;
 
+import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.CapId;
 import org.theoriok.inventory.domain.Cap;
@@ -19,10 +20,12 @@ import java.util.Optional;
 public class PersistCapAdapter implements PersistCapPort {
     private final CapRepository capRepository;
     private final CountryRepository countryRepository;
+    private final JdbcAggregateTemplate jdbcAggregateTemplate;
 
-    public PersistCapAdapter(CapRepository capRepository, CountryRepository countryRepository) {
+    public PersistCapAdapter(CapRepository capRepository, CountryRepository countryRepository, JdbcAggregateTemplate jdbcAggregateTemplate) {
         this.capRepository = capRepository;
         this.countryRepository = countryRepository;
+        this.jdbcAggregateTemplate = jdbcAggregateTemplate;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class PersistCapAdapter implements PersistCapPort {
 
     @Override
     public Collection<Cap> findAllByCountry(String country) {
-        return toDomainObjects(capRepository.findAllByCountry_code(country));
+        return toDomainObjects(capRepository.findAllByCountryCode(country));
     }
 
     @Override
@@ -43,17 +46,13 @@ public class PersistCapAdapter implements PersistCapPort {
 
     @Override
     public Cap create(Cap cap) {
-        var entity = toEntity(cap);
-        countryRepository.findByCode(cap.country().code()).ifPresent(entity::setCountry);
-        capRepository.save(entity);
+        jdbcAggregateTemplate.insert(toEntity(cap));
         return cap;
     }
 
     @Override
     public void update(Cap cap) {
-        var entity = toEntity(cap);
-        countryRepository.findByCode(cap.country().code()).ifPresent(entity::setCountry);
-        capRepository.save(entity);
+        jdbcAggregateTemplate.update(toEntity(cap));
     }
 
     @Override
@@ -69,12 +68,8 @@ public class PersistCapAdapter implements PersistCapPort {
             domainObject.name(),
             domainObject.description(),
             domainObject.amount(),
-            toEntity(domainObject.country())
+            domainObject.country().code()
         );
-    }
-
-    private CountryEntity toEntity(Country domainObject) {
-        return new CountryEntity(domainObject.name(), domainObject.code());
     }
 
     private Collection<Cap> toDomainObjects(Collection<CapEntity> entities) {
@@ -84,19 +79,20 @@ public class PersistCapAdapter implements PersistCapPort {
     }
 
     private Cap toDomainObject(CapEntity entity) {
+        var country = countryRepository.findByCode(entity.countryCode()).orElseThrow();
         return CapBuilder.builder()
-            .id(CapId.from(entity.getId()))
-            .name(entity.getName())
-            .description(entity.getDescription())
-            .amount(entity.getAmount())
-            .country(toDomainObject(entity.getCountry()))
+            .id(CapId.from(entity.id()))
+            .name(entity.name())
+            .description(entity.description())
+            .amount(entity.amount())
+            .country(toDomainObject(country))
             .build();
     }
 
     private Country toDomainObject(CountryEntity entity) {
         return CountryBuilder.builder()
-            .name(entity.getName())
-            .code(entity.getCode())
+            .name(entity.name())
+            .code(entity.code())
             .build();
     }
 }
