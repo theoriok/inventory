@@ -77,6 +77,14 @@ jobs:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
       - run: ./gradlew checkstyleMain checkstyleTest pmdMain pmdTest
+      - name: Upload lint reports
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lint-reports
+          path: |
+            be/**/build/reports/checkstyle/
+            be/**/build/reports/pmd/
 
   sonar:
     needs: test
