@@ -6,6 +6,8 @@
 - When the user says "revert", revert exactly what was asked — nothing more, nothing less.
 - Run `./gradlew clean check` after every code change unless the user explicitly says not to.
 - When a build fails, report the error and suggest a fix, but wait for the user's input before changing anything.
+- The repo might use Windows line endings (`\r\n`) for some files. Use `create` to rewrite files when `str_replace` fails due to line ending mismatches. Don't shell out to `sed`.
+- Prefer the `code` tool over `fs_read` over `cat` for reading. Prefer the `code` tool over `fs_write` over `sed` for writing.
 
 ## Code Style
 
@@ -23,6 +25,7 @@
 
 ## Testing
 
+- Use `jdbcAggregateTemplate.insert()` for test data setup, not `repository.save()`.
 - Use the actual ID from saved entities, not static constants. Save the entity, capture the returned object, use its ID.
 - Use random Vocabulary Ids for not-found test cases to guarantee the ID doesn't exist. Do not use UUID directly even if you know the underlying value is a UUID.
 - Always verify full response bodies.
