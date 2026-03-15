@@ -12,7 +12,8 @@
       "matchStrings": ["\"postgres:(?<currentValue>[\\w.-]+)\""],
       "depNameTemplate": "postgres",
       "datasourceTemplate": "docker",
-      "versioningTemplate": "docker"
+      "versioningTemplate": "docker",
+      "includePaths": ["be/code/main/src/test/**/IntegrationTest.java"]
     }
   ],
   "packageRules": [
