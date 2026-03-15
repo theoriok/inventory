@@ -22,7 +22,7 @@ import java.util.List;
 abstract class IntegrationTest {
 
     @ServiceConnection
-    static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:18.2-alpine");
+    static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:%s-alpine".formatted(System.getProperty("postgresVersion")));
 
     static {
         POSTGRES.start();

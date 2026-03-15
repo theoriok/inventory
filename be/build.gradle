@@ -50,6 +50,7 @@ allprojects {
 
     test {
         useJUnitPlatform()
+        systemProperty 'postgresVersion', findProperty('postgresVersion')
     }
 
 

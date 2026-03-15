@@ -8,12 +8,11 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["\\.java$"],
-      "matchStrings": ["\"postgres:(?<currentValue>[\\w.-]+)\""],
+      "fileMatch": ["be/gradle\\.properties$"],
+      "matchStrings": ["postgresVersion=(?<currentValue>[\\w.-]+)"],
       "depNameTemplate": "postgres",
       "datasourceTemplate": "docker",
-      "versioningTemplate": "docker",
-      "includePaths": ["be/code/main/src/test/**/IntegrationTest.java"]
+      "versioningTemplate": "docker"
     }
   ],
   "packageRules": [
