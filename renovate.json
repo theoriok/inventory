@@ -11,7 +11,8 @@
       "fileMatch": ["\\.java$"],
       "matchStrings": ["\"postgres:(?<currentValue>[\\w.-]+)\""],
       "depNameTemplate": "postgres",
-      "datasourceTemplate": "docker"
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
     }
   ],
   "packageRules": [
