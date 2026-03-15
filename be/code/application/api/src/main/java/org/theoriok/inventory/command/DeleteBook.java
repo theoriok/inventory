@@ -3,7 +3,7 @@ package org.theoriok.inventory.command;
 import org.theoriok.inventory.BookId;
 
 public interface DeleteBook {
-    Result delete(BookId businessId);
+    Result delete(BookId id);
 
     enum Result {
         DELETED,

@@ -15,7 +15,7 @@ public class DeleteBookCommand implements DeleteBook {
     }
 
     @Override
-    public Result delete(BookId businessId) {
-        return persistBookPort.delete(businessId) ? DELETED : NOT_FOUND;
+    public Result delete(BookId id) {
+        return persistBookPort.delete(id) ? DELETED : NOT_FOUND;
     }
 }

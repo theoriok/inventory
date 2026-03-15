@@ -21,8 +21,8 @@ public class FindBooksQuery implements FindBooks {
     }
 
     @Override
-    public Optional<Book> findById(BookId businessId) {
-        return persistBookPort.findById(businessId);
+    public Optional<Book> findById(BookId id) {
+        return persistBookPort.findById(id);
     }
 
 }

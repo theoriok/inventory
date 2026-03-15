@@ -368,5 +368,5 @@ components:
           additionalProperties:
             type: string
           example:
-            businessId: "must not be blank"
+            name: "must not be blank"
             title: "size must be between 0 and 255"

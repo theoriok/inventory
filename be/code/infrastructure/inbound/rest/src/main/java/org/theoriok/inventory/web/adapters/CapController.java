@@ -117,7 +117,7 @@ public class CapController {
 
     private CapDto toCapDto(Cap domainObject) {
         return new CapDto(
-            domainObject.businessId().value(),
+            domainObject.id().value(),
             domainObject.name(),
             domainObject.description(),
             domainObject.amount(),

@@ -65,7 +65,7 @@ public class PersistCapAdapter implements PersistCapPort {
 
     private CapEntity toEntity(Cap domainObject) {
         return new CapEntity(
-            domainObject.businessId().toUuid(),
+            domainObject.id().toUuid(),
             domainObject.name(),
             domainObject.description(),
             domainObject.amount(),
@@ -85,7 +85,7 @@ public class PersistCapAdapter implements PersistCapPort {
 
     private Cap toDomainObject(CapEntity entity) {
         return CapBuilder.builder()
-            .businessId(CapId.from(entity.getId()))
+            .id(CapId.from(entity.getId()))
             .name(entity.getName())
             .description(entity.getDescription())
             .amount(entity.getAmount())

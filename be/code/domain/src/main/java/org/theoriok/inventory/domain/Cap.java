@@ -5,15 +5,15 @@ import org.theoriok.inventory.CapId;
 
 @RecordBuilder
 public record Cap(
-    CapId businessId,
+    CapId id,
     String name,
     String description,
     int amount,
     Country country
 ) implements CapBuilder.With {
-    public static Cap create(CapId businessId, String name, String description, int amount, Country country) {
+    public static Cap create(CapId id, String name, String description, int amount, Country country) {
         return CapBuilder.builder()
-            .businessId(businessId)
+            .id(id)
             .name(name)
             .description(description)
             .amount(amount)
@@ -23,7 +23,7 @@ public record Cap(
 
     public Cap update(String name, String description, int amount, Country country) {
         return CapBuilder.builder()
-            .businessId(this.businessId)
+            .id(this.id)
             .name(name)
             .description(description)
             .amount(amount)
