@@ -67,27 +67,27 @@ class BookIntegrationTest extends IntegrationTest {
         @Language("JSON")
         private String expectedBooks(BookId id) {
             return """
-            [
+                [
+                    {
+                        "id": "%s",
+                        "title": "The Hobbit",
+                        "author": "JRR Tolkien",
+                        "description": "In a hole under the ground, there lived a Hobbit."
+                    }
+                ]
+                """.formatted(id.value());
+        }
+
+        @Language("JSON")
+        private String expectedBook(BookId id) {
+            return """
                 {
                     "id": "%s",
                     "title": "The Hobbit",
                     "author": "JRR Tolkien",
                     "description": "In a hole under the ground, there lived a Hobbit."
                 }
-            ]
-            """.formatted(id.value());
-        }
-
-        @Language("JSON")
-        private String expectedBook(BookId id) {
-            return """
-            {
-                "id": "%s",
-                "title": "The Hobbit",
-                "author": "JRR Tolkien",
-                "description": "In a hole under the ground, there lived a Hobbit."
-            }
-            """.formatted(id.value());
+                """.formatted(id.value());
         }
     }
 
@@ -103,13 +103,13 @@ class BookIntegrationTest extends IntegrationTest {
 
             assertThatJson(result.getResponse().getContentAsString())
                 .isEqualTo("""
-                {
-                    "id": "${json-unit.any-string}",
-                    "title": "The Hobbit",
-                    "author": "JRR Tolkien",
-                    "description": "In a hole under the ground, there lived a Hobbit."
-                }
-                """);
+                    {
+                        "id": "${json-unit.any-string}",
+                        "title": "The Hobbit",
+                        "author": "JRR Tolkien",
+                        "description": "In a hole under the ground, there lived a Hobbit."
+                    }
+                    """);
 
             assertThat(bookRepository.findAll())
                 .singleElement()
@@ -197,35 +197,35 @@ class BookIntegrationTest extends IntegrationTest {
         @Language("JSON")
         private static String expectedBlankValidationProblemJson() {
             return """
-            {
-              "title": "Bad Request",
-              "status": 400,
-              "detail": "Validation failed",
-              "instance": "/books",
-              "errors": {
-                "title": "must not be blank",
-                "author": "must not be blank",
-                "description": "must not be blank"
-              }
-            }
-            """;
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/books",
+                  "errors": {
+                    "title": "must not be blank",
+                    "author": "must not be blank",
+                    "description": "must not be blank"
+                  }
+                }
+                """;
         }
 
         @Language("JSON")
         private static String expectedMaxLengthValidationProblemJson() {
             return """
-            {
-              "title": "Bad Request",
-              "status": 400,
-              "detail": "Validation failed",
-              "instance": "/books",
-              "errors": {
-                "title": "size must be between 0 and 255",
-                "author": "size must be between 0 and 255",
-                "description": "size must be between 0 and 5000"
-              }
-            }
-            """;
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/books",
+                  "errors": {
+                    "title": "size must be between 0 and 255",
+                    "author": "size must be between 0 and 255",
+                    "description": "size must be between 0 and 5000"
+                  }
+                }
+                """;
         }
     }
 
@@ -337,35 +337,35 @@ class BookIntegrationTest extends IntegrationTest {
         @Language("JSON")
         private static String expectedBlankValidationProblemJson() {
             return """
-            {
-              "title": "Bad Request",
-              "status": 400,
-              "detail": "Validation failed",
-              "instance": "/books/%s",
-              "errors": {
-                "title": "must not be blank",
-                "author": "must not be blank",
-                "description": "must not be blank"
-              }
-            }
-            """;
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/books/%s",
+                  "errors": {
+                    "title": "must not be blank",
+                    "author": "must not be blank",
+                    "description": "must not be blank"
+                  }
+                }
+                """;
         }
 
         @Language("JSON")
         private static String expectedMaxLengthValidationProblemJson() {
             return """
-            {
-              "title": "Bad Request",
-              "status": 400,
-              "detail": "Validation failed",
-              "instance": "/books/%s",
-              "errors": {
-                "title": "size must be between 0 and 255",
-                "author": "size must be between 0 and 255",
-                "description": "size must be between 0 and 5000"
-              }
-            }
-            """;
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/books/%s",
+                  "errors": {
+                    "title": "size must be between 0 and 255",
+                    "author": "size must be between 0 and 255",
+                    "description": "size must be between 0 and 5000"
+                  }
+                }
+                """;
         }
 
         @Language("JSON")
@@ -394,7 +394,7 @@ class BookIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnNotFoundWhenBookNotFoundByIdForDelete() throws Exception {
-            var randomId =BookId.randomBookId();
+            var randomId = BookId.randomBookId();
             mvc.perform(delete("/books/" + randomId.value()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(expectedBookNotFoundProblemJson(randomId)));
