@@ -1,5 +1,6 @@
 package org.theoriok.inventory;
 
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -139,10 +140,25 @@ class CapIntegrationTest extends IntegrationTest {
             var country = testCountry();
             jdbcAggregateTemplate.insert(country);
 
-            mvc.perform(post("/caps")
+            var result = mvc.perform(post("/caps")
                     .contentType(APPLICATION_JSON)
                     .content(capToCreate()))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andReturn();
+
+            assertThatJson(result.getResponse().getContentAsString())
+                .isEqualTo("""
+                    {
+                        "id": "${json-unit.any-string}",
+                        "name": "Belgian Cap",
+                        "description": "This is a Belgian Cap",
+                        "amount": 5,
+                        "country": {
+                            "name": "Belgium",
+                            "code": "BE"
+                        }
+                    }
+                    """);
 
             assertThat(capRepository.findAll())
                 .singleElement()

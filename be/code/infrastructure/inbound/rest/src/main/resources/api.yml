@@ -39,6 +39,10 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cap'
         '400':
           description: Validation failed or unknown country
           content:

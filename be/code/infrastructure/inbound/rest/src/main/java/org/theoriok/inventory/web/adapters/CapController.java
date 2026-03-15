@@ -72,8 +72,8 @@ public class CapController {
     @PostMapping
     public ResponseEntity<?> createCap(@Valid @RequestBody CreateCapDto capDto) {
         return switch (createCap.create(toCreateRequest(capDto))) {
-            case CREATED -> ResponseEntity.status(HttpStatus.CREATED).build();
-            case UNKNOWN_COUNTRY -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();
+            case CreateCap.Result.Created(var cap) -> ResponseEntity.status(HttpStatus.CREATED).body(toCapDto(cap));
+            case CreateCap.Result.UnknownCountry() -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();
         };
     }
 

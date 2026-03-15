@@ -1,8 +1,5 @@
 package org.theoriok.inventory.command;
 
-import static org.theoriok.inventory.command.CreateCap.Result.CREATED;
-import static org.theoriok.inventory.command.CreateCap.Result.UNKNOWN_COUNTRY;
-
 import org.theoriok.inventory.domain.Cap;
 import org.theoriok.inventory.port.PersistCapPort;
 import org.theoriok.inventory.port.PersistCountryPort;
@@ -24,8 +21,8 @@ public class CreateCapCommand implements CreateCap {
             .map(country -> {
                 var cap = Cap.create(request.id(), request.name(), request.description(), request.amount(), country);
                 persistCapPort.create(cap);
-                return CREATED;
+                return (Result) new Result.Created(cap);
             })
-            .orElse(UNKNOWN_COUNTRY);
+            .orElse(new Result.UnknownCountry());
     }
 }
