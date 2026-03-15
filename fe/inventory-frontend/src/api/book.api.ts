@@ -3,8 +3,8 @@ import {baseApi} from './base.api.ts';
 import {AxiosResponse} from "axios";
 
 export const bookApi: BookApi = {
-    async fetchBook(business_id: string): Promise<Book> {
-        const {data: book}: AxiosResponse<Book> = await baseApi.get(`/books/${business_id}`);
+    async fetchBook(id: string): Promise<Book> {
+        const {data: book}: AxiosResponse<Book> = await baseApi.get(`/books/${id}`);
         return book;
     },
 

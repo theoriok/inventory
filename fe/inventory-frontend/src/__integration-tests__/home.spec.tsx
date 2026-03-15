@@ -126,7 +126,7 @@ function given(books: Book[]) {
         total: books.length,
     });
     vi.spyOn(bookApi, 'fetchBook').mockImplementation((id) =>
-        Promise.resolve(books.find((book) => book.business_id === id)!),
+        Promise.resolve(books.find((book) => book.id === id)!),
     );
     render(<App/>);
 }

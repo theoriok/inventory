@@ -1,11 +1,11 @@
 export interface BookApi {
     fetchBooks(): Promise<ListResponse<Book>>;
 
-    fetchBook(business_id: string): Promise<Book>;
+    fetchBook(id: string): Promise<Book>;
 }
 
 export interface Book {
-    business_id: string;
+    id: string;
     title: string;
     author: string;
     description: string;
