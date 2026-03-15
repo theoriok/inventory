@@ -5,7 +5,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/countries")
 @Timed
-@CrossOrigin(origins = "http://localhost:3000")
 public class CountryController {
     private final FindCountries findCountries;
 
