@@ -9,7 +9,8 @@
     {
       "customType": "regex",
       "fileMatch": ["\\.java$"],
-      "matchStrings": ["renovate:\\s*datasource=docker\\s+depName=(?<depName>\\S+)\\n\\s*.+\"\\k<depName>:(?<currentValue>[\\w.-]+)\""],
+      "matchStrings": ["\"postgres:(?<currentValue>[\\w.-]+)\""],
+      "depNameTemplate": "postgres",
       "datasourceTemplate": "docker"
     }
   ],

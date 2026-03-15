@@ -22,7 +22,6 @@ import java.util.List;
 abstract class IntegrationTest {
 
     @ServiceConnection
-    // renovate: datasource=docker depName=postgres
     static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:18.2-alpine");
 
     static {
