@@ -43,7 +43,7 @@
     "vite": "8.0.1",
     "vitest": "4.1.0"
   },
-  "packageManager": "yarn@4.12.0",
+  "packageManager": "yarn@4.13.0",
   "resolutions": {
     "@rc-component/util": "1.10.0"
   }
