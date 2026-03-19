@@ -6,7 +6,7 @@ buildscript {
     }
 }
 plugins {
-    id 'org.springframework.boot' version '4.0.3' apply false
+    id 'org.springframework.boot' version '4.0.4' apply false
     id 'jacoco-report-aggregation'
     id "org.sonarqube" version "7.2.3.7755"
     id 'org.openapi.generator' version '7.20.0' apply false
