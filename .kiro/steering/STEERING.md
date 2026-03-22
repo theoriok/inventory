@@ -9,6 +9,13 @@
 - The repo might use Windows line endings (`\r\n`) for some files. Use `create` to rewrite files when `str_replace` fails due to line ending mismatches. Don't shell out to `sed`.
 - Prefer the `code` tool over `fs_read` over `cat` for reading. Prefer the `code` tool over `fs_write` over `sed` for writing.
 
+## TDD
+
+- Follow red → green → refactor strictly. Don't skip or rush the refactor step.
+- Refactor applies to both production code and test code. Tests are the spec — they deserve the same attention for consistency, clarity, and duplication.
+- After green, review both production and test code, share observations, and ask the user before moving on — even if you see nothing to change. We're mobbing, don't fly solo.
+- Think about how the code will actually be used. Don't dismiss obviously needed behavior as "not needed yet".
+
 ## Code Style
 
 - Follow existing code conventions — look at how similar things are already done in the codebase before writing new code.
@@ -26,3 +33,5 @@
 - Don't explain why something is obvious. Just do it.
 - If you're unsure about something, ask — don't guess and get it wrong.
 - When the user points out an error, fix it directly. Don't over-explain or rationalize the mistake.
+- Don't run git commands to recall what was just done — use the conversation context.
+- Keep commit messages functional and concise. Describe what the change does, not a file-by-file listing.
