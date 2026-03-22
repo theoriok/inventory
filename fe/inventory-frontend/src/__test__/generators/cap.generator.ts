@@ -1,6 +1,7 @@
 import {faker} from '@faker-js/faker';
 
 import {Cap, CreateCap, UpdateCap} from '../../api/cap.api.types.ts';
+import {generateCountry} from './country.generator.ts';
 
 export function generateCap(overrides: Partial<Cap> = {}): Cap {
     return {
@@ -8,10 +9,7 @@ export function generateCap(overrides: Partial<Cap> = {}): Cap {
         name: faker.commerce.productName(),
         description: faker.lorem.sentences(5),
         amount: faker.number.int({min: 1, max: 100}),
-        country: {
-            name: faker.location.country(),
-            code: faker.location.countryCode(),
-        },
+        country: generateCountry(),
         ...overrides,
     };
 }

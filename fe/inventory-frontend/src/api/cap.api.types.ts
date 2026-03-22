@@ -1,4 +1,5 @@
 import {ListResponse} from './api.types.ts';
+import {Country} from './country.api.types.ts';
 
 export interface CapApi {
     fetchCaps(): Promise<ListResponse<Cap>>;
@@ -32,9 +33,4 @@ export interface Cap {
     description: string;
     amount: number;
     country: Country;
-}
-
-export interface Country {
-    name: string;
-    code: string;
 }
