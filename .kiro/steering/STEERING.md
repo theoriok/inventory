@@ -15,6 +15,7 @@
 - Refactor applies to both production code and test code. Tests are the spec — they deserve the same attention for consistency, clarity, and duplication.
 - After green, review both production and test code, share observations, and ask the user before moving on — even if you see nothing to change. We're mobbing, don't fly solo.
 - Think about how the code will actually be used. Don't dismiss obviously needed behavior as "not needed yet".
+- A proper red state means tests run and fail on assertions, not compilation or import errors. When testing a new module, create a minimal stub with existing but non-functional methods so the tests can actually execute.
 
 ## Code Style
 
