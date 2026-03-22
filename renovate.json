@@ -8,8 +8,12 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["be/gradle\\.properties$"],
-      "matchStrings": ["postgresVersion=(?<currentValue>[\\w.-]+)"],
+      "managerFilePatterns": [
+        "/be/gradle\\.properties$/"
+      ],
+      "matchStrings": [
+        "postgresVersion=(?<currentValue>[\\w.-]+)"
+      ],
       "depNameTemplate": "postgres",
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker"
@@ -26,8 +30,12 @@
       "automerge": true
     },
     {
-      "matchDatasources": ["docker"],
-      "matchDepNames": ["postgres"],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchDepNames": [
+        "postgres"
+      ],
       "groupName": "postgres"
     }
   ]
