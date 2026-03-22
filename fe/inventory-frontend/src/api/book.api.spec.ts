@@ -2,7 +2,7 @@ import {describe, expect, test, vi} from 'vitest';
 
 import {baseApi} from './base.api.ts';
 import {bookApi} from './book.api.ts';
-import {generateBook, generateCreateBook} from '../__test__/generators/book.generator.ts';
+import {generateBook, generateCreateBook, generateUpdateBook} from '../__test__/generators/book.generator.ts';
 
 describe('BookApi', () => {
     describe('fetch books', () => {
@@ -62,6 +62,44 @@ describe('BookApi', () => {
             const result = await bookApi.createBook(createBook);
 
             expect(result).toEqual(createdBook);
+        });
+    });
+
+    describe('update book', () => {
+        test('should put to /books/{id}', async () => {
+            const updateBook = generateUpdateBook();
+            vi.spyOn(baseApi, 'put').mockResolvedValue({data: undefined});
+
+            await bookApi.updateBook('456', updateBook);
+
+            expect(baseApi.put).toHaveBeenCalledWith('/books/456', updateBook);
+        });
+
+        test('returns void', async () => {
+            const updateBook = generateUpdateBook();
+            vi.spyOn(baseApi, 'put').mockResolvedValue({data: undefined});
+
+            const result = await bookApi.updateBook('456', updateBook);
+
+            expect(result).toBeUndefined();
+        });
+    });
+
+    describe('delete book', () => {
+        test('should delete /books/{id}', async () => {
+            vi.spyOn(baseApi, 'delete').mockResolvedValue({data: undefined});
+
+            await bookApi.deleteBook('789');
+
+            expect(baseApi.delete).toHaveBeenCalledWith('/books/789');
+        });
+
+        test('returns void', async () => {
+            vi.spyOn(baseApi, 'delete').mockResolvedValue({data: undefined});
+
+            const result = await bookApi.deleteBook('789');
+
+            expect(result).toBeUndefined();
         });
     });
 });
