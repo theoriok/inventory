@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -62,6 +63,20 @@ class BookIntegrationTest extends IntegrationTest {
             mvc.perform(get("/books/" + randomId.value()))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json(expectedBookNotFoundProblemJson(randomId)));
+        }
+
+        @Test
+        void shouldReturnInternalServerErrorWhenUnexpectedExceptionOccurs() throws Exception {
+            mvc.perform(get("/books/not-a-uuid"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(APPLICATION_PROBLEM_JSON))
+                .andExpect(content().json("""
+                    {
+                      "title": "Internal Server Error",
+                      "status": 500,
+                      "detail": "Something went wrong"
+                    }
+                    """));
         }
 
         @Language("JSON")

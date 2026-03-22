@@ -21,10 +21,9 @@ public class ExceptionHandlingAdvice {
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(code = INTERNAL_SERVER_ERROR)
-    ResponseEntity<String> onException(Throwable exception) {
-        LOGGER.error(exception.getMessage());
-        return ResponseEntity.internalServerError()
-            .body("Something went wrong");
+    ResponseEntity<ProblemDetail> onException(Throwable exception) {
+        LOGGER.error("Unexpected error", exception);
+        return ResponseEntity.of(ProblemDetail.forStatusAndDetail(INTERNAL_SERVER_ERROR, "Something went wrong")).build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

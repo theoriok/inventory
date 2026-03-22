@@ -3,6 +3,11 @@
 ## General
 
 - Run `./gradlew clean check` from the `be/` directory after every code change unless the user explicitly says not to.
+- Dependencies are upgraded continuously — expect bleeding-edge library versions. Don't assume an API doesn't exist based on older knowledge.
+
+## Environment
+
+- Integration tests use Testcontainers and require Docker. If Docker is unavailable, they fail with Ryuk/Testcontainers errors — this is not a code issue.
 
 ## Code Style
 
