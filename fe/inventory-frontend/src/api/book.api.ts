@@ -1,4 +1,5 @@
-import {Book, BookApi, CreateBook, ListResponse, UpdateBook} from "./book.api.types.ts";
+import {Book, BookApi, CreateBook, UpdateBook} from "./book.api.types.ts";
+import {ListResponse} from "./api.types.ts";
 import {baseApi} from './base.api.ts';
 import {AxiosResponse} from "axios";
 

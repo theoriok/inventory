@@ -1,7 +1,8 @@
 import {useMutation, useQuery, useQueryClient, UseQueryResult,} from '@tanstack/react-query';
 
 import {bookApi} from '../api/book.api.ts';
-import {Book, CreateBook, ListResponse, UpdateBook,} from '../api/book.api.types.ts';
+import {Book, CreateBook, UpdateBook,} from '../api/book.api.types.ts';
+import {ListResponse} from '../api/api.types.ts';
 
 export enum BookQueryKeys {
     Books = 'books',

@@ -1,25 +1,10 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {describe, expect, it, vi} from 'vitest';
-import {ReactNode} from 'react';
 
 import {useBook, useBooks, useCreateBook, useDeleteBook, useUpdateBook} from './book.hook';
 import {bookApi} from '../api/book.api';
 import {generateBook, generateCreateBook, generateUpdateBook} from '../__test__/generators/book.generator';
-
-const createWrapper = () => {
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {retry: false},
-        },
-    });
-
-    const wrapper = function Wrapper({children}: { children: ReactNode }) {
-        return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
-    };
-
-    return {wrapper, queryClient};
-};
+import {createWrapper} from '../__test__/helpers/hook.helper';
 
 describe('useBooks', () => {
     it('should fetch books successfully', async () => {
