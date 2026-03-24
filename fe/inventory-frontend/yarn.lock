@@ -1319,9 +1319,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/form@npm:~1.7.2":
-  version: 1.7.2
-  resolution: "@rc-component/form@npm:1.7.2"
+"@rc-component/form@npm:~1.8.0":
+  version: 1.8.0
+  resolution: "@rc-component/form@npm:1.8.0"
   dependencies:
     "@rc-component/async-validator": "npm:^5.1.0"
     "@rc-component/util": "npm:^1.6.2"
@@ -1329,22 +1329,22 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/48136a89027cc0214a01ac4c1e77972f40d37974b2f97623b2a9eaf3a6ed505d7db0a3c8e955eabed62547ab59775f8f37387897836ad6c8efe23948b0419882
+  checksum: 10c0/e327322c149fb1e758118f75239ecb2ad93eaa6951c9b2537e6039b8a0a65f36cc67edba1b3646b8380b8212a461c103f3f650055fb831e227f8fb288c0c2a61
   languageName: node
   linkType: hard
 
-"@rc-component/image@npm:~1.6.0":
-  version: 1.6.0
-  resolution: "@rc-component/image@npm:1.6.0"
+"@rc-component/image@npm:~1.8.0":
+  version: 1.8.0
+  resolution: "@rc-component/image@npm:1.8.0"
   dependencies:
     "@rc-component/motion": "npm:^1.0.0"
     "@rc-component/portal": "npm:^2.1.2"
-    "@rc-component/util": "npm:^1.3.0"
+    "@rc-component/util": "npm:^1.10.0"
     clsx: "npm:^2.1.1"
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/c416ec0e05562c177c3c922beb4b9ef11de1363a6f60d85672c16f3601284cbf8bf8e6531fa7b0c479d755c097c17d7b0165c13bf0a27b1757303640733abf39
+  checksum: 10c0/9159722199da13b7c05a8eef04312d608403aee3a54e2176ebf8fd75a8ad61f9d419d357e0156a705a75e265c299809dc25b338044a5562ba564349d65339a6b
   languageName: node
   linkType: hard
 
@@ -1645,9 +1645,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/select@npm:~1.6.14":
-  version: 1.6.14
-  resolution: "@rc-component/select@npm:1.6.14"
+"@rc-component/select@npm:~1.6.15":
+  version: 1.6.15
+  resolution: "@rc-component/select@npm:1.6.15"
   dependencies:
     "@rc-component/overflow": "npm:^1.0.0"
     "@rc-component/trigger": "npm:^3.0.0"
@@ -1657,7 +1657,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-dom: "*"
-  checksum: 10c0/a86f12d6ef523ce06a159e49b46501b76a188341a37d8a046a6f704b6164c5c2212b9419ae58adc4a26fba68b9a7ba6f55651d0fb5d8159015474817a09912a0
+  checksum: 10c0/0fc0f5f8a3054735ef2732ad2efa15e227f0234304b94b6b6532ecd088fef5b66bf8cf6651fed944881c1f0637c9737083ed79264347110a576f85a3715761a5
   languageName: node
   linkType: hard
 
@@ -2569,9 +2569,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:6.3.3":
-  version: 6.3.3
-  resolution: "antd@npm:6.3.3"
+"antd@npm:6.3.4":
+  version: 6.3.4
+  resolution: "antd@npm:6.3.4"
   dependencies:
     "@ant-design/colors": "npm:^8.0.1"
     "@ant-design/cssinjs": "npm:^2.1.2"
@@ -2587,8 +2587,8 @@ __metadata:
     "@rc-component/dialog": "npm:~1.8.4"
     "@rc-component/drawer": "npm:~1.4.2"
     "@rc-component/dropdown": "npm:~1.0.2"
-    "@rc-component/form": "npm:~1.7.2"
-    "@rc-component/image": "npm:~1.6.0"
+    "@rc-component/form": "npm:~1.8.0"
+    "@rc-component/image": "npm:~1.8.0"
     "@rc-component/input": "npm:~1.1.2"
     "@rc-component/input-number": "npm:~1.6.2"
     "@rc-component/mentions": "npm:~1.6.0"
@@ -2603,7 +2603,7 @@ __metadata:
     "@rc-component/rate": "npm:~1.0.1"
     "@rc-component/resize-observer": "npm:^1.1.1"
     "@rc-component/segmented": "npm:~1.3.0"
-    "@rc-component/select": "npm:~1.6.14"
+    "@rc-component/select": "npm:~1.6.15"
     "@rc-component/slider": "npm:~1.0.1"
     "@rc-component/steps": "npm:~1.2.2"
     "@rc-component/switch": "npm:~1.0.3"
@@ -2616,7 +2616,7 @@ __metadata:
     "@rc-component/tree-select": "npm:~1.8.0"
     "@rc-component/trigger": "npm:^3.9.0"
     "@rc-component/upload": "npm:~1.1.0"
-    "@rc-component/util": "npm:^1.9.0"
+    "@rc-component/util": "npm:^1.10.0"
     clsx: "npm:^2.1.1"
     dayjs: "npm:^1.11.11"
     scroll-into-view-if-needed: "npm:^3.1.0"
@@ -2624,7 +2624,7 @@ __metadata:
   peerDependencies:
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/f5fbeac671ec265ffa7bdfd2506e13d02548b18b01f5f302078cd5cd337b706513f0c18221b2b3c79adc3cc444107aef47e842e7bf699a3d7ee500f6c8655d9b
+  checksum: 10c0/24b10bf864bfa8e8d1e72ca025a2a03bdb198515dbcf974aae0a7ad713d652218562a09679a5ae3373582c6053df748148e0739ab1d9137ea9c6fc61b673cc53
   languageName: node
   linkType: hard
 
@@ -3662,7 +3662,7 @@ __metadata:
     "@types/react-dom": "npm:19.2.3"
     "@vitejs/plugin-react": "npm:6.0.1"
     "@vitest/coverage-v8": "npm:4.1.1"
-    antd: "npm:6.3.3"
+    antd: "npm:6.3.4"
     axios: "npm:1.13.6"
     eslint: "npm:10.1.0"
     eslint-plugin-react-hooks: "npm:7.0.1"
