@@ -1,5 +1,7 @@
 package org.theoriok.inventory.persistence.adapters;
 
+import static java.util.stream.Collectors.toMap;
+
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.CapId;
@@ -41,7 +43,7 @@ public class PersistCapAdapter implements PersistCapPort {
     @Override
     public Optional<Cap> findById(CapId id) {
         return capRepository.findById(id.toUuid())
-            .map(this::toDomainObject);
+            .map(entity -> toDomainObject(entity, countryRepository.findByCode(entity.countryCode()).map(this::toDomainObject).orElseThrow()));
     }
 
     @Override
@@ -57,9 +59,11 @@ public class PersistCapAdapter implements PersistCapPort {
 
     @Override
     public boolean delete(CapId id) {
-        Optional<CapEntity> capEntity = capRepository.findById(id.toUuid());
-        capEntity.ifPresent(capRepository::delete);
-        return capEntity.isPresent();
+        boolean capExists = capRepository.existsById(id.toUuid());
+        if (capExists) {
+            capRepository.deleteById(id.toUuid());
+        }
+        return capExists;
     }
 
     private CapEntity toEntity(Cap domainObject) {
@@ -73,19 +77,20 @@ public class PersistCapAdapter implements PersistCapPort {
     }
 
     private List<Cap> toDomainObjects(List<CapEntity> entities) {
+        var countriesByCode = countryRepository.findAll().stream()
+            .collect(toMap(CountryEntity::code, this::toDomainObject));
         return entities.stream()
-            .map(this::toDomainObject)
+            .map(entity -> toDomainObject(entity, countriesByCode.get(entity.countryCode())))
             .toList();
     }
 
-    private Cap toDomainObject(CapEntity entity) {
-        var country = countryRepository.findByCode(entity.countryCode()).orElseThrow();
+    private Cap toDomainObject(CapEntity entity, Country country) {
         return CapBuilder.builder()
             .id(CapId.from(entity.id()))
             .name(entity.name())
             .description(entity.description())
             .amount(entity.amount())
-            .country(toDomainObject(country))
+            .country(country)
             .build();
     }
 

@@ -47,9 +47,11 @@ public class PersistBookAdapter implements PersistBookPort {
 
     @Override
     public boolean delete(BookId id) {
-        Optional<BookEntity> bookEntity = bookRepository.findById(id.toUuid());
-        bookEntity.ifPresent(bookRepository::delete);
-        return bookEntity.isPresent();
+        boolean bookExists = bookRepository.existsById(id.toUuid());
+        if (bookExists) {
+            bookRepository.deleteById(id.toUuid());
+        }
+        return bookExists;
     }
 
     private BookEntity toEntity(Book book) {
