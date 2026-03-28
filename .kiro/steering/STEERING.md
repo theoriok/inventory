@@ -3,6 +3,8 @@
 ## General
 
 - Don't make changes the user didn't ask for. If you spot something that needs fixing, mention it and wait for approval.
+- When refactoring multiple files, do one file at a time and run tests between each (unless this makes it not compile, then you can do the necessary changes to make it compile as well). Don't batch all files into one change.
+- Don't split up changes in the same file into multiple write commands if they actually belong together.
 - When the user says "revert", revert exactly what was asked — nothing more, nothing less.
 - Run tests after every code change unless the user explicitly says not to.
 - When a build fails, report the error and suggest a fix, but wait for the user's input before changing anything.
@@ -21,6 +23,7 @@
 
 - Follow existing code conventions — look at how similar things are already done in the codebase before writing new code.
 - Keep code minimal. Don't add boilerplate or defensive code that isn't needed.
+- Verify library API signatures before making claims about what's possible or not. Check the docs or source — don't assume based on older knowledge.
 
 ## Planning
 
@@ -36,3 +39,5 @@
 - When the user points out an error, fix it directly. Don't over-explain or rationalize the mistake.
 - Don't run git commands to recall what was just done — use the conversation context.
 - Keep commit messages functional and concise. Describe what the change does, not a file-by-file listing.
+- When presenting a list of suggestions, ask how the user wants to review them (one by one, all at once, etc.) rather than assuming.
+- Don't pad lists. If there's one option, present one option. If a summary references N items, include all N.

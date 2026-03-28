@@ -31,3 +31,4 @@
 - When expected JSON needs a dynamic ID, use `%s` placeholders and `.formatted()` at the call site.
 - Don't delete or modify tests if they fail unless explicitly asked. Usually the tests fail because the production code is wrong.
 - When a production code change affects API responses (e.g. adding a response body), update the corresponding tests in the same change.
+- Prefer outside-in integration tests or scenario tests with in-memory repository implementations over mock-based unit tests. Mocks couple tests to implementation details. If use case logic grows complex enough to warrant isolated tests, use in-memory implementations with contract tests to ensure they behave like the real adapters.
