@@ -5,6 +5,8 @@ import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 import org.springframework.data.jdbc.core.JdbcAggregateOperations;
+import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.CapId;
 import org.theoriok.inventory.domain.Cap;
@@ -14,7 +16,6 @@ import org.theoriok.inventory.domain.CountryBuilder;
 import org.theoriok.inventory.persistence.entities.CapEntity;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.persistence.repositories.CapRepository;
-import org.theoriok.inventory.persistence.repositories.CountryRepository;
 import org.theoriok.inventory.port.PersistCapPort;
 
 import java.util.List;
@@ -25,32 +26,31 @@ import java.util.Set;
 @Component
 public class PersistCapAdapter implements PersistCapPort {
     private final CapRepository capRepository;
-    private final CountryRepository countryRepository;
     private final JdbcAggregateOperations jdbcAggregateTemplate;
 
-    public PersistCapAdapter(CapRepository capRepository, CountryRepository countryRepository, JdbcAggregateOperations jdbcAggregateTemplate) {
+    public PersistCapAdapter(CapRepository capRepository, JdbcAggregateOperations jdbcAggregateTemplate) {
         this.capRepository = capRepository;
-        this.countryRepository = countryRepository;
         this.jdbcAggregateTemplate = jdbcAggregateTemplate;
     }
 
     @Override
     public List<Cap> findAll() {
-        List<CapEntity> capEntities = capRepository.findAll();
+        List<CapEntity> capEntities = jdbcAggregateTemplate.findAll(CapEntity.class);
         if (capEntities.isEmpty()) {
             return emptyList();
         }
         Set<String> distinctCountryCodes = capEntities.stream()
             .map(CapEntity::countryCode)
             .collect(toSet());
-        Map<String, Country> countriesByCode = countryRepository.findAllByCodeIn(distinctCountryCodes).stream()
+        Map<String, Country> countriesByCode = jdbcAggregateTemplate.findAll(Query.query(Criteria.where("code").in(distinctCountryCodes)), CountryEntity.class)
+            .stream()
             .collect(toMap(CountryEntity::code, this::toDomainObject));
         return toDomainObjects(capEntities, countriesByCode);
     }
 
     @Override
     public List<Cap> findAllByCountry(String country) {
-        List<CapEntity> capEntities = capRepository.findAllByCountryCode(country);
+        List<CapEntity> capEntities = jdbcAggregateTemplate.findAll(Query.query(Criteria.where("country_code").is(country)), CapEntity.class);
         if (capEntities.isEmpty()) {
             return emptyList();
         }
@@ -60,12 +60,12 @@ public class PersistCapAdapter implements PersistCapPort {
 
     @Override
     public Optional<Cap> findById(CapId id) {
-        return capRepository.findById(id.toUuid())
+        return jdbcAggregateTemplate.findOne(Query.query(Criteria.where("id").is(id.toUuid())), CapEntity.class)
             .map(entity -> toDomainObject(entity, getCountry(entity.countryCode())));
     }
 
     private Country getCountry(String country) {
-        return countryRepository.findByCode(country)
+        return jdbcAggregateTemplate.findOne(Query.query(Criteria.where("code").is(country)), CountryEntity.class)
             .map(this::toDomainObject)
             .orElseThrow();
     }

@@ -1,6 +1,8 @@
 package org.theoriok.inventory.persistence.adapters;
 
 import org.springframework.data.jdbc.core.JdbcAggregateOperations;
+import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.domain.Book;
@@ -24,14 +26,15 @@ public class PersistBookAdapter implements PersistBookPort {
 
     @Override
     public List<Book> findAll() {
-        return bookRepository.findAll().stream()
+        return jdbcAggregateTemplate.findAll(BookEntity.class).stream()
             .map(this::toDomainObject)
             .toList();
     }
 
     @Override
     public Optional<Book> findById(BookId id) {
-        return bookRepository.findById(id.toUuid()).map(this::toDomainObject);
+        return jdbcAggregateTemplate.findOne(Query.query(Criteria.where("id").is(id.toUuid())), BookEntity.class)
+            .map(this::toDomainObject);
     }
 
     @Override
