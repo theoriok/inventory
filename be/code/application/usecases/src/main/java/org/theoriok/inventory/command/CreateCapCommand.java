@@ -20,8 +20,8 @@ public class CreateCapCommand implements CreateCap {
         return persistCountryPort.findByCode(request.country())
             .map(country -> {
                 var cap = Cap.create(request.id(), request.name(), request.description(), request.amount(), country);
-                persistCapPort.create(cap);
-                return (Result) new Result.Created(cap);
+                var created = persistCapPort.create(cap);
+                return (Result) new Result.Created(created);
             })
             .orElse(new Result.UnknownCountry());
     }

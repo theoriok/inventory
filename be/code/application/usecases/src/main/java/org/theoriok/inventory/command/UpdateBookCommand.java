@@ -1,6 +1,8 @@
 package org.theoriok.inventory.command;
 
-import org.theoriok.inventory.domain.Book;
+import static org.theoriok.inventory.command.UpdateBook.Result.NOT_FOUND;
+import static org.theoriok.inventory.command.UpdateBook.Result.UPDATED;
+
 import org.theoriok.inventory.port.PersistBookPort;
 
 @Command
@@ -14,14 +16,11 @@ public class UpdateBookCommand implements UpdateBook {
 
     @Override
     public Result update(Request request) {
-        var book = persistBookPort.findById(request.id());
-
-        if (book.isPresent()) {
-            Book updatedBook = book.get().update(request.title(), request.author(), request.description());
-            persistBookPort.update(updatedBook);
-            return Result.UPDATED;
-        } else {
-            return Result.NOT_FOUND;
-        }
+        return persistBookPort.findById(request.id())
+            .map(book -> {
+                persistBookPort.update(book.update(request.title(), request.author(), request.description()));
+                return UPDATED;
+            })
+            .orElse(NOT_FOUND);
     }
 }

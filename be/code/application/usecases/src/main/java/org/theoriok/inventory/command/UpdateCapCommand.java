@@ -20,16 +20,14 @@ public class UpdateCapCommand implements UpdateCap {
 
     @Override
     public Result update(Request request) {
-        var existingCap = persistCapPort.findById(request.id());
-        if (existingCap.isEmpty()) {
-            return NOT_FOUND;
-        }
-        return persistCountryPort.findByCode(request.country())
-            .map(country -> {
-                var cap = existingCap.get().update(request.name(), request.description(), request.amount(), country);
-                persistCapPort.update(cap);
-                return UPDATED;
-            })
-            .orElse(UNKNOWN_COUNTRY);
+        return persistCapPort.findById(request.id())
+            .map(cap -> persistCountryPort.findByCode(request.country())
+                .map(country -> {
+                    persistCapPort.update(cap.update(request.name(), request.description(), request.amount(), country));
+                    return UPDATED;
+                })
+                .orElse(UNKNOWN_COUNTRY)
+            )
+            .orElse(NOT_FOUND);
     }
 }

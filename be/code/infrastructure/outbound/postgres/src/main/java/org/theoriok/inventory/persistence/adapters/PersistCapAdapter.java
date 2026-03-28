@@ -4,7 +4,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
-import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
+import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.CapId;
 import org.theoriok.inventory.domain.Cap;
@@ -26,9 +26,9 @@ import java.util.Set;
 public class PersistCapAdapter implements PersistCapPort {
     private final CapRepository capRepository;
     private final CountryRepository countryRepository;
-    private final JdbcAggregateTemplate jdbcAggregateTemplate;
+    private final JdbcAggregateOperations jdbcAggregateTemplate;
 
-    public PersistCapAdapter(CapRepository capRepository, CountryRepository countryRepository, JdbcAggregateTemplate jdbcAggregateTemplate) {
+    public PersistCapAdapter(CapRepository capRepository, CountryRepository countryRepository, JdbcAggregateOperations jdbcAggregateTemplate) {
         this.capRepository = capRepository;
         this.countryRepository = countryRepository;
         this.jdbcAggregateTemplate = jdbcAggregateTemplate;
@@ -83,11 +83,7 @@ public class PersistCapAdapter implements PersistCapPort {
 
     @Override
     public boolean delete(CapId id) {
-        boolean capExists = capRepository.existsById(id.toUuid());
-        if (capExists) {
-            capRepository.deleteById(id.toUuid());
-        }
-        return capExists;
+        return capRepository.deleteByIdReturningCount(id.toUuid()) > 0;
     }
 
     private CapEntity toEntity(Cap domainObject) {

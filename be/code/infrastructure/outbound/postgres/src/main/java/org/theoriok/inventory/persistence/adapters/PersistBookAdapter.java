@@ -1,6 +1,6 @@
 package org.theoriok.inventory.persistence.adapters;
 
-import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
+import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.stereotype.Component;
 import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.domain.Book;
@@ -15,9 +15,9 @@ import java.util.Optional;
 @Component
 public class PersistBookAdapter implements PersistBookPort {
     private final BookRepository bookRepository;
-    private final JdbcAggregateTemplate jdbcAggregateTemplate;
+    private final JdbcAggregateOperations jdbcAggregateTemplate;
 
-    public PersistBookAdapter(BookRepository bookRepository, JdbcAggregateTemplate jdbcAggregateTemplate) {
+    public PersistBookAdapter(BookRepository bookRepository, JdbcAggregateOperations jdbcAggregateTemplate) {
         this.bookRepository = bookRepository;
         this.jdbcAggregateTemplate = jdbcAggregateTemplate;
     }
@@ -47,11 +47,7 @@ public class PersistBookAdapter implements PersistBookPort {
 
     @Override
     public boolean delete(BookId id) {
-        boolean bookExists = bookRepository.existsById(id.toUuid());
-        if (bookExists) {
-            bookRepository.deleteById(id.toUuid());
-        }
-        return bookExists;
+        return bookRepository.deleteByIdReturningCount(id.toUuid()) > 0;
     }
 
     private BookEntity toEntity(Book book) {
