@@ -1,6 +1,8 @@
 package org.theoriok.inventory.persistence.adapters;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,9 @@ import org.theoriok.inventory.persistence.repositories.CountryRepository;
 import org.theoriok.inventory.port.PersistCapPort;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 public class PersistCapAdapter implements PersistCapPort {
@@ -32,18 +36,38 @@ public class PersistCapAdapter implements PersistCapPort {
 
     @Override
     public List<Cap> findAll() {
-        return toDomainObjects(capRepository.findAll());
+        List<CapEntity> capEntities = capRepository.findAll();
+        if (capEntities.isEmpty()) {
+            return emptyList();
+        }
+        Set<String> distinctCountryCodes = capEntities.stream()
+            .map(CapEntity::countryCode)
+            .collect(toSet());
+        Map<String, Country> countriesByCode = countryRepository.findAllByCodeIn(distinctCountryCodes).stream()
+            .collect(toMap(CountryEntity::code, this::toDomainObject));
+        return toDomainObjects(capEntities, countriesByCode);
     }
 
     @Override
     public List<Cap> findAllByCountry(String country) {
-        return toDomainObjects(capRepository.findAllByCountryCode(country));
+        List<CapEntity> capEntities = capRepository.findAllByCountryCode(country);
+        if (capEntities.isEmpty()) {
+            return emptyList();
+        }
+        Map<String, Country> countriesByCode = Map.of(country, getCountry(country));
+        return toDomainObjects(capEntities, countriesByCode);
     }
 
     @Override
     public Optional<Cap> findById(CapId id) {
         return capRepository.findById(id.toUuid())
-            .map(entity -> toDomainObject(entity, countryRepository.findByCode(entity.countryCode()).map(this::toDomainObject).orElseThrow()));
+            .map(entity -> toDomainObject(entity, getCountry(entity.countryCode())));
+    }
+
+    private Country getCountry(String country) {
+        return countryRepository.findByCode(country)
+            .map(this::toDomainObject)
+            .orElseThrow();
     }
 
     @Override
@@ -76,9 +100,7 @@ public class PersistCapAdapter implements PersistCapPort {
         );
     }
 
-    private List<Cap> toDomainObjects(List<CapEntity> entities) {
-        var countriesByCode = countryRepository.findAll().stream()
-            .collect(toMap(CountryEntity::code, this::toDomainObject));
+    private List<Cap> toDomainObjects(List<CapEntity> entities, Map<String, Country> countriesByCode) {
         return entities.stream()
             .map(entity -> toDomainObject(entity, countriesByCode.get(entity.countryCode())))
             .toList();
