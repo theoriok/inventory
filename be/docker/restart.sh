@@ -7,6 +7,5 @@ function cleanup_images() {
 }
 
 docker-compose down --remove-orphans
-docker run --rm --privileged alpine hwclock -s
 cleanup_images
 docker-compose up

@@ -1,6 +1,6 @@
 import {Button, Empty, Form, Input, Modal, Table} from "antd";
 import {FC, useState} from "react";
-import {useBooks} from "../hooks/book.hook.ts";
+import {useBooks, useCreateBook} from "../hooks/book.hook.ts";
 
 export const HomePage: FC = () => {
     const {data: books} = useBooks();
@@ -22,6 +22,8 @@ export const HomePage: FC = () => {
         },
     ];
     const [showCreateNewModal, setShowCreateNewModal] = useState<boolean>(false);
+    const addBook = useCreateBook();
+    const [form] = Form.useForm();
     return (
         <>
             <h1>Books</h1>
@@ -39,16 +41,21 @@ export const HomePage: FC = () => {
                 title={'Add new Book'}
                 open={showCreateNewModal}
                 onCancel={() => setShowCreateNewModal(false)}
-                footer={'null'}
+                okText="Add"
+                onOk={async () => {
+                    const values = form.getFieldsValue();
+                    await addBook.mutateAsync(values);
+                    setShowCreateNewModal(false);
+                }}
             >
-                <Form autoComplete="off">
-                    <Form.Item label={'Title'} htmlFor="title">
+                <Form form={form} autoComplete="off">
+                    <Form.Item label={'Title'} htmlFor="title" name="title">
                         <Input id="title" aria-label="title"/>
                     </Form.Item>
-                    <Form.Item label={'Author'} htmlFor="author">
+                    <Form.Item label={'Author'} htmlFor="author" name="author">
                         <Input id="author" aria-label="author"/>
                     </Form.Item>
-                    <Form.Item label={'Description'} htmlFor="description">
+                    <Form.Item label={'Description'} htmlFor="description" name="description">
                         <Input.TextArea id="description" aria-label="description" rows={4}/>
                     </Form.Item>
                 </Form>
