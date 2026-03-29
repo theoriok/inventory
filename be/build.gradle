@@ -20,7 +20,7 @@ ext {
     jacocoVersion = '0.8.14'
     flywayVersion = '12.2.0'
     annotationsVersion = '26.1.0'
-    checkstyleVersion = "13.3.0"
+    checkstyleVersion = "13.4.0"
     pmdVersion = '7.23.0'
     recordBuilderVersion = '52'
 }
