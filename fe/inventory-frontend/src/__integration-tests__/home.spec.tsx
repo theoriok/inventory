@@ -1,6 +1,6 @@
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, test, vi} from 'vitest';
 
 import {generateBook} from '../__test__/generators/book.generator.ts';
 import {bookApi} from '../api/book.api.ts';
@@ -17,13 +17,13 @@ describe('home', () => {
         describe('no books', () => {
             beforeEach(async () => given([]));
 
-            it('has a title', async () => await waitFor(() => {
+            test('has a title', async () => await waitFor(() => {
                 const titleHeading = screen.getByRole('heading');
                 expect(titleHeading).toBeInTheDocument()
                 expect(titleHeading).toHaveTextContent("Books")
             }));
 
-            it('shows the table headers', async () => await waitFor(() => {
+            test('shows the table headers', async () => await waitFor(() => {
                 const booksTable = screen.getByTestId('books-table');
                 
                 const headers = within(booksTable).getAllByRole('columnheader');
@@ -32,11 +32,11 @@ describe('home', () => {
                 expect(headers[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent('Description');
             }));
 
-            it('shows the no books message', async () => await waitFor(() =>
+            test('shows the no books message', async () => await waitFor(() =>
                 expect(screen.getByTestId('no-books-message')).toBeInTheDocument(),
             ));
 
-            it('shows the add books button', async () => await waitFor(() =>
+            test('shows the add books button', async () => await waitFor(() =>
                 expect(screen.getByTestId('add-books')).toBeInTheDocument(),
             ));
         });
@@ -46,7 +46,7 @@ describe('home', () => {
             
             beforeEach(async () => given([book]));
 
-            it('shows the table headers', async () => await waitFor(() => {
+            test('shows the table headers', async () => await waitFor(() => {
                 const booksTable = screen.getByTestId('books-table');
                 
                 const headers = within(booksTable).getAllByRole('columnheader');
@@ -55,7 +55,7 @@ describe('home', () => {
                 expect(headers[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent('Description');
             }));
 
-            it('shows the book data', async () => await waitFor(() => {
+            test('shows the book data', async () => await waitFor(() => {
                 const booksTable = screen.getByTestId('books-table');
                 
                 const rows = within(booksTable).getAllByRole('row');
@@ -68,11 +68,11 @@ describe('home', () => {
                 expect(cells[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent(book.description);
             }));
 
-            it('does not show the no books message', async () => await waitFor(() =>
+            test('does not show the no books message', async () => await waitFor(() =>
                 expect(screen.queryByTestId('no-books-message')).not.toBeInTheDocument(),
             ));
 
-            it('shows the add books button', async () => await waitFor(() =>
+            test('shows the add books button', async () => await waitFor(() =>
                 expect(screen.getByTestId('add-books')).toBeInTheDocument(),
             ));
         });
@@ -81,7 +81,7 @@ describe('home', () => {
     describe('add book', () => {
         beforeEach(async () => given([]));
 
-        it('opens modal when add book button is clicked', async () => {
+        test('opens modal when add book button is clicked', async () => {
             const user = userEvent.setup();
             await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
 
@@ -95,7 +95,7 @@ describe('home', () => {
             });
         });
 
-        it('closes modal when close is clicked', async () => {
+        test('closes modal when close is clicked', async () => {
             const user = userEvent.setup();
             await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
 
@@ -107,7 +107,7 @@ describe('home', () => {
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
 
-        it('closes modal when cancel is clicked', async () => {
+        test('closes modal when cancel is clicked', async () => {
             const user = userEvent.setup();
             await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
 
@@ -119,7 +119,7 @@ describe('home', () => {
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
 
-        it('closes modal when escape key is pressed', async () => {
+        test('closes modal when escape key is pressed', async () => {
             const user = userEvent.setup();
             await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
 
@@ -131,7 +131,7 @@ describe('home', () => {
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
 
-        it('adds book to table when form is filled and saved', async () => {
+        test('adds book to table when form is filled and saved', async () => {
             const user = userEvent.setup();
             const newBook = generateBook({id: undefined});
 

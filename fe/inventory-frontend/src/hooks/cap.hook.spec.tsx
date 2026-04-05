@@ -1,5 +1,5 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {describe, expect, it, vi} from 'vitest';
+import {describe, expect, test, vi} from 'vitest';
 
 import {useCap, useCaps, useCreateCap, useDeleteCap, useUpdateCap} from './cap.hook';
 import {capApi} from '../api/cap.api';
@@ -7,7 +7,7 @@ import {generateCap, generateCreateCap, generateUpdateCap} from '../__test__/gen
 import {createWrapper} from '../__test__/helpers/hook.helper';
 
 describe('useCaps', () => {
-    it('should fetch caps successfully', async () => {
+    test('should fetch caps successfully', async () => {
         const caps = [generateCap(), generateCap()];
         vi.spyOn(capApi, 'fetchCaps').mockResolvedValue({
             items: caps,
@@ -26,7 +26,7 @@ describe('useCaps', () => {
         expect(capApi.fetchCaps).toHaveBeenCalledOnce();
     });
 
-    it('should handle fetch error', async () => {
+    test('should handle fetch error', async () => {
         vi.spyOn(capApi, 'fetchCaps').mockRejectedValue(new Error('API Error'));
 
         const {wrapper} = createWrapper();
@@ -39,7 +39,7 @@ describe('useCaps', () => {
         expect(result.current.error).toBeInstanceOf(Error);
     });
 
-    it('should start in loading state', () => {
+    test('should start in loading state', () => {
         const {wrapper} = createWrapper();
         const {result} = renderHook(() => useCaps(), {wrapper});
 
@@ -49,7 +49,7 @@ describe('useCaps', () => {
 });
 
 describe('useCap', () => {
-    it('should fetch single cap successfully', async () => {
+    test('should fetch single cap successfully', async () => {
         const cap = generateCap();
         vi.spyOn(capApi, 'fetchCap').mockResolvedValue(cap);
 
@@ -64,7 +64,7 @@ describe('useCap', () => {
         expect(capApi.fetchCap).toHaveBeenCalledWith('123');
     });
 
-    it('should handle fetch error', async () => {
+    test('should handle fetch error', async () => {
         vi.spyOn(capApi, 'fetchCap').mockRejectedValue(new Error('Cap not found'));
 
         const {wrapper} = createWrapper();
@@ -77,7 +77,7 @@ describe('useCap', () => {
         expect(result.current.error).toBeInstanceOf(Error);
     });
 
-    it('should start in loading state', () => {
+    test('should start in loading state', () => {
         const {wrapper} = createWrapper();
         const {result} = renderHook(() => useCap('123'), {wrapper});
 
@@ -87,7 +87,7 @@ describe('useCap', () => {
 });
 
 describe('useCreateCap', () => {
-    it('should call createCap and return created cap', async () => {
+    test('should call createCap and return created cap', async () => {
         const createCap = generateCreateCap();
         const createdCap = generateCap();
         vi.spyOn(capApi, 'createCap').mockResolvedValue(createdCap);
@@ -105,7 +105,7 @@ describe('useCreateCap', () => {
         expect(capApi.createCap).toHaveBeenCalledWith(createCap);
     });
 
-    it('should invalidate caps query on success', async () => {
+    test('should invalidate caps query on success', async () => {
         const {wrapper, queryClient} = createWrapper();
         const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
         vi.spyOn(capApi, 'createCap').mockResolvedValue(generateCap());
@@ -123,7 +123,7 @@ describe('useCreateCap', () => {
 });
 
 describe('useUpdateCap', () => {
-    it('should call updateCap with id and body', async () => {
+    test('should call updateCap with id and body', async () => {
         const updateCap = generateUpdateCap();
         vi.spyOn(capApi, 'updateCap').mockResolvedValue(undefined);
 
@@ -139,7 +139,7 @@ describe('useUpdateCap', () => {
         expect(capApi.updateCap).toHaveBeenCalledWith('456', updateCap);
     });
 
-    it('should invalidate caps query on success', async () => {
+    test('should invalidate caps query on success', async () => {
         const {wrapper, queryClient} = createWrapper();
         const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
         vi.spyOn(capApi, 'updateCap').mockResolvedValue(undefined);
@@ -157,7 +157,7 @@ describe('useUpdateCap', () => {
 });
 
 describe('useDeleteCap', () => {
-    it('should call deleteCap with id', async () => {
+    test('should call deleteCap with id', async () => {
         vi.spyOn(capApi, 'deleteCap').mockResolvedValue(undefined);
 
         const {wrapper} = createWrapper();
@@ -172,7 +172,7 @@ describe('useDeleteCap', () => {
         expect(capApi.deleteCap).toHaveBeenCalledWith('789');
     });
 
-    it('should invalidate caps query on success', async () => {
+    test('should invalidate caps query on success', async () => {
         const {wrapper, queryClient} = createWrapper();
         const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
         vi.spyOn(capApi, 'deleteCap').mockResolvedValue(undefined);

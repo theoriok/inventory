@@ -10,6 +10,7 @@
 - When a build fails, report the error and suggest a fix, but wait for the user's input before changing anything.
 - The repo might use Windows line endings (`\r\n`) for some files. Use `create` to rewrite files when `str_replace` fails due to line ending mismatches. Don't shell out to `sed`.
 - Prefer the `code` tool over `fs_read` over `cat` for reading. Prefer the `code` tool over `fs_write` over `sed` for writing.
+- For straightforward text replacements, use `str_replace` or `create`. Don't reach for AST rewrite tools or pattern-based approaches when a simple file rewrite does the job.
 - Don't pipe command output through `head` or `tail` when debugging — you lose visibility into whether commands are hanging, and important context gets truncated, leading to re-runs.
 
 ## TDD
