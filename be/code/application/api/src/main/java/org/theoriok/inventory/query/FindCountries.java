@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface FindCountries {
     List<Country> findAll();
 
-    Optional<Country> findByCode(String id);
+    Optional<Country> findByCode(String code);
 
 }

@@ -11,7 +11,7 @@ import org.theoriok.inventory.persistence.entities.CountryEntity;
 
 import java.util.UUID;
 
-public class CountryIntegrationTest extends IntegrationTest {
+class CountryIntegrationTest extends IntegrationTest {
 
     @Nested
     class Find {

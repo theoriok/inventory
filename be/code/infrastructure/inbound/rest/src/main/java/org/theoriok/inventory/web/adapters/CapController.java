@@ -35,15 +35,15 @@ import java.util.List;
 @RequestMapping("/caps")
 @Timed
 public class CapController {
+    private final FindCaps findCaps;
     private final CreateCap createCap;
     private final UpdateCap updateCap;
-    private final FindCaps findCaps;
     private final DeleteCap deleteCap;
 
-    public CapController(CreateCap createCap, UpdateCap updateCap, FindCaps findCaps, DeleteCap deleteCap) {
+    public CapController(FindCaps findCaps, CreateCap createCap, UpdateCap updateCap, DeleteCap deleteCap) {
+        this.findCaps = findCaps;
         this.createCap = createCap;
         this.updateCap = updateCap;
-        this.findCaps = findCaps;
         this.deleteCap = deleteCap;
     }
 
