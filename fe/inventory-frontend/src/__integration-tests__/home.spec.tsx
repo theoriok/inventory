@@ -7,6 +7,7 @@ import {bookApi} from '../api/book.api.ts';
 import {Book,} from '../api/book.api.types.ts';
 import {App} from '../App.tsx';
 import {BOOK_TABLE} from './constants.ts';
+import {faker} from "@faker-js/faker";
 
 afterEach(() => {
     window.location.hash = '/';
@@ -94,7 +95,7 @@ describe('home', () => {
             });
         });
 
-        it('closes modal when cancel is clicked', async () => {
+        it('closes modal when close is clicked', async () => {
             const user = userEvent.setup();
             await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
 
@@ -102,6 +103,18 @@ describe('home', () => {
             await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
             await user.click(screen.getByRole('button', {name: 'Close'}));
+
+            await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+        });
+
+        it('closes modal when cancel is clicked', async () => {
+            const user = userEvent.setup();
+            await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+
+            await user.click(screen.getByTestId('add-books'));
+            await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+            await user.click(screen.getByRole('button', {name: 'Cancel'}));
 
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
@@ -117,16 +130,62 @@ describe('home', () => {
 
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
+
+        it('adds book to table when form is filled and saved', async () => {
+            const user = userEvent.setup();
+            const newBook = generateBook({id: undefined});
+
+            await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+            await user.click(screen.getByTestId('add-books'));
+            await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+            await user.type(screen.getByLabelText('title'), newBook.title);
+            await user.type(screen.getByLabelText('author'), newBook.author);
+            await user.type(screen.getByLabelText('description'), newBook.description);
+
+            await user.click(screen.getByRole('button', {name: 'Add'}));
+
+            await waitFor(() => {
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                const dataRows = rows.slice(1);
+                expect(dataRows).toHaveLength(1);
+                
+                const cells = within(dataRows[0]).getAllByRole('cell');
+                expect(cells[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent(newBook.title);
+                expect(cells[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent(newBook.author);
+                expect(cells[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent(newBook.description);
+            });
+
+            await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+        });
     });
 });
 
+
+
+let savedBooks: Book[] = []
+
 function given(books: Book[]) {
-    vi.spyOn(bookApi, 'fetchBooks').mockResolvedValue({
-        items: books,
-        total: books.length,
-    });
-    vi.spyOn(bookApi, 'fetchBook').mockImplementation((id) =>
-        Promise.resolve(books.find((book) => book.id === id)!),
+    savedBooks = books;
+    vi.spyOn(bookApi, 'fetchBooks').mockImplementation(() =>
+        Promise.resolve({
+            items: savedBooks,
+            total: savedBooks.length,
+        }),
     );
-    render(<App/>);
+    vi.spyOn(bookApi, 'fetchBook').mockImplementation((id) =>
+        Promise.resolve(savedBooks.find((book) => book.id === id)!),
+    );
+    vi.spyOn(bookApi, 'createBook').mockImplementation(async (book) => {
+        const newBook = {
+            id: faker.string.uuid(),
+            ...book,
+        };
+        savedBooks.push(newBook);
+        return newBook;
+    });
+    render(
+        <App/>
+    );
 }

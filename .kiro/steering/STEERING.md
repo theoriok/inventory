@@ -10,6 +10,7 @@
 - When a build fails, report the error and suggest a fix, but wait for the user's input before changing anything.
 - The repo might use Windows line endings (`\r\n`) for some files. Use `create` to rewrite files when `str_replace` fails due to line ending mismatches. Don't shell out to `sed`.
 - Prefer the `code` tool over `fs_read` over `cat` for reading. Prefer the `code` tool over `fs_write` over `sed` for writing.
+- Don't pipe command output through `head` or `tail` when debugging — you lose visibility into whether commands are hanging, and important context gets truncated, leading to re-runs.
 
 ## TDD
 
@@ -41,3 +42,5 @@
 - Keep commit messages functional and concise. Describe what the change does, not a file-by-file listing.
 - When presenting a list of suggestions, ask how the user wants to review them (one by one, all at once, etc.) rather than assuming.
 - Don't pad lists. If there's one option, present one option. If a summary references N items, include all N.
+- When stuck on a library behavior issue, search online for known issues and common solutions before diving into source code. Look at multiple results from the same search before trying a different search.
+- When trying to fix something, propose one approach and ask before trying it. Don't chain multiple speculative changes without checking in.

@@ -1,8 +1,19 @@
 import {cleanup} from '@testing-library/react';
+import React from 'react';
 import {afterEach, beforeAll, vi} from 'vitest';
 
 import '@testing-library/jest-dom/vitest';
 
+vi.mock('antd', async (importOriginal) => {
+    const antd = await importOriginal<typeof import('antd')>();
+    const OriginalModal = antd.Modal;
+    const WrappedModal = (props: Record<string, unknown>) => React.createElement(OriginalModal, {
+        transitionName: '',
+        maskTransitionName: '', ...props
+    } as Record<string, unknown>);
+    Object.assign(WrappedModal, OriginalModal);
+    return {...antd, Modal: WrappedModal};
+});
 
 // runs a clean after each test case (e.g. clearing jsdom)
 afterEach(() => {
@@ -10,29 +21,22 @@ afterEach(() => {
 });
 
 beforeAll(() => {
-    const { getComputedStyle } = window;
+    const {getComputedStyle} = window;
     window.getComputedStyle = (elt) => getComputedStyle(elt);
     Element.prototype.scrollIntoView = vi.fn(); // see https://github.com/jsdom/jsdom/issues/1695#issuecomment-449931788
 
     // Mock ResizeObserver
     globalThis.ResizeObserver = class ResizeObserver {
-        observe() {}
-        unobserve() {}
-        disconnect() {}
-    };
+        observe() {
+        }
 
-    // Mock transitionend events for jsdom v28+
-    // jsdom v28 added TransitionEvent but doesn't fire transitionend events
-    const originalAddEventListener = Element.prototype.addEventListener;
-    Element.prototype.addEventListener = function(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) {
-        originalAddEventListener.call(this, type, listener, options);
-        if (type === 'transitionend') {
-            setTimeout(() => {
-                const event = new TransitionEvent('transitionend', { bubbles: true });
-                this.dispatchEvent(event);
-            }, 0);
+        unobserve() {
+        }
+
+        disconnect() {
         }
     };
+
 });
 
 Object.defineProperty(window, 'matchMedia', {
