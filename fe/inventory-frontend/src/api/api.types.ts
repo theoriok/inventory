@@ -6,13 +6,13 @@ export interface ListResponse<T> {
 export interface ProblemDetail {
     title: string;
     status: number;
-    detail?: string;
+    detail: string;
     instance?: string;
     errors?: Record<string, string>;
 }
 
 export class ProblemDetailError extends Error {
     constructor(public readonly problemDetail: ProblemDetail) {
-        super(problemDetail.detail ?? problemDetail.title);
+        super(problemDetail.detail);
     }
 }

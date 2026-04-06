@@ -1,9 +1,10 @@
-import {Button, Empty, Form, Input, Modal, Table} from "antd";
+import {App, Button, Empty, Form, Input, Modal, Table} from "antd";
 import {FC, useState} from "react";
 import {useBooks, useCreateBook} from "../hooks/book.hook.ts";
 
 export const HomePage: FC = () => {
     const {data: books} = useBooks();
+    const {message} = App.useApp();
     const columns = [
         {
             title: 'Title',
@@ -26,8 +27,10 @@ export const HomePage: FC = () => {
     const addBook = useCreateBook({
         onSuccess: () => setShowCreateNewModal(false),
         onValidationError: (errors) => form.setFields(
-            Object.entries(errors).map(([field, message]) => ({name: field, errors: [message]})),
+            Object.entries(errors).map(([field, msg]) => ({name: field, errors: [msg]})),
         ),
+        onDetailedError: (detail) => void message.error(detail),
+        onError: () => void message.error('Something went wrong. Please try again.'),
     });
     return (
         <>

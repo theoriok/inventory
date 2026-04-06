@@ -23,9 +23,11 @@ export function useBook(id: string): UseQueryResult<Book> {
     });
 }
 
-export function useCreateBook({onSuccess, onValidationError}: {
+export function useCreateBook({onSuccess, onValidationError, onDetailedError, onError}: {
     onSuccess?: () => void;
     onValidationError?: (errors: Record<string, string>) => void;
+    onDetailedError?: (detail: string) => void;
+    onError?: () => void;
 } = {}) {
     const queryClient = useQueryClient();
     return useMutation({
@@ -35,8 +37,14 @@ export function useCreateBook({onSuccess, onValidationError}: {
             onSuccess?.();
         },
         onError: (error) => {
-            if (error instanceof ProblemDetailError && error.problemDetail.errors) {
-                onValidationError?.(error.problemDetail.errors);
+            if (error instanceof ProblemDetailError) {
+                if (error.problemDetail.errors) {
+                    onValidationError?.(error.problemDetail.errors);
+                } else {
+                    onDetailedError?.(error.problemDetail.detail);
+                }
+            } else {
+                onError?.();
             }
         },
     });

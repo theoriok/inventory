@@ -152,6 +152,36 @@ describe('useCreateBook', () => {
             expect(onValidationError).toHaveBeenCalledWith(errors);
         });
     });
+
+    test('should call onDetailedError with detail when createBook throws ProblemDetailError without field errors', async () => {
+        vi.spyOn(bookApi, 'createBook').mockRejectedValue(
+            new ProblemDetailError({title: 'Internal Server Error', status: 500, detail: 'Something went wrong'}),
+        );
+        const onDetailedError = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useCreateBook({onDetailedError}), {wrapper});
+
+        result.current.mutate(generateCreateBook());
+
+        await waitFor(() => {
+            expect(onDetailedError).toHaveBeenCalledWith('Something went wrong');
+        });
+    });
+
+    test('should call onError when createBook throws a non-ProblemDetailError', async () => {
+        vi.spyOn(bookApi, 'createBook').mockRejectedValue(new Error('Network failure'));
+        const onError = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useCreateBook({onError}), {wrapper});
+
+        result.current.mutate(generateCreateBook());
+
+        await waitFor(() => {
+            expect(onError).toHaveBeenCalledOnce();
+        });
+    });
 });
 
 describe('useUpdateBook', () => {

@@ -229,23 +229,67 @@ describe('home', () => {
         });
 
         describe('backend errors', () => {
-            beforeEach(async () => given([], true));
+            describe('validation errors', () => {
+                beforeEach(async () => given([], 'validation'));
 
-            test('shows backend validation errors inline on form fields', async () => {
-                const user = userEvent.setup();
-                await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
-                await user.click(screen.getByTestId('add-books'));
-                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+                test('shows backend validation errors inline on form fields', async () => {
+                    const user = userEvent.setup();
+                    await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+                    await user.click(screen.getByTestId('add-books'));
+                    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-                await user.type(screen.getByLabelText('title'), 'x');
-                await user.type(screen.getByLabelText('author'), 'x');
-                await user.type(screen.getByLabelText('description'), 'x');
-                await user.click(screen.getByRole('button', {name: 'Add'}));
+                    await user.type(screen.getByLabelText('title'), 'x');
+                    await user.type(screen.getByLabelText('author'), 'x');
+                    await user.type(screen.getByLabelText('description'), 'x');
+                    await user.click(screen.getByRole('button', {name: 'Add'}));
 
-                await waitFor(() => {
-                    expect(screen.getAllByText('must not be blank')).toHaveLength(2);
+                    await waitFor(() => {
+                        expect(screen.getAllByText('must not be blank')).toHaveLength(2);
+                    });
+                    expect(screen.getByRole('dialog')).toBeInTheDocument();
                 });
-                expect(screen.getByRole('dialog')).toBeInTheDocument();
+            });
+
+            describe('unexpected errors', () => {
+                beforeEach(async () => given([], 'server'));
+
+                test('shows error notification for unexpected backend errors', async () => {
+                    const user = userEvent.setup();
+                    await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+                    await user.click(screen.getByTestId('add-books'));
+                    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                    await user.type(screen.getByLabelText('title'), 'x');
+                    await user.type(screen.getByLabelText('author'), 'x');
+                    await user.type(screen.getByLabelText('description'), 'x');
+                    await user.click(screen.getByRole('button', {name: 'Add'}));
+
+                    await waitFor(() => {
+                        expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+                    });
+                    expect(screen.getByRole('dialog')).toBeInTheDocument();
+                });
+            });
+
+            describe('unknown errors', () => {
+                beforeEach(async () => given([], 'network'));
+
+                test('shows generic error notification for non-backend errors', async () => {
+                    const user = userEvent.setup();
+                    await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+                    await user.click(screen.getByTestId('add-books'));
+                    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                    await user.type(screen.getByLabelText('title'), 'x');
+                    await user.type(screen.getByLabelText('author'), 'x');
+                    await user.type(screen.getByLabelText('description'), 'x');
+                    await user.click(screen.getByRole('button', {name: 'Add'}));
+
+                    await waitFor(() => {
+                        expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument();
+                    });
+                    expect(screen.getByRole('dialog')).toBeInTheDocument();
+                });
             });
         });
     });
@@ -253,7 +297,7 @@ describe('home', () => {
 
 let savedBooks: Book[] = []
 
-function given(books: Book[], shouldFailOnCreate = false) {
+function given(books: Book[], createError?: 'validation' | 'server' | 'network') {
     savedBooks = books;
     vi.spyOn(bookApi, 'fetchBooks').mockImplementation(() =>
         Promise.resolve({
@@ -265,13 +309,23 @@ function given(books: Book[], shouldFailOnCreate = false) {
         Promise.resolve(savedBooks.find((book) => book.id === id)!),
     );
     vi.spyOn(bookApi, 'createBook').mockImplementation(async (book) => {
-        if (shouldFailOnCreate) {
+        if (createError === 'validation') {
             throw new ProblemDetailError({
                 title: 'Bad Request',
                 status: 400,
                 detail: 'Validation failed',
                 errors: {title: 'must not be blank', author: 'must not be blank'},
             });
+        }
+        if (createError === 'server') {
+            throw new ProblemDetailError({
+                title: 'Internal Server Error',
+                status: 500,
+                detail: 'Something went wrong',
+            });
+        }
+        if (createError === 'network') {
+            throw new Error('Network failure');
         }
         const newBook = {
             id: faker.string.uuid(),
