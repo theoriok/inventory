@@ -24,8 +24,14 @@ export const HomePage: FC = () => {
     ];
     const [showCreateNewModal, setShowCreateNewModal] = useState<boolean>(false);
     const [form] = Form.useForm();
+
+    const closeModal = () => {
+        form.resetFields();
+        setShowCreateNewModal(false);
+    };
+
     const addBook = useCreateBook({
-        onSuccess: () => setShowCreateNewModal(false),
+        onSuccess: closeModal,
         onValidationError: (errors) => form.setFields(
             Object.entries(errors).map(([field, msg]) => ({name: field, errors: [msg]})),
         ),
@@ -35,7 +41,7 @@ export const HomePage: FC = () => {
     return (
         <>
             <h1>Books</h1>
-            <Table dataSource={books?.items} columns={columns} showHeader={true} locale={{
+            <Table dataSource={books?.items} columns={columns} rowKey="id" showHeader={true} locale={{
                 emptyText: (
                     <Empty
                         image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -48,8 +54,9 @@ export const HomePage: FC = () => {
             <Modal
                 title={'Add new Book'}
                 open={showCreateNewModal}
-                onCancel={() => setShowCreateNewModal(false)}
+                onCancel={closeModal}
                 okText="Add"
+                confirmLoading={addBook.isPending}
                 onOk={async () => {
                     const values = await form.validateFields().catch(() => null);
                     if (!values) return;

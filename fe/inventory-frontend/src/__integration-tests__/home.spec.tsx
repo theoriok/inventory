@@ -162,6 +162,45 @@ describe('home', () => {
 
                 await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
             });
+
+            test('resets form when modal is cancelled and reopened', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+
+                await user.click(screen.getByTestId('add-books'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+                await user.type(screen.getByLabelText('title'), 'some title');
+                await user.click(screen.getByRole('button', {name: 'Cancel'}));
+                await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+                await user.click(screen.getByTestId('add-books'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                expect(screen.getByLabelText('title')).toHaveValue('');
+                expect(screen.getByLabelText('author')).toHaveValue('');
+                expect(screen.getByLabelText('description')).toHaveValue('');
+            });
+
+            test('resets form after successful submission and reopened', async () => {
+                const user = userEvent.setup();
+                const newBook = generateBook({id: undefined});
+                await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+
+                await user.click(screen.getByTestId('add-books'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+                await user.type(screen.getByLabelText('title'), newBook.title);
+                await user.type(screen.getByLabelText('author'), newBook.author);
+                await user.type(screen.getByLabelText('description'), newBook.description);
+                await user.click(screen.getByRole('button', {name: 'Add'}));
+                await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+                await user.click(screen.getByTestId('add-books'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                expect(screen.getByLabelText('title')).toHaveValue('');
+                expect(screen.getByLabelText('author')).toHaveValue('');
+                expect(screen.getByLabelText('description')).toHaveValue('');
+            });
         });
 
         describe('validation', () => {
