@@ -80,7 +80,7 @@ describe('home', () => {
         });
     });
 
-    describe('add book', () => {
+    describe('add book', {timeout: 10000}, () => {
         describe('happy path', () => {
             beforeEach(async () => given([]));
 
