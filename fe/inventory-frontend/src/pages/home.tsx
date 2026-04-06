@@ -22,8 +22,13 @@ export const HomePage: FC = () => {
         },
     ];
     const [showCreateNewModal, setShowCreateNewModal] = useState<boolean>(false);
-    const addBook = useCreateBook();
     const [form] = Form.useForm();
+    const addBook = useCreateBook({
+        onSuccess: () => setShowCreateNewModal(false),
+        onValidationError: (errors) => form.setFields(
+            Object.entries(errors).map(([field, message]) => ({name: field, errors: [message]})),
+        ),
+    });
     return (
         <>
             <h1>Books</h1>
@@ -43,13 +48,9 @@ export const HomePage: FC = () => {
                 onCancel={() => setShowCreateNewModal(false)}
                 okText="Add"
                 onOk={async () => {
-                    try {
-                        const values = await form.validateFields();
-                        await addBook.mutateAsync(values);
-                        setShowCreateNewModal(false);
-                    } catch {
-                        // validation failed — antd shows errors inline
-                    }
+                    const values = await form.validateFields().catch(() => null);
+                    if (!values) return;
+                    addBook.mutate(values);
                 }}
             >
                 <Form form={form} autoComplete="off">

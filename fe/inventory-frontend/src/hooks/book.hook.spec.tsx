@@ -5,6 +5,7 @@ import {useBook, useBooks, useCreateBook, useDeleteBook, useUpdateBook} from './
 import {bookApi} from '../api/book.api';
 import {generateBook, generateCreateBook, generateUpdateBook} from '../__test__/generators/book.generator';
 import {createWrapper} from '../__test__/helpers/hook.helper';
+import {ProblemDetailError} from '../api/api.types';
 
 describe('useBooks', () => {
     test('should fetch books successfully', async () => {
@@ -119,6 +120,37 @@ describe('useCreateBook', () => {
         });
 
         expect(invalidateSpy).toHaveBeenCalledWith({queryKey: ['books']});
+    });
+
+    test('should call onSuccess callback on success', async () => {
+        vi.spyOn(bookApi, 'createBook').mockResolvedValue(generateBook());
+        const onSuccess = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useCreateBook({onSuccess}), {wrapper});
+
+        result.current.mutate(generateCreateBook());
+
+        await waitFor(() => {
+            expect(onSuccess).toHaveBeenCalledOnce();
+        });
+    });
+
+    test('should call onValidationError with field errors when createBook throws ProblemDetailError', async () => {
+        const errors = {title: 'must not be blank', author: 'must not be blank'};
+        vi.spyOn(bookApi, 'createBook').mockRejectedValue(
+            new ProblemDetailError({title: 'Bad Request', status: 400, detail: 'Validation failed', errors}),
+        );
+        const onValidationError = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useCreateBook({onValidationError}), {wrapper});
+
+        result.current.mutate(generateCreateBook({title: ''}));
+
+        await waitFor(() => {
+            expect(onValidationError).toHaveBeenCalledWith(errors);
+        });
     });
 });
 

@@ -3,6 +3,7 @@ import {describe, expect, test, vi} from 'vitest';
 import {baseApi} from './base.api.ts';
 import {bookApi} from './book.api.ts';
 import {generateBook, generateCreateBook, generateUpdateBook} from '../__test__/generators/book.generator.ts';
+import {ProblemDetailError} from './api.types.ts';
 
 describe('BookApi', () => {
     describe('fetch books', () => {
@@ -47,7 +48,7 @@ describe('BookApi', () => {
         test('should post to /books', async () => {
             const createBook = generateCreateBook();
             const createdBook = generateBook();
-            vi.spyOn(baseApi, 'post').mockResolvedValue({data: createdBook});
+            vi.spyOn(baseApi, 'post').mockResolvedValue({status: 201, data: createdBook});
 
             await bookApi.createBook(createBook);
 
@@ -57,11 +58,26 @@ describe('BookApi', () => {
         test('returns the created book', async () => {
             const createBook = generateCreateBook();
             const createdBook = generateBook();
-            vi.spyOn(baseApi, 'post').mockResolvedValue({data: createdBook});
+            vi.spyOn(baseApi, 'post').mockResolvedValue({status: 201, data: createdBook});
 
             const result = await bookApi.createBook(createBook);
 
             expect(result).toEqual(createdBook);
+        });
+
+        test('returns problem detail when backend returns validation error', async () => {
+            const createBook = generateCreateBook({title: ''});
+            const problemDetail = {
+                title: 'Bad Request',
+                status: 400,
+                detail: 'Validation failed',
+                errors: {title: 'must not be blank'},
+            };
+            vi.spyOn(baseApi, 'post').mockRejectedValue({
+                response: {status: 400, data: problemDetail},
+            });
+
+            await expect(bookApi.createBook(createBook)).rejects.toThrow(ProblemDetailError);
         });
     });
 

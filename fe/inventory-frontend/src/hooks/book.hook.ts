@@ -2,7 +2,7 @@ import {useMutation, useQuery, useQueryClient, UseQueryResult,} from '@tanstack/
 
 import {bookApi} from '../api/book.api.ts';
 import {Book, CreateBook, UpdateBook,} from '../api/book.api.types.ts';
-import {ListResponse} from '../api/api.types.ts';
+import {ListResponse, ProblemDetailError} from '../api/api.types.ts';
 
 export enum BookQueryKeys {
     Books = 'books',
@@ -23,11 +23,22 @@ export function useBook(id: string): UseQueryResult<Book> {
     });
 }
 
-export function useCreateBook() {
+export function useCreateBook({onSuccess, onValidationError}: {
+    onSuccess?: () => void;
+    onValidationError?: (errors: Record<string, string>) => void;
+} = {}) {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (book: CreateBook) => bookApi.createBook(book),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: [BookQueryKeys.Books]}),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [BookQueryKeys.Books]});
+            onSuccess?.();
+        },
+        onError: (error) => {
+            if (error instanceof ProblemDetailError && error.problemDetail.errors) {
+                onValidationError?.(error.problemDetail.errors);
+            }
+        },
     });
 }
 
