@@ -5,7 +5,7 @@ import {afterEach, beforeEach, describe, expect, test, vi} from 'vitest';
 import {generateBook} from '../__test__/generators/book.generator.ts';
 import {bookApi} from '../api/book.api.ts';
 import {Book,} from '../api/book.api.types.ts';
-import {App} from '../App.tsx';
+import {InventoryApp} from '../App.tsx';
 import {BOOK_TABLE} from './constants.ts';
 import {faker} from "@faker-js/faker";
 
@@ -131,6 +131,68 @@ describe('home', () => {
             await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
         });
 
+        describe('validation', () => {
+            test('shows validation errors when submitting empty form', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+                await user.click(screen.getByTestId('add-books'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.click(screen.getByRole('button', {name: 'Add'}));
+
+                await waitFor(() => {
+                    expect(screen.getByText('Title is required')).toBeInTheDocument();
+                    expect(screen.getByText('Author is required')).toBeInTheDocument();
+                    expect(screen.getByText('Description is required')).toBeInTheDocument();
+                });
+                expect(screen.getByRole('dialog')).toBeInTheDocument();
+                expect(bookApi.createBook).not.toHaveBeenCalled();
+            });
+
+            test('shows validation errors when submitting whitespace-only values', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+                await user.click(screen.getByTestId('add-books'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.type(screen.getByLabelText('title'), '   ');
+                await user.type(screen.getByLabelText('author'), '   ');
+                await user.type(screen.getByLabelText('description'), '   ');
+                await user.click(screen.getByRole('button', {name: 'Add'}));
+
+                await waitFor(() => {
+                    expect(screen.getByText('Title is required')).toBeInTheDocument();
+                    expect(screen.getByText('Author is required')).toBeInTheDocument();
+                    expect(screen.getByText('Description is required')).toBeInTheDocument();
+                });
+                expect(screen.getByRole('dialog')).toBeInTheDocument();
+                expect(bookApi.createBook).not.toHaveBeenCalled();
+            });
+
+            test('shows validation errors when fields exceed max length', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('add-books')).toBeInTheDocument());
+                await user.click(screen.getByTestId('add-books'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.click(screen.getByLabelText('title'));
+                await user.paste('a'.repeat(256));
+                await user.click(screen.getByLabelText('author'));
+                await user.paste('a'.repeat(256));
+                await user.click(screen.getByLabelText('description'));
+                await user.paste('a'.repeat(5001));
+                await user.click(screen.getByRole('button', {name: 'Add'}));
+
+                await waitFor(() => {
+                    expect(screen.getByText('Title must be at most 255 characters')).toBeInTheDocument();
+                    expect(screen.getByText('Author must be at most 255 characters')).toBeInTheDocument();
+                    expect(screen.getByText('Description must be at most 5000 characters')).toBeInTheDocument();
+                });
+                expect(screen.getByRole('dialog')).toBeInTheDocument();
+                expect(bookApi.createBook).not.toHaveBeenCalled();
+            });
+        });
+
         test('adds book to table when form is filled and saved', async () => {
             const user = userEvent.setup();
             const newBook = generateBook({id: undefined});
@@ -162,8 +224,6 @@ describe('home', () => {
     });
 });
 
-
-
 let savedBooks: Book[] = []
 
 function given(books: Book[]) {
@@ -186,6 +246,6 @@ function given(books: Book[]) {
         return newBook;
     });
     render(
-        <App/>
+        <InventoryApp/>
     );
 }

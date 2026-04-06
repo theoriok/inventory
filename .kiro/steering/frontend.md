@@ -36,7 +36,7 @@
 - Use `axios` for HTTP calls.
 - 4-space indentation in `.ts`/`.tsx` files (convention, not enforced by tooling).
 - LF line endings, final newline (`.editorconfig`).
-- Named exports everywhere, no default exports (except `App` in `App.tsx`).
+- Named exports everywhere, no default exports.
 - Use `const` for variables, `function` for hooks and generators.
 - API modules are typed `const` objects implementing an interface, not classes.
 - Destructure axios responses with explicit type annotation: `const {data: book}: AxiosResponse<Book> = await baseApi.get(...)`.

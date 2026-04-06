@@ -43,19 +43,32 @@ export const HomePage: FC = () => {
                 onCancel={() => setShowCreateNewModal(false)}
                 okText="Add"
                 onOk={async () => {
-                    const values = form.getFieldsValue();
-                    await addBook.mutateAsync(values);
-                    setShowCreateNewModal(false);
+                    try {
+                        const values = await form.validateFields();
+                        await addBook.mutateAsync(values);
+                        setShowCreateNewModal(false);
+                    } catch {
+                        // validation failed — antd shows errors inline
+                    }
                 }}
             >
                 <Form form={form} autoComplete="off">
-                    <Form.Item label={'Title'} htmlFor="title" name="title">
+                    <Form.Item label={'Title'} htmlFor="title" name="title" rules={[
+                        {required: true, whitespace: true, message: 'Title is required'},
+                        {max: 255, message: 'Title must be at most 255 characters'},
+                    ]}>
                         <Input id="title" aria-label="title"/>
                     </Form.Item>
-                    <Form.Item label={'Author'} htmlFor="author" name="author">
+                    <Form.Item label={'Author'} htmlFor="author" name="author" rules={[
+                        {required: true, whitespace: true, message: 'Author is required'},
+                        {max: 255, message: 'Author must be at most 255 characters'},
+                    ]}>
                         <Input id="author" aria-label="author"/>
                     </Form.Item>
-                    <Form.Item label={'Description'} htmlFor="description" name="description">
+                    <Form.Item label={'Description'} htmlFor="description" name="description" rules={[
+                        {required: true, whitespace: true, message: 'Description is required'},
+                        {max: 5000, message: 'Description must be at most 5000 characters'},
+                    ]}>
                         <Input.TextArea id="description" aria-label="description" rows={4}/>
                     </Form.Item>
                 </Form>
