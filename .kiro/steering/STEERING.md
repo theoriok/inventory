@@ -4,7 +4,7 @@
 
 - Don't make changes the user didn't ask for. If you spot something that needs fixing, mention it and wait for approval.
 - When refactoring multiple files, do one file at a time and run tests between each (unless this makes it not compile, then you can do the necessary changes to make it compile as well). Don't batch all files into one change.
-- Don't split up changes in the same file into multiple write commands if they actually belong together.
+- Don't split up changes in the same file into multiple write commands if they actually belong together. This includes import changes — if you're adding an import and changing code in the same file, do it in one write. Splitting causes avoidable errors like duplicate imports.
 - When the user says "revert", revert exactly what was asked — nothing more, nothing less.
 - Run tests after every code change unless the user explicitly says not to.
 - When a build fails, report the error and suggest a fix, but wait for the user's input before changing anything.
@@ -17,7 +17,7 @@
 
 - Follow red → green → refactor strictly. Don't skip or rush the refactor step.
 - Refactor applies to both production code and test code. Tests are the spec — they deserve the same attention for consistency, clarity, and duplication.
-- After green, review both production and test code, share observations, and ask the user before moving on — even if you see nothing to change. We're mobbing, don't fly solo.
+- After green, STOP. Review both production and test code together with the user, share observations, and ask before moving on — even if you see nothing to change. Do not start the next task until the user says to. We're mobbing, don't fly solo.
 - Think about how the code will actually be used. Don't dismiss obviously needed behavior as "not needed yet".
 - A proper red state means tests run and fail on assertions, not compilation or import errors. When testing a new module, create a minimal stub with existing but non-functional methods so the tests can actually execute.
 

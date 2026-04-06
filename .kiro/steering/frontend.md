@@ -4,6 +4,7 @@
 
 - Run `yarn test` from `fe/inventory-frontend` after every code change unless the user explicitly says not to.
 - Run `yarn lint` after code changes as well.
+- Never claim lint or tests pass without actually running them.
 - Capture the full test output. Don't pipe through `tail` or `head` — you'll miss important context and end up running them again.
 - package.json contains which yarn commands you can run. Use these instead of doing weird npx stuff.
 
@@ -46,6 +47,13 @@
 - Imports use `.ts`/`.tsx` extensions.
 - Use `data-testid` for test selectors.
 - Prefer semantic faker methods (e.g. `faker.book.author()` not `faker.person.fullName()`).
+
+## Error Handling
+
+- API methods catch HTTP errors and throw typed `ProblemDetailError` instead of leaking raw axios errors. Use the HTTP status code to determine success vs failure.
+- `ProblemDetail` and `ProblemDetailError` live in `api.types.ts` as shared API-layer types.
+- Hooks handle error routing via callbacks (e.g. `onSuccess`, `onValidationError`). Components don't catch or inspect errors from the backend.
+- Components should have no knowledge of `ProblemDetailError` or error response shapes.
 
 ## Testing
 
