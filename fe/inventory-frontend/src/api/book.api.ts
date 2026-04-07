@@ -30,6 +30,12 @@ export const bookApi: BookApi = {
     },
 
     async deleteBook(id: string): Promise<void> {
-        await baseApi.delete(`/books/${id}`);
+        const response = await baseApi.delete(`/books/${id}`).catch((e: unknown) => {
+            if (isAxiosError(e) && e.response) return e.response;
+            throw e;
+        });
+        if (response.status !== 200) {
+            throw new ProblemDetailError(response.data);
+        }
     }
 }

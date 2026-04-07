@@ -113,7 +113,7 @@ describe('BookApi', () => {
 
     describe('delete book', () => {
         test('should delete /books/{id}', async () => {
-            vi.spyOn(baseApi, 'delete').mockResolvedValue({data: undefined});
+            vi.spyOn(baseApi, 'delete').mockResolvedValue({status: 200, data: undefined});
 
             await bookApi.deleteBook('789');
 
@@ -121,11 +121,32 @@ describe('BookApi', () => {
         });
 
         test('returns void', async () => {
-            vi.spyOn(baseApi, 'delete').mockResolvedValue({data: undefined});
+            vi.spyOn(baseApi, 'delete').mockResolvedValue({status: 200, data: undefined});
 
             const result = await bookApi.deleteBook('789');
 
             expect(result).toBeUndefined();
+        });
+
+        test('returns problem detail when backend returns error', async () => {
+            const problemDetail = {
+                title: 'Not Found',
+                status: 404,
+                detail: 'Book 789 not found',
+            };
+            const error = new AxiosError('Not Found', 'ERR_BAD_REQUEST', undefined, undefined, {
+                status: 404, data: problemDetail,
+            } as never);
+            vi.spyOn(baseApi, 'delete').mockRejectedValue(error);
+
+            await expect(bookApi.deleteBook('789')).rejects.toThrow(ProblemDetailError);
+        });
+
+        test('re-throws non-HTTP errors as-is', async () => {
+            const networkError = new Error('Network Error');
+            vi.spyOn(baseApi, 'delete').mockRejectedValue(networkError);
+
+            await expect(bookApi.deleteBook('789')).rejects.toThrow(networkError);
         });
     });
 });
