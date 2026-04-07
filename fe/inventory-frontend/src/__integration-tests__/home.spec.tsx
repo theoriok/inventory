@@ -11,7 +11,6 @@ import {faker} from "@faker-js/faker";
 import {ProblemDetailError} from "../api/api.types.ts";
 
 afterEach(() => {
-    vi.restoreAllMocks();
     window.location.hash = '/';
 });
 describe('home', () => {
