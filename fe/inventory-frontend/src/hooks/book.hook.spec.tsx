@@ -249,4 +249,48 @@ describe('useDeleteBook', () => {
 
         expect(invalidateSpy).toHaveBeenCalledWith({queryKey: ['books']});
     });
+
+    test('should call onSuccess callback on success', async () => {
+        vi.spyOn(bookApi, 'deleteBook').mockResolvedValue(undefined);
+        const onSuccess = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useDeleteBook({onSuccess}), {wrapper});
+
+        result.current.mutate('789');
+
+        await waitFor(() => {
+            expect(onSuccess).toHaveBeenCalledOnce();
+        });
+    });
+
+    test('should call onError with detail when deleteBook throws ProblemDetailError', async () => {
+        vi.spyOn(bookApi, 'deleteBook').mockRejectedValue(
+            new ProblemDetailError({title: 'Not Found', status: 404, detail: 'Book 789 not found'}),
+        );
+        const onError = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useDeleteBook({onError}), {wrapper});
+
+        result.current.mutate('789');
+
+        await waitFor(() => {
+            expect(onError).toHaveBeenCalledWith('Book 789 not found');
+        });
+    });
+
+    test('should call onError with fallback message when deleteBook throws a non-ProblemDetailError', async () => {
+        vi.spyOn(bookApi, 'deleteBook').mockRejectedValue(new Error('Network failure'));
+        const onError = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useDeleteBook({onError}), {wrapper});
+
+        result.current.mutate('789');
+
+        await waitFor(() => {
+            expect(onError).toHaveBeenCalledWith('something went wrong');
+        });
+    });
 });

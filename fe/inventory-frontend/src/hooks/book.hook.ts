@@ -58,11 +58,24 @@ export function useUpdateBook() {
     });
 }
 
-export function useDeleteBook() {
+export function useDeleteBook({onSuccess, onError}: {
+    onSuccess?: () => void;
+    onError?: (detail: string) => void;
+} = {}) {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (id: string) => bookApi.deleteBook(id),
-        onSuccess: () => queryClient.invalidateQueries({queryKey: [BookQueryKeys.Books]}),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [BookQueryKeys.Books]});
+            onSuccess?.();
+        },
+        onError: (error) => {
+            if (error instanceof ProblemDetailError) {
+                onError?.(error.problemDetail.detail);
+            } else {
+                onError?.('something went wrong');
+            }
+        },
     });
 }
 
