@@ -1877,16 +1877,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/util@npm:1.10.0":
-  version: 1.10.0
-  resolution: "@rc-component/util@npm:1.10.0"
+"@rc-component/util@npm:1.10.1":
+  version: 1.10.1
+  resolution: "@rc-component/util@npm:1.10.1"
   dependencies:
     is-mobile: "npm:^5.0.0"
     react-is: "npm:^18.2.0"
   peerDependencies:
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/80073b6d621dab87cc5b7189fa9827ad0293ad6567efd9ee7ff368d2564d379eca133aa2c2997cef7313ab33d30810a3d191c49e73d1315619a2dbb9ff362318
+  checksum: 10c0/9604409d5819b7e7e61b386a7691eba893dced4b6d1014043115de369176935826f71a8f6c77b5a0f96263eb06c371e651a87d3db6400e8dda1c3a202dc6ebeb
   languageName: node
   linkType: hard
 
