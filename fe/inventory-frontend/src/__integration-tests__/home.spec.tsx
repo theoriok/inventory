@@ -28,6 +28,7 @@ describe('home', () => {
                 const booksTable = screen.getByTestId('books-table');
 
                 const headers = within(booksTable).getAllByRole('columnheader');
+                expect(headers).toHaveLength(4);
                 expect(headers[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent('Title');
                 expect(headers[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent('Author');
                 expect(headers[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent('Description');
@@ -51,6 +52,7 @@ describe('home', () => {
                 const booksTable = screen.getByTestId('books-table');
 
                 const headers = within(booksTable).getAllByRole('columnheader');
+                expect(headers).toHaveLength(4);
                 expect(headers[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent('Title');
                 expect(headers[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent('Author');
                 expect(headers[BOOK_TABLE.DESCRIPTION_COLUMN]).toHaveTextContent('Description');
@@ -331,9 +333,123 @@ describe('home', () => {
             });
         });
     });
+
+    describe('delete book', {timeout: 10000}, () => {
+        describe('happy path', () => {
+            const book = generateBook();
+
+            beforeEach(async () => given([book]));
+
+            test('shows delete icon in each row', async () => {
+                await waitFor(() => {
+                    const booksTable = screen.getByTestId('books-table');
+                    const rows = within(booksTable).getAllByRole('row');
+                    const dataRows = rows.slice(1);
+
+                    expect(within(dataRows[0]).getByTestId('delete-book')).toBeInTheDocument();
+                });
+            });
+
+            test('opens confirmation modal when delete icon is clicked', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('delete-book'));
+
+                await waitFor(() => {
+                    expect(screen.getByRole('dialog')).toBeInTheDocument();
+                    expect(screen.getByText(`Are you sure you want to delete '${book.title}'?`)).toBeInTheDocument();
+                });
+            });
+
+            test('closes modal on cancel', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('delete-book'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.click(screen.getByRole('button', {name: 'Cancel'}));
+
+                await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+            });
+
+            test('removes book from table on confirm and shows success message', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('delete-book'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.click(screen.getByRole('button', {name: 'OK'}));
+
+                await waitFor(() => {
+                    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+                    expect(screen.getByText('Book deleted successfully')).toBeInTheDocument();
+                    expect(screen.getByTestId('no-books-message')).toBeInTheDocument();
+                });
+            });
+        });
+
+        describe('multiple books', () => {
+            const bookA = generateBook();
+            const bookB = generateBook();
+
+            beforeEach(async () => given([bookA, bookB]));
+
+            test('only removes the selected book', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('delete-book'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.click(screen.getByRole('button', {name: 'OK'}));
+
+                await waitFor(() => {
+                    const updatedRows = within(screen.getByTestId('books-table')).getAllByRole('row');
+                    const dataRows = updatedRows.slice(1);
+                    expect(dataRows).toHaveLength(1);
+
+                    const cells = within(dataRows[0]).getAllByRole('cell');
+                    expect(cells[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent(bookB.title);
+                });
+            });
+        });
+
+        describe('error handling', () => {
+            const book = generateBook();
+
+            beforeEach(async () => given([book], undefined, 'server'));
+
+            test('shows error message when delete fails', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('delete-book'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.click(screen.getByRole('button', {name: 'OK'}));
+
+                await waitFor(() => {
+                    expect(screen.getByText(`Failed to delete book: Book ${book.id} not found`)).toBeInTheDocument();
+                });
+            });
+        });
+    });
 });
 
-function given(books: Book[], createError?: 'validation' | 'server' | 'network') {
+function given(books: Book[], createError?: 'validation' | 'server' | 'network', deleteError?: 'server' | 'network') {
     const savedBooks = [...books];
     vi.spyOn(bookApi, 'fetchBooks').mockImplementation(() =>
         Promise.resolve({
@@ -369,6 +485,22 @@ function given(books: Book[], createError?: 'validation' | 'server' | 'network')
         };
         savedBooks.push(newBook);
         return newBook;
+    });
+    vi.spyOn(bookApi, 'deleteBook').mockImplementation(async (id) => {
+        if (deleteError === 'server') {
+            throw new ProblemDetailError({
+                title: 'Not Found',
+                status: 404,
+                detail: `Book ${id} not found`,
+            });
+        }
+        if (deleteError === 'network') {
+            throw new Error('Network failure');
+        }
+        const index = savedBooks.findIndex((book) => book.id === id);
+        if (index !== -1) {
+            savedBooks.splice(index, 1);
+        }
     });
     render(
         <InventoryApp/>

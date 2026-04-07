@@ -3813,6 +3813,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inventory-frontend@workspace:."
   dependencies:
+    "@ant-design/icons": "npm:^6.1.1"
     "@ant-design/pro-components": "npm:2.8.10"
     "@eslint/js": "npm:10.0.1"
     "@faker-js/faker": "npm:10.4.0"
