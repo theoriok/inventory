@@ -1,4 +1,5 @@
 import {describe, expect, test, vi} from 'vitest';
+import {AxiosError} from 'axios';
 
 import {baseApi} from './base.api.ts';
 import {bookApi} from './book.api.ts';
@@ -73,11 +74,20 @@ describe('BookApi', () => {
                 detail: 'Validation failed',
                 errors: {title: 'must not be blank'},
             };
-            vi.spyOn(baseApi, 'post').mockRejectedValue({
-                response: {status: 400, data: problemDetail},
-            });
+            const error = new AxiosError('Bad Request', 'ERR_BAD_REQUEST', undefined, undefined, {
+                status: 400, data: problemDetail,
+            } as never);
+            vi.spyOn(baseApi, 'post').mockRejectedValue(error);
 
             await expect(bookApi.createBook(createBook)).rejects.toThrow(ProblemDetailError);
+        });
+
+        test('re-throws non-HTTP errors as-is', async () => {
+            const createBook = generateCreateBook();
+            const networkError = new Error('Network Error');
+            vi.spyOn(baseApi, 'post').mockRejectedValue(networkError);
+
+            await expect(bookApi.createBook(createBook)).rejects.toThrow(networkError);
         });
     });
 

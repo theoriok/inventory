@@ -27,7 +27,7 @@ describe('home', () => {
 
             test('shows the table headers', async () => await waitFor(() => {
                 const booksTable = screen.getByTestId('books-table');
-                
+
                 const headers = within(booksTable).getAllByRole('columnheader');
                 expect(headers[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent('Title');
                 expect(headers[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent('Author');
@@ -45,12 +45,12 @@ describe('home', () => {
 
         describe('one book', () => {
             const book = generateBook();
-            
+
             beforeEach(async () => given([book]));
 
             test('shows the table headers', async () => await waitFor(() => {
                 const booksTable = screen.getByTestId('books-table');
-                
+
                 const headers = within(booksTable).getAllByRole('columnheader');
                 expect(headers[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent('Title');
                 expect(headers[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent('Author');
@@ -59,11 +59,11 @@ describe('home', () => {
 
             test('shows the book data', async () => await waitFor(() => {
                 const booksTable = screen.getByTestId('books-table');
-                
+
                 const rows = within(booksTable).getAllByRole('row');
                 const dataRows = rows.slice(1);
                 expect(dataRows).toHaveLength(1);
-                
+
                 const cells = within(dataRows[0]).getAllByRole('cell');
                 expect(cells[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent(book.title);
                 expect(cells[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent(book.author);
@@ -153,7 +153,7 @@ describe('home', () => {
                     const rows = within(booksTable).getAllByRole('row');
                     const dataRows = rows.slice(1);
                     expect(dataRows).toHaveLength(1);
-                    
+
                     const cells = within(dataRows[0]).getAllByRole('cell');
                     expect(cells[BOOK_TABLE.TITLE_COLUMN]).toHaveTextContent(newBook.title);
                     expect(cells[BOOK_TABLE.AUTHOR_COLUMN]).toHaveTextContent(newBook.author);
@@ -334,10 +334,8 @@ describe('home', () => {
     });
 });
 
-let savedBooks: Book[] = []
-
 function given(books: Book[], createError?: 'validation' | 'server' | 'network') {
-    savedBooks = books;
+    const savedBooks = [...books];
     vi.spyOn(bookApi, 'fetchBooks').mockImplementation(() =>
         Promise.resolve({
             items: savedBooks,

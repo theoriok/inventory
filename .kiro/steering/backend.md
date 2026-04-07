@@ -21,7 +21,6 @@
 - Use var for local variables when the type is obvious from the right-hand side.
 - Versions go in the dependency management block of the root `build.gradle`, not in individual module build files.
 - When classes are in the same package, don't add unnecessary imports.
-- When rewriting a file with `create`, preserve all existing imports. Don't drop imports that were already there.
 
 ## Architecture
 

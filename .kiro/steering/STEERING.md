@@ -5,6 +5,9 @@
 - Don't make changes the user didn't ask for. If you spot something that needs fixing, mention it and wait for approval.
 - When refactoring multiple files, do one file at a time and run tests between each (unless this makes it not compile, then you can do the necessary changes to make it compile as well). Don't batch all files into one change.
 - Don't split up changes in the same file into multiple write commands if they actually belong together. This includes import changes — if you're adding an import and changing code in the same file, do it in one write. Splitting causes avoidable errors like duplicate imports.
+  - BAD: Two `str_replace` calls to the same file — one for the import, one for the method body.
+  - GOOD: One `str_replace` (or `create`) that includes both the import and the method body change together.
+- CRITICAL: When rewriting a file with `create`, you MUST preserve ALL existing imports — including CSS imports, side-effect imports, and any import that was already there. Dropping an import during a rewrite is a bug. Diff the before and after imports to verify nothing was lost.
 - When the user says "revert", revert exactly what was asked — nothing more, nothing less.
 - Run tests after every code change unless the user explicitly says not to.
 - When a build fails, report the error and suggest a fix, but wait for the user's input before changing anything.
