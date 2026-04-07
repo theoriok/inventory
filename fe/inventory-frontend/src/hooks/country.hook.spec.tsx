@@ -1,5 +1,5 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {describe, expect, it, vi} from 'vitest';
+import {describe, expect, test, vi} from 'vitest';
 
 import {useCountries, useCountry} from './country.hook';
 import {countryApi} from '../api/country.api';
@@ -7,7 +7,7 @@ import {generateCountry} from '../__test__/generators/country.generator';
 import {createWrapper} from '../__test__/helpers/hook.helper';
 
 describe('useCountries', () => {
-    it('should fetch countries successfully', async () => {
+    test('should fetch countries successfully', async () => {
         const countries = [generateCountry(), generateCountry()];
         vi.spyOn(countryApi, 'fetchCountries').mockResolvedValue({
             items: countries,
@@ -26,7 +26,7 @@ describe('useCountries', () => {
         expect(countryApi.fetchCountries).toHaveBeenCalledOnce();
     });
 
-    it('should handle fetch error', async () => {
+    test('should handle fetch error', async () => {
         vi.spyOn(countryApi, 'fetchCountries').mockRejectedValue(new Error('API Error'));
 
         const {wrapper} = createWrapper();
@@ -39,7 +39,7 @@ describe('useCountries', () => {
         expect(result.current.error).toBeInstanceOf(Error);
     });
 
-    it('should start in loading state', () => {
+    test('should start in loading state', () => {
         const {wrapper} = createWrapper();
         const {result} = renderHook(() => useCountries(), {wrapper});
 
@@ -49,7 +49,7 @@ describe('useCountries', () => {
 });
 
 describe('useCountry', () => {
-    it('should fetch single country successfully', async () => {
+    test('should fetch single country successfully', async () => {
         const country = generateCountry();
         vi.spyOn(countryApi, 'fetchCountry').mockResolvedValue(country);
 
@@ -64,7 +64,7 @@ describe('useCountry', () => {
         expect(countryApi.fetchCountry).toHaveBeenCalledWith('BE');
     });
 
-    it('should handle fetch error', async () => {
+    test('should handle fetch error', async () => {
         vi.spyOn(countryApi, 'fetchCountry').mockRejectedValue(new Error('Country not found'));
 
         const {wrapper} = createWrapper();
@@ -77,7 +77,7 @@ describe('useCountry', () => {
         expect(result.current.error).toBeInstanceOf(Error);
     });
 
-    it('should start in loading state', () => {
+    test('should start in loading state', () => {
         const {wrapper} = createWrapper();
         const {result} = renderHook(() => useCountry('BE'), {wrapper});
 

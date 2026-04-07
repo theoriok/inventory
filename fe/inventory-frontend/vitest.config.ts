@@ -4,6 +4,7 @@ import {defineConfig} from 'vitest/config';
 export default defineConfig({
     plugins: [react()],
     test: {
+        restoreMocks: true,
         environment: 'jsdom',
         setupFiles: './src/setup-test.ts',
         coverage: {

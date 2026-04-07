@@ -1,8 +1,10 @@
 import {describe, expect, test, vi} from 'vitest';
+import {AxiosError} from 'axios';
 
 import {baseApi} from './base.api.ts';
 import {bookApi} from './book.api.ts';
 import {generateBook, generateCreateBook, generateUpdateBook} from '../__test__/generators/book.generator.ts';
+import {ProblemDetailError} from './api.types.ts';
 
 describe('BookApi', () => {
     describe('fetch books', () => {
@@ -47,7 +49,7 @@ describe('BookApi', () => {
         test('should post to /books', async () => {
             const createBook = generateCreateBook();
             const createdBook = generateBook();
-            vi.spyOn(baseApi, 'post').mockResolvedValue({data: createdBook});
+            vi.spyOn(baseApi, 'post').mockResolvedValue({status: 201, data: createdBook});
 
             await bookApi.createBook(createBook);
 
@@ -57,11 +59,35 @@ describe('BookApi', () => {
         test('returns the created book', async () => {
             const createBook = generateCreateBook();
             const createdBook = generateBook();
-            vi.spyOn(baseApi, 'post').mockResolvedValue({data: createdBook});
+            vi.spyOn(baseApi, 'post').mockResolvedValue({status: 201, data: createdBook});
 
             const result = await bookApi.createBook(createBook);
 
             expect(result).toEqual(createdBook);
+        });
+
+        test('returns problem detail when backend returns validation error', async () => {
+            const createBook = generateCreateBook({title: ''});
+            const problemDetail = {
+                title: 'Bad Request',
+                status: 400,
+                detail: 'Validation failed',
+                errors: {title: 'must not be blank'},
+            };
+            const error = new AxiosError('Bad Request', 'ERR_BAD_REQUEST', undefined, undefined, {
+                status: 400, data: problemDetail,
+            } as never);
+            vi.spyOn(baseApi, 'post').mockRejectedValue(error);
+
+            await expect(bookApi.createBook(createBook)).rejects.toThrow(ProblemDetailError);
+        });
+
+        test('re-throws non-HTTP errors as-is', async () => {
+            const createBook = generateCreateBook();
+            const networkError = new Error('Network Error');
+            vi.spyOn(baseApi, 'post').mockRejectedValue(networkError);
+
+            await expect(bookApi.createBook(createBook)).rejects.toThrow(networkError);
         });
     });
 

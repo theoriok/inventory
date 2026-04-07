@@ -1,13 +1,14 @@
 import {renderHook, waitFor} from '@testing-library/react';
-import {describe, expect, it, vi} from 'vitest';
+import {describe, expect, test, vi} from 'vitest';
 
 import {useBook, useBooks, useCreateBook, useDeleteBook, useUpdateBook} from './book.hook';
 import {bookApi} from '../api/book.api';
 import {generateBook, generateCreateBook, generateUpdateBook} from '../__test__/generators/book.generator';
 import {createWrapper} from '../__test__/helpers/hook.helper';
+import {ProblemDetailError} from '../api/api.types';
 
 describe('useBooks', () => {
-    it('should fetch books successfully', async () => {
+    test('should fetch books successfully', async () => {
         const books = [generateBook(), generateBook()];
         vi.spyOn(bookApi, 'fetchBooks').mockResolvedValue({
             items: books,
@@ -26,7 +27,7 @@ describe('useBooks', () => {
         expect(bookApi.fetchBooks).toHaveBeenCalledOnce();
     });
 
-    it('should handle fetch error', async () => {
+    test('should handle fetch error', async () => {
         vi.spyOn(bookApi, 'fetchBooks').mockRejectedValue(new Error('API Error'));
 
         const {wrapper} = createWrapper();
@@ -39,7 +40,7 @@ describe('useBooks', () => {
         expect(result.current.error).toBeInstanceOf(Error);
     });
 
-    it('should start in loading state', () => {
+    test('should start in loading state', () => {
         const {wrapper} = createWrapper();
         const {result} = renderHook(() => useBooks(), {wrapper});
 
@@ -49,7 +50,7 @@ describe('useBooks', () => {
 });
 
 describe('useBook', () => {
-    it('should fetch single book successfully', async () => {
+    test('should fetch single book successfully', async () => {
         const book = generateBook();
         vi.spyOn(bookApi, 'fetchBook').mockResolvedValue(book);
 
@@ -64,7 +65,7 @@ describe('useBook', () => {
         expect(bookApi.fetchBook).toHaveBeenCalledWith('123');
     });
 
-    it('should handle fetch error', async () => {
+    test('should handle fetch error', async () => {
         vi.spyOn(bookApi, 'fetchBook').mockRejectedValue(new Error('Book not found'));
 
         const {wrapper} = createWrapper();
@@ -77,7 +78,7 @@ describe('useBook', () => {
         expect(result.current.error).toBeInstanceOf(Error);
     });
 
-    it('should start in loading state', () => {
+    test('should start in loading state', () => {
         const {wrapper} = createWrapper();
         const {result} = renderHook(() => useBook('123'), {wrapper});
 
@@ -87,7 +88,7 @@ describe('useBook', () => {
 });
 
 describe('useCreateBook', () => {
-    it('should call createBook and return created book', async () => {
+    test('should call createBook and return created book', async () => {
         const createBook = generateCreateBook();
         const createdBook = generateBook();
         vi.spyOn(bookApi, 'createBook').mockResolvedValue(createdBook);
@@ -105,7 +106,7 @@ describe('useCreateBook', () => {
         expect(bookApi.createBook).toHaveBeenCalledWith(createBook);
     });
 
-    it('should invalidate books query on success', async () => {
+    test('should invalidate books query on success', async () => {
         const {wrapper, queryClient} = createWrapper();
         const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
         vi.spyOn(bookApi, 'createBook').mockResolvedValue(generateBook());
@@ -120,10 +121,71 @@ describe('useCreateBook', () => {
 
         expect(invalidateSpy).toHaveBeenCalledWith({queryKey: ['books']});
     });
+
+    test('should call onSuccess callback on success', async () => {
+        vi.spyOn(bookApi, 'createBook').mockResolvedValue(generateBook());
+        const onSuccess = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useCreateBook({onSuccess}), {wrapper});
+
+        result.current.mutate(generateCreateBook());
+
+        await waitFor(() => {
+            expect(onSuccess).toHaveBeenCalledOnce();
+        });
+    });
+
+    test('should call onValidationError with field errors when createBook throws ProblemDetailError', async () => {
+        const errors = {title: 'must not be blank', author: 'must not be blank'};
+        vi.spyOn(bookApi, 'createBook').mockRejectedValue(
+            new ProblemDetailError({title: 'Bad Request', status: 400, detail: 'Validation failed', errors}),
+        );
+        const onValidationError = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useCreateBook({onValidationError}), {wrapper});
+
+        result.current.mutate(generateCreateBook({title: ''}));
+
+        await waitFor(() => {
+            expect(onValidationError).toHaveBeenCalledWith(errors);
+        });
+    });
+
+    test('should call onDetailedError with detail when createBook throws ProblemDetailError without field errors', async () => {
+        vi.spyOn(bookApi, 'createBook').mockRejectedValue(
+            new ProblemDetailError({title: 'Internal Server Error', status: 500, detail: 'Something went wrong'}),
+        );
+        const onDetailedError = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useCreateBook({onDetailedError}), {wrapper});
+
+        result.current.mutate(generateCreateBook());
+
+        await waitFor(() => {
+            expect(onDetailedError).toHaveBeenCalledWith('Something went wrong');
+        });
+    });
+
+    test('should call onError when createBook throws a non-ProblemDetailError', async () => {
+        vi.spyOn(bookApi, 'createBook').mockRejectedValue(new Error('Network failure'));
+        const onError = vi.fn();
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useCreateBook({onError}), {wrapper});
+
+        result.current.mutate(generateCreateBook());
+
+        await waitFor(() => {
+            expect(onError).toHaveBeenCalledOnce();
+        });
+    });
 });
 
 describe('useUpdateBook', () => {
-    it('should call updateBook with id and body', async () => {
+    test('should call updateBook with id and body', async () => {
         const updateBook = generateUpdateBook();
         vi.spyOn(bookApi, 'updateBook').mockResolvedValue(undefined);
 
@@ -139,7 +201,7 @@ describe('useUpdateBook', () => {
         expect(bookApi.updateBook).toHaveBeenCalledWith('456', updateBook);
     });
 
-    it('should invalidate books query on success', async () => {
+    test('should invalidate books query on success', async () => {
         const {wrapper, queryClient} = createWrapper();
         const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
         vi.spyOn(bookApi, 'updateBook').mockResolvedValue(undefined);
@@ -157,7 +219,7 @@ describe('useUpdateBook', () => {
 });
 
 describe('useDeleteBook', () => {
-    it('should call deleteBook with id', async () => {
+    test('should call deleteBook with id', async () => {
         vi.spyOn(bookApi, 'deleteBook').mockResolvedValue(undefined);
 
         const {wrapper} = createWrapper();
@@ -172,7 +234,7 @@ describe('useDeleteBook', () => {
         expect(bookApi.deleteBook).toHaveBeenCalledWith('789');
     });
 
-    it('should invalidate books query on success', async () => {
+    test('should invalidate books query on success', async () => {
         const {wrapper, queryClient} = createWrapper();
         const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
         vi.spyOn(bookApi, 'deleteBook').mockResolvedValue(undefined);
