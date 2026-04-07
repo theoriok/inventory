@@ -58,14 +58,14 @@ public class CapController {
         return findCaps.findById(new CapId(id))
             .map(this::toCapDto)
             .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
+            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Cap %s not found".formatted(id))).build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCapById(@PathVariable(name = "id") String id) {
         return switch (deleteCap.delete(new CapId(id))) {
             case DELETED -> ResponseEntity.ok().build();
-            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
+            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Cap %s not found".formatted(id))).build();
         };
     }
 
@@ -81,7 +81,7 @@ public class CapController {
     public ResponseEntity<?> updateCap(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateCapDto capDto) {
         return switch (updateCap.update(toUpdateRequest(id, capDto))) {
             case UPDATED -> ResponseEntity.noContent().build();
-            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
+            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Cap %s not found".formatted(id))).build();
             case UNKNOWN_COUNTRY -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();
         };
     }

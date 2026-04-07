@@ -354,6 +354,11 @@ components:
           type: string
     Problem:
       type: object
+      required:
+        - title
+        - status
+        - detail
+        - instance
       properties:
         title:
           type: string

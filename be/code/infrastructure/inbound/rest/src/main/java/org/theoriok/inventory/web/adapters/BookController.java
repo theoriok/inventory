@@ -55,14 +55,14 @@ public class BookController {
         return findBooks.findById(new BookId(id))
             .map(this::toBookDto)
             .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
+            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Book %s not found".formatted(id))).build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookById(@PathVariable(name = "id") String id) {
         return switch (deleteBook.delete(new BookId(id))) {
             case DELETED -> ResponseEntity.ok().build();
-            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
+            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Book %s not found".formatted(id))).build();
         };
     }
 
@@ -76,7 +76,7 @@ public class BookController {
     public ResponseEntity<Void> updateBook(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateBookDto bookDto) {
         return switch (updateBook.update(toUpdateRequest(id, bookDto))) {
             case UPDATED -> ResponseEntity.noContent().build();
-            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build();
+            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Book %s not found".formatted(id))).build();
         };
     }
 

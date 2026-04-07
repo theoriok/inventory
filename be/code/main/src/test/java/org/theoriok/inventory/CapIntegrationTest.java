@@ -578,9 +578,10 @@ class CapIntegrationTest extends IntegrationTest {
             {
               "title": "Not Found",
               "status": 404,
+              "detail": "Cap %s not found",
               "instance": "/caps/%s"
             }
-            """.formatted(id.value());
+            """.formatted(id.value(), id.value());
     }
 
     private CapEntity testCap(CountryEntity country) {

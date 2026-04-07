@@ -41,7 +41,7 @@ public class CountryController {
         return findCountries.findByCode(code)
             .map(this::toCountryDto)
             .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatus(NOT_FOUND)).build());
+            .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Country %s not found".formatted(code))).build());
     }
 
     private CountryDto toCountryDto(Country country) {

@@ -36,7 +36,7 @@ class CountryIntegrationTest extends IntegrationTest {
         void shouldReturnNotFoundWhenCountryNotFoundById() throws Exception {
             mvc.perform(get("/countries/BE-1"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(expectedCountryNotFoundProblemJson()));
+                .andExpect(content().json(expectedCountryNotFoundProblemJson("BE-1")));
         }
 
         @Test
@@ -73,14 +73,15 @@ class CountryIntegrationTest extends IntegrationTest {
     }
 
     @Language("JSON")
-    private String expectedCountryNotFoundProblemJson() {
+    private String expectedCountryNotFoundProblemJson(String code) {
         return """
                 {
                   "title": "Not Found",
                   "status": 404,
-                  "instance": "/countries/BE-1"
+                  "detail": "Country %s not found",
+                  "instance": "/countries/%s"
                 }
-                """;
+                """.formatted(code, code);
     }
 
     private CountryEntity testCountry() {

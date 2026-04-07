@@ -389,9 +389,10 @@ class BookIntegrationTest extends IntegrationTest {
                 {
                   "title": "Not Found",
                   "status": 404,
+                  "detail": "Book %s not found",
                   "instance": "/books/%s"
                 }
-                """.formatted(id.value());
+                """.formatted(id.value(), id.value());
         }
     }
 
@@ -430,8 +431,9 @@ class BookIntegrationTest extends IntegrationTest {
             {
               "title": "Not Found",
               "status": 404,
+              "detail": "Book %s not found",
               "instance": "/books/%s"
             }
-            """.formatted(id.value());
+            """.formatted(id.value(), id.value());
     }
 }
