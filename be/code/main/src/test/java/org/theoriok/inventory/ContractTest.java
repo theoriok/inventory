@@ -7,6 +7,7 @@ import org.theoriok.inventory.client.ApiClient;
 import org.theoriok.inventory.client.ApiException;
 import org.theoriok.inventory.client.JSON;
 import org.theoriok.inventory.client.api.BookControllerApi;
+import org.theoriok.inventory.client.api.CapControllerApi;
 import org.theoriok.inventory.client.model.Problem;
 
 import java.io.IOException;
@@ -21,19 +22,21 @@ abstract class ContractTest extends IntegrationTest {
     int port;
 
     BookControllerApi bookApi;
+    CapControllerApi capApi;
 
     @BeforeEach
     void setUpApis() {
         var client = new ApiClient();
         client.updateBaseUri("http://localhost:" + port);
         bookApi = new BookControllerApi(client);
+        capApi = new CapControllerApi(client);
     }
 
     Problem parseProblem(ApiException exception) {
         try {
             return JSON_MAPPER.getMapper().readValue(exception.getResponseBody(), Problem.class);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+        } catch (IOException ioException) {
+            throw new UncheckedIOException(ioException);
         }
     }
 }
