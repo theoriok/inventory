@@ -229,6 +229,7 @@ class CapContractTest extends ContractTest {
                     assertThat(problem.getTitle()).isEqualTo("Bad Request");
                     assertThat(problem.getStatus()).isEqualTo(400);
                     assertThat(problem.getDetail()).isEqualTo("Unknown country XX");
+                    assertThat(problem.getInstance()).isEqualTo("/caps/%s".formatted(cap.id()));
                 });
         }
     }
