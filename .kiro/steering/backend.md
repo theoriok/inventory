@@ -3,7 +3,6 @@
 ## General
 
 - Run `./gradlew clean check` from the `be/` directory after every code change unless the user explicitly says not to.
-- Dependencies are upgraded continuously — expect bleeding-edge library versions. Don't assume an API doesn't exist based on older knowledge.
 
 ## Environment
 

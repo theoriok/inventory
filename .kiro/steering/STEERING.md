@@ -15,6 +15,8 @@
 - Prefer the `code` tool over `fs_read` over `cat` for reading. Prefer the `code` tool over `fs_write` over `sed` for writing.
 - For straightforward text replacements, use `str_replace` or `create`. Don't reach for AST rewrite tools or pattern-based approaches when a simple file rewrite does the job.
 - Don't pipe command output through `head` or `tail` when debugging — you lose visibility into whether commands are hanging, and important context gets truncated, leading to re-runs.
+- Dependencies are upgraded continuously — expect bleeding-edge library versions. Don't assume an API doesn't exist based on older knowledge.
+- When adding new dependencies, make sure you are using the latest version.
 
 ## TDD
 
