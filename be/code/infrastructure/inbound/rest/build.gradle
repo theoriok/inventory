@@ -1,5 +1,4 @@
 apply plugin: 'java-library'
-apply plugin: 'org.openapi.generator'
 
 dependencies {
     implementation project(":application-api")
@@ -9,19 +8,4 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'io.micrometer:micrometer-registry-prometheus'
-}
-
-openApiGenerate {
-    generatorName = 'java'
-    inputSpec = "$projectDir/src/main/resources/api.yml"
-    outputDir = "$buildDir/generated-sources/openapi"
-    apiPackage = 'org.theoriok.inventory.client.api'
-    modelPackage = 'org.theoriok.inventory.client.model'
-    generateApiTests = false
-    generateModelTests = false
-    configOptions = [
-        library: 'native',
-        dateLibrary: 'java8',
-        useJakartaEe: 'true'
-    ]
 }

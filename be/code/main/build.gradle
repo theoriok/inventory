@@ -1,5 +1,6 @@
 apply plugin: 'org.springframework.boot'
 apply plugin: 'java-library'
+apply plugin: 'org.openapi.generator'
 
 dependencies {
     implementation project(":application-api")
@@ -22,6 +23,8 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers-junit-jupiter"
     testImplementation 'org.jetbrains:annotations'
     testImplementation 'net.javacrumbs.json-unit:json-unit-assertj'
+    testImplementation 'org.openapitools:jackson-databind-nullable'
+    testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 springBoot {
@@ -30,4 +33,31 @@ springBoot {
             name = rootProject.ext.name
         }
     }
+}
+
+openApiGenerate {
+    generatorName = 'java'
+    inputSpec = "${project.rootDir}/documentation/api/api.yml"
+    outputDir = "$buildDir/generated-sources/openapi-test"
+    apiPackage = 'org.theoriok.inventory.client.api'
+    modelPackage = 'org.theoriok.inventory.client.model'
+    generateApiTests = false
+    generateModelTests = false
+    configOptions = [
+        library: 'native',
+        dateLibrary: 'java8',
+        useJakartaEe: 'true'
+    ]
+}
+
+sourceSets.test.java.srcDir("$buildDir/generated-sources/openapi-test/src/main/java")
+
+compileTestJava.dependsOn(tasks.named('openApiGenerate'))
+
+checkstyleTest {
+    source = sourceSets.test.java.srcDirs.findAll { !it.path.contains('generated-sources') }
+}
+
+pmdTest {
+    source = sourceSets.test.java.srcDirs.findAll { !it.path.contains('generated-sources') }
 }
