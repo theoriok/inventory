@@ -8,6 +8,7 @@ import org.theoriok.inventory.client.ApiException;
 import org.theoriok.inventory.client.JSON;
 import org.theoriok.inventory.client.api.BookControllerApi;
 import org.theoriok.inventory.client.api.CapControllerApi;
+import org.theoriok.inventory.client.api.CountryControllerApi;
 import org.theoriok.inventory.client.model.Problem;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ abstract class ContractTest extends IntegrationTest {
 
     BookControllerApi bookApi;
     CapControllerApi capApi;
+    CountryControllerApi countryApi;
 
     @BeforeEach
     void setUpApis() {
@@ -30,6 +32,7 @@ abstract class ContractTest extends IntegrationTest {
         client.updateBaseUri("http://localhost:" + port);
         bookApi = new BookControllerApi(client);
         capApi = new CapControllerApi(client);
+        countryApi = new CountryControllerApi(client);
     }
 
     Problem parseProblem(ApiException exception) {
