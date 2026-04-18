@@ -148,8 +148,20 @@ class BookIntegrationTest extends IntegrationTest {
                 arguments(bookToCreateWithNulls(), expectedBlankValidationProblemJson()),
                 arguments(bookToCreateWithBlankStrings(), expectedBlankValidationProblemJson()),
                 arguments(bookToCreateWithWhitespace(), expectedBlankValidationProblemJson()),
+                arguments(bookToCreateWithExtremeWhitespace(), expectedExtremeValidationProblemJson()),
                 arguments(bookToCreateWithFieldsTooLong(), expectedMaxLengthValidationProblemJson())
             );
+        }
+
+        @Language("JSON")
+        private String bookToCreate() {
+            return """
+                {
+                    "title": "The Hobbit",
+                    "author": "JRR Tolkien",
+                    "description": "In a hole under the ground, there lived a Hobbit."
+                }
+                """;
         }
 
         @Language("JSON")
@@ -184,14 +196,18 @@ class BookIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private String bookToCreate() {
+        private static String bookToCreateWithExtremeWhitespace() {
             return """
                 {
-                    "title": "The Hobbit",
-                    "author": "JRR Tolkien",
-                    "description": "In a hole under the ground, there lived a Hobbit."
+                    "title": "%s",
+                    "author": "%s",
+                    "description": "%s"
                 }
-                """;
+                """.formatted(
+                " ".repeat(256),
+                " ".repeat(256),
+                " ".repeat(5001)
+            );
         }
 
         @Language("JSON")
@@ -221,6 +237,23 @@ class BookIntegrationTest extends IntegrationTest {
                     "title": "must not be blank",
                     "author": "must not be blank",
                     "description": "must not be blank"
+                  }
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String expectedExtremeValidationProblemJson() {
+            return """
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/books",
+                  "errors": {
+                    "title": "must not be blank, size must be between 0 and 255",
+                    "author": "must not be blank, size must be between 0 and 255",
+                    "description": "must not be blank, size must be between 0 and 5000"
                   }
                 }
                 """;
@@ -288,8 +321,20 @@ class BookIntegrationTest extends IntegrationTest {
                 arguments(bookToUpdateWithNulls(), expectedBlankValidationProblemJson()),
                 arguments(bookToUpdateWithBlankStrings(), expectedBlankValidationProblemJson()),
                 arguments(bookToUpdateWithWhitespace(), expectedBlankValidationProblemJson()),
+                arguments(bookToUpdateWithExtremeWhitespace(), expectedExtremeValidationProblemJson()),
                 arguments(bookToUpdateWithFieldsTooLong(), expectedMaxLengthValidationProblemJson())
             );
+        }
+
+        @Language("JSON")
+        private String bookToUpdate() {
+            return """
+                {
+                    "title": "The Hobbit",
+                    "author": "JRR Tolkien",
+                    "description": "In a hole under the ground, there lived a Hobbit."
+                }
+                """;
         }
 
         @Language("JSON")
@@ -324,14 +369,18 @@ class BookIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
-        private String bookToUpdate() {
+        private static String bookToUpdateWithExtremeWhitespace() {
             return """
                 {
-                    "title": "The Hobbit",
-                    "author": "JRR Tolkien",
-                    "description": "In a hole under the ground, there lived a Hobbit."
+                    "title": "%s",
+                    "author": "%s",
+                    "description": "%s"
                 }
-                """;
+                """.formatted(
+                " ".repeat(256),
+                " ".repeat(256),
+                " ".repeat(5001)
+            );
         }
 
         @Language("JSON")
@@ -361,6 +410,23 @@ class BookIntegrationTest extends IntegrationTest {
                     "title": "must not be blank",
                     "author": "must not be blank",
                     "description": "must not be blank"
+                  }
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String expectedExtremeValidationProblemJson() {
+            return """
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/books/%s",
+                  "errors": {
+                    "title": "must not be blank, size must be between 0 and 255",
+                    "author": "must not be blank, size must be between 0 and 255",
+                    "description": "must not be blank, size must be between 0 and 5000"
                   }
                 }
                 """;

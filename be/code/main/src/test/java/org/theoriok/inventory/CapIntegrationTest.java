@@ -207,6 +207,7 @@ class CapIntegrationTest extends IntegrationTest {
                 arguments(capToCreateWithNulls(), expectedBlankValidationProblemJson()),
                 arguments(capToCreateWithBlankStrings(), expectedBlankValidationProblemJson()),
                 arguments(capToCreateWithWhitespace(), expectedBlankValidationProblemJson()),
+                arguments(capToCreateWithExtremeWhitespace(), expectedExtremeValidationProblemJson()),
                 arguments(capToCreateWithFieldsTooLong(), expectedMaxLengthValidationProblemJson()),
                 arguments(capToCreateWithNegativeAmount(), expectedPositiveAmountValidationProblemJson())
             );
@@ -258,6 +259,22 @@ class CapIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
+        private static String capToCreateWithExtremeWhitespace() {
+            return """
+                {
+                    "name": "%s",
+                    "description": "%s",
+                    "amount": 1,
+                    "country": "%s"
+                }
+                """.formatted(
+                " ".repeat(256),
+                " ".repeat(5001),
+                " ".repeat(11)
+            );
+        }
+
+        @Language("JSON")
         private static String capToCreateWithFieldsTooLong() {
             return """
                 {
@@ -269,7 +286,7 @@ class CapIntegrationTest extends IntegrationTest {
                 """.formatted(
                 "B".repeat(256),
                 "C".repeat(5001),
-                "D".repeat(256)
+                "D".repeat(11)
             );
         }
 
@@ -297,6 +314,23 @@ class CapIntegrationTest extends IntegrationTest {
                     "name": "must not be blank",
                     "description": "must not be blank",
                     "country": "must not be blank"
+                  }
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String expectedExtremeValidationProblemJson() {
+            return """
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/caps",
+                  "errors": {
+                    "name": "must not be blank, size must be between 0 and 255",
+                    "description": "must not be blank, size must be between 0 and 5000",
+                    "country": "must not be blank, size must be between 0 and 10"
                   }
                 }
                 """;
@@ -409,6 +443,7 @@ class CapIntegrationTest extends IntegrationTest {
                 arguments(capToUpdateWithNulls(), expectedBlankValidationProblemJson()),
                 arguments(capToUpdateWithBlankStrings(), expectedBlankValidationProblemJson()),
                 arguments(capToUpdateWithWhitespace(), expectedBlankValidationProblemJson()),
+                arguments(capToUpdateWithExtremeWhitespace(), expectedExtremeValidationProblemJson()),
                 arguments(capToUpdateWithFieldsTooLong(), expectedMaxLengthValidationProblemJson()),
                 arguments(capToUpdateWithNegativeAmount(), expectedPositiveAmountValidationProblemJson())
             );
@@ -472,6 +507,22 @@ class CapIntegrationTest extends IntegrationTest {
         }
 
         @Language("JSON")
+        private static String capToUpdateWithExtremeWhitespace() {
+            return """
+                {
+                    "name": "%s",
+                    "description": "%s",
+                    "amount": 1,
+                    "country": "%s"
+                }
+                """.formatted(
+                " ".repeat(256),
+                " ".repeat(5001),
+                " ".repeat(11)
+            );
+        }
+
+        @Language("JSON")
         private static String capToUpdateWithFieldsTooLong() {
             return """
                 {
@@ -483,7 +534,7 @@ class CapIntegrationTest extends IntegrationTest {
                 """.formatted(
                 "B".repeat(256),
                 "C".repeat(5001),
-                "D".repeat(256)
+                "D".repeat(11)
             );
         }
 
@@ -511,6 +562,23 @@ class CapIntegrationTest extends IntegrationTest {
                     "name": "must not be blank",
                     "description": "must not be blank",
                     "country": "must not be blank"
+                  }
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String expectedExtremeValidationProblemJson() {
+            return """
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Validation failed",
+                  "instance": "/caps/%s",
+                  "errors": {
+                    "name": "must not be blank, size must be between 0 and 255",
+                    "description": "must not be blank, size must be between 0 and 5000",
+                    "country": "must not be blank, size must be between 0 and 10"
                   }
                 }
                 """;
