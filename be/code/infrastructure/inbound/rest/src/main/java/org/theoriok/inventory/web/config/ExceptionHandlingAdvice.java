@@ -15,7 +15,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 @ResponseBody
@@ -23,7 +22,6 @@ public class ExceptionHandlingAdvice {
     public static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlingAdvice.class);
 
     @ExceptionHandler(Throwable.class)
-    @ResponseStatus(code = INTERNAL_SERVER_ERROR)
     ResponseEntity<ProblemDetail> onException(Throwable exception) {
         LOGGER.error("Unexpected error", exception);
         return ResponseEntity.of(ProblemDetail.forStatusAndDetail(INTERNAL_SERVER_ERROR, "Something went wrong")).build();
