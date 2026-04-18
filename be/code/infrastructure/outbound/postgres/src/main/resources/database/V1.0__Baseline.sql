@@ -11,7 +11,7 @@ create table cap
 (
     id           uuid         not null,
     amount       int4         not null,
-    description  text,
+    description  text         not null,
     name         varchar(255) not null,
     country_code varchar(10)  not null,
     primary key (id)
@@ -21,7 +21,7 @@ alter table if exists cap add constraint FK_cap_country_code foreign key (countr
 create table book
 (
     id          uuid         not null,
-    description text,
+    description text         not null,
     title       varchar(255) not null,
     author      varchar(255) not null,
     primary key (id)
