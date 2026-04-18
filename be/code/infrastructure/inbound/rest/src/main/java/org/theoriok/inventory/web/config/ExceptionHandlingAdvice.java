@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 @ResponseBody
 public class ExceptionHandlingAdvice {
-    public static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlingAdvice.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlingAdvice.class);
 
     @ExceptionHandler(Throwable.class)
     ResponseEntity<ProblemDetail> onException(Throwable exception) {
@@ -28,7 +28,7 @@ public class ExceptionHandlingAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> handleValidationException(MethodArgumentNotValidException ex) {
+    ResponseEntity<ProblemDetail> handleValidationException(MethodArgumentNotValidException ex) {
         var problemDetail = ProblemDetail.forStatusAndDetail(ex.getStatusCode(), "Validation failed");
         var errors = ex.getBindingResult().getFieldErrors().stream()
             .sorted(comparing(FieldError::getDefaultMessage))
