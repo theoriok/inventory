@@ -302,7 +302,7 @@ class BookIntegrationTest extends IntegrationTest {
                     .contentType(APPLICATION_JSON)
                     .content(bookToUpdate()))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(expectedBookNotFoundProblemJsonForUpdate(randomId)));
+                .andExpect(content().json(expectedBookNotFoundProblemJson(randomId)));
         }
 
         @ParameterizedTest
@@ -449,17 +449,6 @@ class BookIntegrationTest extends IntegrationTest {
                 """;
         }
 
-        @Language("JSON")
-        private String expectedBookNotFoundProblemJsonForUpdate(BookId id) {
-            return """
-                {
-                  "title": "Not Found",
-                  "status": 404,
-                  "detail": "Book %s not found",
-                  "instance": "/books/%s"
-                }
-                """.formatted(id.value(), id.value());
-        }
     }
 
     @Nested
