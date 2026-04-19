@@ -118,7 +118,7 @@ allprojects {
             dependency "org.flywaydb:flyway-core:$flywayVersion"
             dependency "org.flywaydb:flyway-database-postgresql:$flywayVersion"
             dependency "org.jetbrains:annotations:$annotationsVersion"
-            dependency "com.tngtech.archunit:archunit-junit5:1.4.1"
+            dependency "com.tngtech.archunit:archunit-junit5:1.4.2"
             dependency "com.tngtech.archunit:archunit-junit5-engine:1.4.1"
             dependency "net.javacrumbs.json-unit:json-unit-assertj:5.1.1"
             dependency "org.openapitools:jackson-databind-nullable:0.2.10"
