@@ -25,13 +25,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
@@ -43,18 +43,18 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
       - run: ./gradlew test testCodeCoverageReport
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: |
             be/**/build/test-results
@@ -66,20 +66,20 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
       - run: ./gradlew checkstyleMain checkstyleTest pmdMain pmdTest
       - name: Upload lint reports
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: lint-reports
           path: |
@@ -90,19 +90,19 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: |
             be/**/build/test-results
@@ -124,7 +124,7 @@ jobs:
   dependency-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - name: Dependency check
         uses: dependency-check/Dependency-Check_Action@main
         env:
@@ -142,7 +142,7 @@ jobs:
             --exclude **/package-lock.json
             --exclude **/yarn.lock
       - name: Upload Test results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: Dependency check report
           path: ${{github.workspace}}/reports

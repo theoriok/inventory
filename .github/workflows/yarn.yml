@@ -25,9 +25,9 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-node-yarn
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: |
             fe/inventory-frontend/.yarn/cache
@@ -42,9 +42,9 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-node-yarn
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: |
             fe/inventory-frontend/.yarn/cache
@@ -57,9 +57,9 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-node-yarn
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: |
             fe/inventory-frontend/.yarn/cache
@@ -72,9 +72,9 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/setup-node-yarn
-      - uses: actions/cache@v5
+      - uses: actions/cache@v5.0.5
         with:
           path: |
             fe/inventory-frontend/.yarn/cache
