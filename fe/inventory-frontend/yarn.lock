@@ -1373,9 +1373,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/form@npm:~1.8.0":
-  version: 1.8.0
-  resolution: "@rc-component/form@npm:1.8.0"
+"@rc-component/form@npm:~1.8.1":
+  version: 1.8.1
+  resolution: "@rc-component/form@npm:1.8.1"
   dependencies:
     "@rc-component/async-validator": "npm:^5.1.0"
     "@rc-component/util": "npm:^1.6.2"
@@ -1383,7 +1383,7 @@ __metadata:
   peerDependencies:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
-  checksum: 10c0/e327322c149fb1e758118f75239ecb2ad93eaa6951c9b2537e6039b8a0a65f36cc67edba1b3646b8380b8212a461c103f3f650055fb831e227f8fb288c0c2a61
+  checksum: 10c0/7598468ac1e972ba5bb0482389c6905eace88de0203125a0a1b519b9481c3b343e8638250311be2a94cd925b5cab3a99b9b2881c18a4ccc6f77feb94c0066979
   languageName: node
   linkType: hard
 
@@ -2751,9 +2751,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:6.3.6":
-  version: 6.3.6
-  resolution: "antd@npm:6.3.6"
+"antd@npm:6.3.7":
+  version: 6.3.7
+  resolution: "antd@npm:6.3.7"
   dependencies:
     "@ant-design/colors": "npm:^8.0.1"
     "@ant-design/cssinjs": "npm:^2.1.2"
@@ -2769,7 +2769,7 @@ __metadata:
     "@rc-component/dialog": "npm:~1.8.4"
     "@rc-component/drawer": "npm:~1.4.2"
     "@rc-component/dropdown": "npm:~1.0.2"
-    "@rc-component/form": "npm:~1.8.0"
+    "@rc-component/form": "npm:~1.8.1"
     "@rc-component/image": "npm:~1.9.0"
     "@rc-component/input": "npm:~1.1.2"
     "@rc-component/input-number": "npm:~1.6.2"
@@ -2806,7 +2806,7 @@ __metadata:
   peerDependencies:
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/ca8bce6059fc4a6a023cc8fe930d0d1f0da3417e28cef29d589aa26aa158c1d0da16d64f3fd03a0bd522e871b768a9746f9ed8d38342239a633ca621599e2cfa
+  checksum: 10c0/f07fff4da4e5e0c8e01560369ddbfee4aba0593b56dff8847a1cd69937c1c94e39496ac4a3aebf5771894d3cf046ffa3d09436a33b8f23a9385ef22e3d5bbbba
   languageName: node
   linkType: hard
 
@@ -3845,7 +3845,7 @@ __metadata:
     "@types/react-dom": "npm:19.2.3"
     "@vitejs/plugin-react": "npm:6.0.1"
     "@vitest/coverage-v8": "npm:4.1.5"
-    antd: "npm:6.3.6"
+    antd: "npm:6.3.7"
     axios: "npm:1.15.2"
     eslint: "npm:10.2.1"
     eslint-plugin-react-hooks: "npm:7.1.1"
