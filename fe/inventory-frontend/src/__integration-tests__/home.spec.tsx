@@ -447,6 +447,24 @@ describe('home', () => {
             });
         });
     });
+
+    describe('view book', {timeout: 10000}, () => {
+        describe('happy path', () => {
+            const book = generateBook();
+
+            beforeEach(async () => given([book]));
+
+            test('shows view icon in each row', async () => {
+                await waitFor(() => {
+                    const booksTable = screen.getByTestId('books-table');
+                    const rows = within(booksTable).getAllByRole('row');
+                    const dataRows = rows.slice(1);
+
+                    expect(within(dataRows[0]).getByTestId('view-book')).toBeInTheDocument();
+                });
+            });
+        });
+    });
 });
 
 function given(books: Book[], createError?: 'validation' | 'server' | 'network', deleteError?: 'server' | 'network') {

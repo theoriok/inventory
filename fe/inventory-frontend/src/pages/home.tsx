@@ -1,5 +1,5 @@
-import {App, Button, Empty, Form, Input, Modal, Table} from "antd";
-import {DeleteOutlined} from "@ant-design/icons";
+import {App, Button, Empty, Form, Input, Modal, Space, Table} from "antd";
+import {DeleteOutlined, EyeOutlined} from "@ant-design/icons";
 import {FC, useState} from "react";
 import {useBooks, useCreateBook, useDeleteBook} from "../hooks/book.hook.ts";
 import {Book} from "../api/book.api.types.ts";
@@ -52,7 +52,10 @@ export const HomePage: FC = () => {
         {
             key: 'actions',
             render: (_: unknown, record: Book) => (
-                <DeleteOutlined data-testid="delete-book" onClick={() => setBookToDelete(record)}/>
+                <Space>
+                    <EyeOutlined data-testid="view-book"/>
+                    <DeleteOutlined data-testid="delete-book" onClick={() => setBookToDelete(record)}/>
+                </Space>
             ),
         },
     ];
