@@ -463,6 +463,23 @@ describe('home', () => {
                     expect(within(dataRows[0]).getByTestId('view-book')).toBeInTheDocument();
                 });
             });
+
+            test('opens detail modal and shows book data when view icon is clicked', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('view-book'));
+
+                await waitFor(() => {
+                    const dialog = screen.getByRole('dialog');
+                    expect(dialog).toBeInTheDocument();
+                    expect(within(dialog).getByText(book.title)).toBeInTheDocument();
+                    expect(within(dialog).getByText(`by ${book.author}`)).toBeInTheDocument();
+                    expect(within(dialog).getByText(book.description)).toBeInTheDocument();
+                });
+            });
         });
     });
 });

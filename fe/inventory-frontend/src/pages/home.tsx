@@ -1,7 +1,7 @@
-import {App, Button, Empty, Form, Input, Modal, Space, Table} from "antd";
+import {App, Button, Card, Empty, Form, Input, Modal, Space, Table, Typography} from "antd";
 import {DeleteOutlined, EyeOutlined} from "@ant-design/icons";
 import {FC, useState} from "react";
-import {useBooks, useCreateBook, useDeleteBook} from "../hooks/book.hook.ts";
+import {useBook, useBooks, useCreateBook, useDeleteBook} from "../hooks/book.hook.ts";
 import {Book} from "../api/book.api.types.ts";
 
 export const HomePage: FC = () => {
@@ -9,7 +9,9 @@ export const HomePage: FC = () => {
     const {message} = App.useApp();
     const [showCreateNewModal, setShowCreateNewModal] = useState<boolean>(false);
     const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
+    const [bookToView, setBookToView] = useState<string | null>(null);
     const [form] = Form.useForm();
+    const {data: viewedBook} = useBook(bookToView);
 
     const closeModal = () => {
         form.resetFields();
@@ -53,7 +55,7 @@ export const HomePage: FC = () => {
             key: 'actions',
             render: (_: unknown, record: Book) => (
                 <Space>
-                    <EyeOutlined data-testid="view-book"/>
+                    <EyeOutlined data-testid="view-book" onClick={() => setBookToView(record.id)}/>
                     <DeleteOutlined data-testid="delete-book" onClick={() => setBookToDelete(record)}/>
                 </Space>
             ),
@@ -118,6 +120,20 @@ export const HomePage: FC = () => {
                 }}
             >
                 <p>{`Are you sure you want to delete '${bookToDelete?.title}'?`}</p>
+            </Modal>
+            <Modal
+                title="Book Details"
+                open={bookToView !== null}
+                onCancel={() => setBookToView(null)}
+                footer={null}
+            >
+                {viewedBook && (
+                    <Card>
+                        <Typography.Paragraph strong style={{marginBottom: 0}}>{viewedBook.title}</Typography.Paragraph>
+                        <Typography.Paragraph type="secondary" style={{marginTop: 0}}>by {viewedBook.author}</Typography.Paragraph>
+                        <Typography.Paragraph style={{marginTop: 16}}>{viewedBook.description}</Typography.Paragraph>
+                    </Card>
+                )}
             </Modal>
         </>
     );
