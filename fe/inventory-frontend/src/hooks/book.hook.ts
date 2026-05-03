@@ -16,10 +16,11 @@ export function useBooks(): UseQueryResult<ListResponse<Book>> {
     });
 }
 
-export function useBook(id: string): UseQueryResult<Book> {
+export function useBook(id: string | null): UseQueryResult<Book> {
     return useQuery({
         queryKey: [BookQueryKeys.Book, id],
-        queryFn: () => bookApi.fetchBook(id),
+        queryFn: () => bookApi.fetchBook(id!),
+        enabled: id !== null,
     });
 }
 

@@ -85,6 +85,17 @@ describe('useBook', () => {
         expect(result.current.isLoading).toBe(true);
         expect(result.current.data).toBeUndefined();
     });
+
+    test('should not fetch when id is null', () => {
+        vi.spyOn(bookApi, 'fetchBook');
+
+        const {wrapper} = createWrapper();
+        const {result} = renderHook(() => useBook(null), {wrapper});
+
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.data).toBeUndefined();
+        expect(bookApi.fetchBook).not.toHaveBeenCalled();
+    });
 });
 
 describe('useCreateBook', () => {
