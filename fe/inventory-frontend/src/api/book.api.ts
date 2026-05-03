@@ -5,8 +5,14 @@ import {AxiosResponse, isAxiosError} from "axios";
 
 export const bookApi: BookApi = {
     async fetchBook(id: string): Promise<Book> {
-        const {data: book}: AxiosResponse<Book> = await baseApi.get(`/books/${id}`);
-        return book;
+        const response = await baseApi.get(`/books/${id}`).catch((e: unknown) => {
+            if (isAxiosError(e) && e.response) return e.response;
+            throw e;
+        });
+        if (response.status === 200) {
+            return response.data as Book;
+        }
+        throw new ProblemDetailError(response.data);
     },
 
     async fetchBooks(): Promise<ListResponse<Book>> {

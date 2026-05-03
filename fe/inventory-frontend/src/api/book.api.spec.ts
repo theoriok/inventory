@@ -8,7 +8,7 @@ import {ProblemDetailError} from './api.types.ts';
 
 describe('BookApi', () => {
     describe('fetch books', () => {
-        test('should fetch the user info', async () => {
+        test('should get /books', async () => {
             vi.spyOn(baseApi, 'get').mockResolvedValue({data: [generateBook()]});
 
             await bookApi.fetchBooks();
@@ -27,8 +27,8 @@ describe('BookApi', () => {
     });
 
     describe('fetch book by id', () => {
-        test('should fetch the user info', async () => {
-            vi.spyOn(baseApi, 'get').mockResolvedValue({data: generateBook()});
+        test('should get /books/{id}', async () => {
+            vi.spyOn(baseApi, 'get').mockResolvedValue({status: 200, data: generateBook()});
 
             await bookApi.fetchBook('123');
 
@@ -37,11 +37,32 @@ describe('BookApi', () => {
 
         test('returns a single book', async () => {
             const book = generateBook();
-            vi.spyOn(baseApi, 'get').mockResolvedValue({data: book});
+            vi.spyOn(baseApi, 'get').mockResolvedValue({status: 200, data: book});
 
             const result = await bookApi.fetchBook('123');
 
             expect(result).toEqual(book);
+        });
+
+        test('throws ProblemDetailError when backend returns non-2xx response', async () => {
+            const problemDetail = {
+                title: 'Not Found',
+                status: 404,
+                detail: 'Book 123 not found',
+            };
+            const error = new AxiosError('Not Found', 'ERR_BAD_REQUEST', undefined, undefined, {
+                status: 404, data: problemDetail,
+            } as never);
+            vi.spyOn(baseApi, 'get').mockRejectedValue(error);
+
+            await expect(bookApi.fetchBook('123')).rejects.toThrow(ProblemDetailError);
+        });
+
+        test('re-throws non-HTTP errors as-is', async () => {
+            const networkError = new Error('Network Error');
+            vi.spyOn(baseApi, 'get').mockRejectedValue(networkError);
+
+            await expect(bookApi.fetchBook('123')).rejects.toThrow(networkError);
         });
     });
 
