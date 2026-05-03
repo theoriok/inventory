@@ -480,6 +480,24 @@ describe('home', () => {
                     expect(within(dialog).getByText(book.description)).toBeInTheDocument();
                 });
             });
+
+            test('shows loading state while fetching book', async () => {
+                vi.spyOn(bookApi, 'fetchBook').mockImplementation(() => new Promise(() => {}));
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('view-book'));
+
+                await waitFor(() => {
+                    const dialog = screen.getByRole('dialog');
+                    expect(within(dialog).getByTestId('view-book-loading')).toBeInTheDocument();
+                    expect(within(dialog).queryByText(book.title)).not.toBeInTheDocument();
+                    expect(within(dialog).queryByText(book.author)).not.toBeInTheDocument();
+                    expect(within(dialog).queryByText(book.description)).not.toBeInTheDocument();
+                });
+            });
         });
     });
 });

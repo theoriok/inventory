@@ -1,4 +1,4 @@
-import {App, Button, Card, Empty, Form, Input, Modal, Space, Table, Typography} from "antd";
+import {App, Button, Card, Empty, Form, Input, Modal, Space, Spin, Table, Typography} from "antd";
 import {DeleteOutlined, EyeOutlined} from "@ant-design/icons";
 import {FC, useState} from "react";
 import {useBook, useBooks, useCreateBook, useDeleteBook} from "../hooks/book.hook.ts";
@@ -11,15 +11,15 @@ export const HomePage: FC = () => {
     const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
     const [bookToView, setBookToView] = useState<string | null>(null);
     const [form] = Form.useForm();
-    const {data: viewedBook} = useBook(bookToView);
+    const {data: viewedBook, isLoading: isBookLoading} = useBook(bookToView);
 
-    const closeModal = () => {
+    const closeCreateBookModal = () => {
         form.resetFields();
         setShowCreateNewModal(false);
     };
 
     const addBook = useCreateBook({
-        onSuccess: closeModal,
+        onSuccess: closeCreateBookModal,
         onValidationError: (errors) => form.setFields(
             Object.entries(errors).map(([field, msg]) => ({name: field, errors: [msg]})),
         ),
@@ -78,7 +78,7 @@ export const HomePage: FC = () => {
             <Modal
                 title={'Add new Book'}
                 open={showCreateNewModal}
-                onCancel={closeModal}
+                onCancel={closeCreateBookModal}
                 okText="Add"
                 confirmLoading={addBook.isPending}
                 onOk={async () => {
@@ -127,6 +127,7 @@ export const HomePage: FC = () => {
                 onCancel={() => setBookToView(null)}
                 footer={null}
             >
+                {isBookLoading && <Spin data-testid="view-book-loading" />}
                 {viewedBook && (
                     <Card>
                         <Typography.Paragraph strong style={{marginBottom: 0}}>{viewedBook.title}</Typography.Paragraph>
