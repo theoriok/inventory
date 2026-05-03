@@ -11,7 +11,7 @@ export const HomePage: FC = () => {
     const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
     const [bookToView, setBookToView] = useState<string | null>(null);
     const [form] = Form.useForm();
-    const {data: viewedBook, isLoading: isBookLoading} = useBook(bookToView);
+    const {data: viewedBook, isLoading: isBookLoading, error: bookError} = useBook(bookToView);
 
     const closeCreateBookModal = () => {
         form.resetFields();
@@ -128,6 +128,9 @@ export const HomePage: FC = () => {
                 footer={null}
             >
                 {isBookLoading && <Spin data-testid="view-book-loading" />}
+                {bookError && (
+                    <Typography.Paragraph type="danger">{bookError.message}</Typography.Paragraph>
+                )}
                 {viewedBook && (
                     <Card>
                         <Typography.Paragraph strong style={{marginBottom: 0}}>{viewedBook.title}</Typography.Paragraph>

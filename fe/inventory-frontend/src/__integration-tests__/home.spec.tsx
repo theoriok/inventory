@@ -499,10 +499,58 @@ describe('home', () => {
                 });
             });
         });
+
+        describe('error handling', {timeout: 10000}, () => {
+            const book = generateBook();
+
+            describe('not found', () => {
+                beforeEach(async () => given([book], undefined, undefined, 'not-found'));
+
+                test('shows detail message when book is not found', async () => {
+                    const user = userEvent.setup();
+                    await waitFor(() => {
+                        const booksTable = screen.getByTestId('books-table');
+                        const rows = within(booksTable).getAllByRole('row');
+                        expect(rows).toHaveLength(2);
+                    });
+
+                    const booksTable = screen.getByTestId('books-table');
+                    const rows = within(booksTable).getAllByRole('row');
+                    await user.click(within(rows[1]).getByTestId('view-book'));
+
+                    await waitFor(() => {
+                        const dialog = screen.getByRole('dialog');
+                        expect(within(dialog).getByText('Book not found')).toBeInTheDocument();
+                    }, {timeout: 10000});
+                });
+            });
+
+            describe('server error', () => {
+                beforeEach(async () => given([book], undefined, undefined, 'server'));
+
+                test('shows detail message when server error occurs', async () => {
+                    const user = userEvent.setup();
+                    await waitFor(() => {
+                        const booksTable = screen.getByTestId('books-table');
+                        const rows = within(booksTable).getAllByRole('row');
+                        expect(rows).toHaveLength(2);
+                    });
+
+                    const booksTable = screen.getByTestId('books-table');
+                    const rows = within(booksTable).getAllByRole('row');
+                    await user.click(within(rows[1]).getByTestId('view-book'));
+
+                    await waitFor(() => {
+                        const dialog = screen.getByRole('dialog');
+                        expect(within(dialog).getByText('Something went wrong')).toBeInTheDocument();
+                    }, {timeout: 10000});
+                });
+            });
+        });
     });
 });
 
-function given(books: Book[], createError?: 'validation' | 'server' | 'network', deleteError?: 'server' | 'network') {
+function given(books: Book[], createError?: 'validation' | 'server' | 'network', deleteError?: 'server' | 'network', fetchBookError?: 'not-found' | 'server') {
     const savedBooks = [...books];
     vi.spyOn(bookApi, 'fetchBooks').mockImplementation(() =>
         Promise.resolve({
@@ -510,9 +558,23 @@ function given(books: Book[], createError?: 'validation' | 'server' | 'network',
             total: savedBooks.length,
         }),
     );
-    vi.spyOn(bookApi, 'fetchBook').mockImplementation((id) =>
-        Promise.resolve(savedBooks.find((book) => book.id === id)!),
-    );
+    vi.spyOn(bookApi, 'fetchBook').mockImplementation(async (id) => {
+        if (fetchBookError === 'not-found') {
+            throw new ProblemDetailError({
+                title: 'Not Found',
+                status: 404,
+                detail: 'Book not found',
+            });
+        }
+        if (fetchBookError === 'server') {
+            throw new ProblemDetailError({
+                title: 'Internal Server Error',
+                status: 500,
+                detail: 'Something went wrong',
+            });
+        }
+        return savedBooks.find((book) => book.id === id)!;
+    });
     vi.spyOn(bookApi, 'createBook').mockImplementation(async (book) => {
         if (createError === 'validation') {
             throw new ProblemDetailError({
