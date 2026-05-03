@@ -50,9 +50,7 @@ describe('BookApi', () => {
                 status: 404,
                 detail: 'Book 123 not found',
             };
-            const error = new AxiosError('Not Found', 'ERR_BAD_REQUEST', undefined, undefined, {
-                status: 404, data: problemDetail,
-            } as never);
+            const error = new AxiosError('Not Found', 'ERR_BAD_REQUEST', undefined, undefined, {status: 404, data: problemDetail} as never);
             vi.spyOn(baseApi, 'get').mockRejectedValue(error);
 
             await expect(bookApi.fetchBook('123')).rejects.toThrow(ProblemDetailError);
@@ -95,9 +93,7 @@ describe('BookApi', () => {
                 detail: 'Validation failed',
                 errors: {title: 'must not be blank'},
             };
-            const error = new AxiosError('Bad Request', 'ERR_BAD_REQUEST', undefined, undefined, {
-                status: 400, data: problemDetail,
-            } as never);
+            const error = new AxiosError('Bad Request', 'ERR_BAD_REQUEST', undefined, undefined, {status: 400, data: problemDetail} as never);
             vi.spyOn(baseApi, 'post').mockRejectedValue(error);
 
             await expect(bookApi.createBook(createBook)).rejects.toThrow(ProblemDetailError);
@@ -155,9 +151,7 @@ describe('BookApi', () => {
                 status: 404,
                 detail: 'Book 789 not found',
             };
-            const error = new AxiosError('Not Found', 'ERR_BAD_REQUEST', undefined, undefined, {
-                status: 404, data: problemDetail,
-            } as never);
+            const error = new AxiosError('Not Found', 'ERR_BAD_REQUEST', undefined, undefined, {status: 404, data: problemDetail} as never);
             vi.spyOn(baseApi, 'delete').mockRejectedValue(error);
 
             await expect(bookApi.deleteBook('789')).rejects.toThrow(ProblemDetailError);
