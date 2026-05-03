@@ -498,6 +498,88 @@ describe('home', () => {
                     expect(within(dialog).queryByText(book.description)).not.toBeInTheDocument();
                 });
             });
+
+            test('closes modal when close button is clicked', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('view-book'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.click(screen.getByRole('button', {name: 'Close'}));
+
+                await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+            });
+
+            test('closes modal when escape key is pressed', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => expect(screen.getByTestId('books-table')).toBeInTheDocument());
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[1]).getByTestId('view-book'));
+                await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+                await user.keyboard('{Escape}');
+
+                await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+            });
+        });
+
+        describe('multiple books', {timeout: 10000}, () => {
+            const bookA = generateBook();
+            const bookB = generateBook();
+
+            beforeEach(async () => given([bookA, bookB]));
+
+            test('shows correct book when viewing second book', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => {
+                    const booksTable = screen.getByTestId('books-table');
+                    const rows = within(booksTable).getAllByRole('row');
+                    expect(rows).toHaveLength(3);
+                });
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+                await user.click(within(rows[2]).getByTestId('view-book'));
+
+                await waitFor(() => {
+                    const dialog = screen.getByRole('dialog');
+                    expect(within(dialog).getByText(bookB.title)).toBeInTheDocument();
+                    expect(within(dialog).getByText(`by ${bookB.author}`)).toBeInTheDocument();
+                });
+            });
+
+            test('shows new book data when viewing a different book after closing modal', async () => {
+                const user = userEvent.setup();
+                await waitFor(() => {
+                    const booksTable = screen.getByTestId('books-table');
+                    const rows = within(booksTable).getAllByRole('row');
+                    expect(rows).toHaveLength(3);
+                });
+
+                const booksTable = screen.getByTestId('books-table');
+                const rows = within(booksTable).getAllByRole('row');
+
+                await user.click(within(rows[1]).getByTestId('view-book'));
+                await waitFor(() => {
+                    const dialog = screen.getByRole('dialog');
+                    expect(within(dialog).getByText(bookA.title)).toBeInTheDocument();
+                });
+
+                await user.click(screen.getByRole('button', {name: 'Close'}));
+                await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+                await user.click(within(rows[2]).getByTestId('view-book'));
+                await waitFor(() => {
+                    const dialog = screen.getByRole('dialog');
+                    expect(within(dialog).getByText(bookB.title)).toBeInTheDocument();
+                    expect(within(dialog).getByText(`by ${bookB.author}`)).toBeInTheDocument();
+                });
+            });
         });
 
         describe('error handling', {timeout: 10000}, () => {
