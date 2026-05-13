@@ -110,9 +110,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/icons@npm:6.2.2":
-  version: 6.2.2
-  resolution: "@ant-design/icons@npm:6.2.2"
+"@ant-design/icons@npm:6.2.3":
+  version: 6.2.3
+  resolution: "@ant-design/icons@npm:6.2.3"
   dependencies:
     "@ant-design/colors": "npm:^8.0.1"
     "@ant-design/icons-svg": "npm:^4.4.2"
@@ -121,7 +121,7 @@ __metadata:
   peerDependencies:
     react: ">=16.0.0"
     react-dom: ">=16.0.0"
-  checksum: 10c0/90224591995ce91ef638218ac9829f5ba129f8aa2f6fc293af0b79b9343c25b6a9e056e6aef519b6f790fbaf2a69e03af50b9169b1011955ef8efcdaf4a0ba1c
+  checksum: 10c0/16f452703b2f9dfed296645b54a16e46afe1c12daed72d4a875b6f8d51f084966246afedba920fcbe3dc765a88ba40446b5a48f00c902071289b7eb3cc9a614e
   languageName: node
   linkType: hard
 
@@ -3846,7 +3846,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inventory-frontend@workspace:."
   dependencies:
-    "@ant-design/icons": "npm:6.2.2"
+    "@ant-design/icons": "npm:6.2.3"
     "@ant-design/pro-components": "npm:2.8.10"
     "@eslint/js": "npm:10.0.1"
     "@faker-js/faker": "npm:10.4.0"
