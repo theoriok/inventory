@@ -15,7 +15,7 @@
   "dependencies": {
     "@ant-design/icons": "6.2.3",
     "@ant-design/pro-components": "2.8.10",
-    "@tanstack/react-query": "5.100.10",
+    "@tanstack/react-query": "5.100.11",
     "antd": "6.4.2",
     "axios": "1.16.1",
     "lodash": "4.18.1",
