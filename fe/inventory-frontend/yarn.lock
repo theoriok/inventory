@@ -1507,17 +1507,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/notification@npm:~2.0.6":
-  version: 2.0.6
-  resolution: "@rc-component/notification@npm:2.0.6"
+"@rc-component/notification@npm:~2.0.7":
+  version: 2.0.7
+  resolution: "@rc-component/notification@npm:2.0.7"
   dependencies:
     "@rc-component/motion": "npm:^1.1.4"
-    "@rc-component/util": "npm:^1.2.1"
+    "@rc-component/util": "npm:^1.11.0"
     clsx: "npm:^2.1.1"
   peerDependencies:
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/dc875c41ca0bbe26fd161573d60a4b381dd4d87af3647591f9d6afff4e435faba3e1a2ddd72ee3fb230189becea976faa4ecbefcfda4b75bff9654f6c170b258
+  checksum: 10c0/3a21cf070c43769fc98abe0c2818012204ec4f96a99be7463322b8f1d3644e7572a394c0db43851ccf7bafd3676660308cc082970360bb9a55a0670f11f385b0
   languageName: node
   linkType: hard
 
@@ -2721,9 +2721,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:6.4.2":
-  version: 6.4.2
-  resolution: "antd@npm:6.4.2"
+"antd@npm:6.4.3":
+  version: 6.4.3
+  resolution: "antd@npm:6.4.3"
   dependencies:
     "@ant-design/colors": "npm:^8.0.1"
     "@ant-design/cssinjs": "npm:^2.1.2"
@@ -2747,7 +2747,7 @@ __metadata:
     "@rc-component/menu": "npm:~1.3.0"
     "@rc-component/motion": "npm:^1.3.2"
     "@rc-component/mutate-observer": "npm:^2.0.1"
-    "@rc-component/notification": "npm:~2.0.6"
+    "@rc-component/notification": "npm:~2.0.7"
     "@rc-component/pagination": "npm:~1.2.0"
     "@rc-component/picker": "npm:~1.10.0"
     "@rc-component/progress": "npm:~1.0.2"
@@ -2767,7 +2767,7 @@ __metadata:
     "@rc-component/tree-select": "npm:~1.9.0"
     "@rc-component/trigger": "npm:^3.9.0"
     "@rc-component/upload": "npm:~1.1.0"
-    "@rc-component/util": "npm:^1.10.1"
+    "@rc-component/util": "npm:^1.11.0"
     clsx: "npm:^2.1.1"
     dayjs: "npm:^1.11.11"
     scroll-into-view-if-needed: "npm:^3.1.0"
@@ -2775,7 +2775,7 @@ __metadata:
   peerDependencies:
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/e91f3737bdd5b2f52fa5f53e7ee5b7cada2e58d684d1462341419749f8b07a20a020a921a157a3a37cfa086c34998086d9c819e526d2e4e46a401a22382ea3fb
+  checksum: 10c0/8c09fdf88bd70cdefb3dbd2c37ab5d12f00532327430e94db37ae24b258e90678951c044c82afc3a0d1f2592e25885f803e09f342beac422c1ddd17c87746677
   languageName: node
   linkType: hard
 
@@ -3825,7 +3825,7 @@ __metadata:
     "@types/react-dom": "npm:19.2.3"
     "@vitejs/plugin-react": "npm:6.0.2"
     "@vitest/coverage-v8": "npm:4.1.6"
-    antd: "npm:6.4.2"
+    antd: "npm:6.4.3"
     axios: "npm:1.16.1"
     eslint: "npm:10.4.0"
     eslint-plugin-react-hooks: "npm:7.1.1"
