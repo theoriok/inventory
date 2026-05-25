@@ -107,8 +107,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No-content
         '404':
           description: Cap not found
   /countries:
@@ -240,8 +240,8 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No-content
         '404':
           description: Book not found
 components:

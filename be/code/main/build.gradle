@@ -38,7 +38,7 @@ springBoot {
 openApiGenerate {
     generatorName = 'java'
     inputSpec = "${project.rootDir}/documentation/api/api.yml"
-    outputDir = "$buildDir/generated-sources/openapi-test"
+    outputDir = layout.buildDirectory.dir("generated-sources/openapi-test").get().asFile.path
     apiPackage = 'org.theoriok.inventory.client.api'
     modelPackage = 'org.theoriok.inventory.client.model'
     generateApiTests = false
@@ -50,7 +50,7 @@ openApiGenerate {
     ]
 }
 
-sourceSets.test.java.srcDir("$buildDir/generated-sources/openapi-test/src/main/java")
+sourceSets.test.java.srcDir(layout.buildDirectory.dir("generated-sources/openapi-test/src/main/java"))
 
 compileTestJava.dependsOn(tasks.named('openApiGenerate'))
 
