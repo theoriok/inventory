@@ -18,7 +18,7 @@ project.ext.name = 'inventory'
 
 ext {
     jacocoVersion = '0.8.15'
-    flywayVersion = '12.6.2'
+    flywayVersion = '12.9.0'
     annotationsVersion = '26.1.0'
     checkstyleVersion = "13.6.0"
     pmdVersion = '7.24.0'
