@@ -101,18 +101,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/icons@npm:6.2.5, @ant-design/icons@npm:^6.2.5":
-  version: 6.2.5
-  resolution: "@ant-design/icons@npm:6.2.5"
+"@ant-design/icons-svg@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "@ant-design/icons-svg@npm:4.5.0"
+  checksum: 10c0/6d8c15ffc43c7c39560e075682da5b177462d42ca92ac227702c9ce267fea688025449bc6528d7b64f1bc88408384af5d6c52464afa47a01b5394894816d7f9e
+  languageName: node
+  linkType: hard
+
+"@ant-design/icons@npm:6.3.2":
+  version: 6.3.2
+  resolution: "@ant-design/icons@npm:6.3.2"
   dependencies:
     "@ant-design/colors": "npm:^8.0.1"
-    "@ant-design/icons-svg": "npm:^4.4.2"
+    "@ant-design/icons-svg": "npm:^4.5.0"
     "@rc-component/util": "npm:^1.11.0"
     clsx: "npm:^2.1.1"
   peerDependencies:
     react: ">=16.0.0"
     react-dom: ">=16.0.0"
-  checksum: 10c0/9fe43c491465276d3dbd1dfeb1d97a33253c7e0a1e80f18dac86e04fa6d11164d7d8d95d68b17fa89797327d585d5a97a6d219f5ce66a0b90a07148977ee7357
+  checksum: 10c0/3f7dcfda65d22f43f78173de60ac47fd5ffcb54a9db4dcaa2fd8380aa424facb8c51edc9c7a9afeaab8ca012c07827edfe73bb51e7a33891fed90ce1da692620
   languageName: node
   linkType: hard
 
@@ -129,6 +136,21 @@ __metadata:
     react: ">=16.0.0"
     react-dom: ">=16.0.0"
   checksum: 10c0/7a9d9fd388c5c66d92818fd0eb794a54ef0b0dc3d75f15ac24c7cfde21c5c836c220cf35423768fd1faa28d55443a6917bf4260469c1485be83f799daa351976
+  languageName: node
+  linkType: hard
+
+"@ant-design/icons@npm:^6.2.5":
+  version: 6.2.5
+  resolution: "@ant-design/icons@npm:6.2.5"
+  dependencies:
+    "@ant-design/colors": "npm:^8.0.1"
+    "@ant-design/icons-svg": "npm:^4.4.2"
+    "@rc-component/util": "npm:^1.11.0"
+    clsx: "npm:^2.1.1"
+  peerDependencies:
+    react: ">=16.0.0"
+    react-dom: ">=16.0.0"
+  checksum: 10c0/9fe43c491465276d3dbd1dfeb1d97a33253c7e0a1e80f18dac86e04fa6d11164d7d8d95d68b17fa89797327d585d5a97a6d219f5ce66a0b90a07148977ee7357
   languageName: node
   linkType: hard
 
@@ -3871,7 +3893,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inventory-frontend@workspace:."
   dependencies:
-    "@ant-design/icons": "npm:6.2.5"
+    "@ant-design/icons": "npm:6.3.2"
     "@ant-design/pro-components": "npm:2.8.10"
     "@eslint/js": "npm:10.0.1"
     "@faker-js/faker": "npm:10.5.0"
