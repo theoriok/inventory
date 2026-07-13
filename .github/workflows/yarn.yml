@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - uses: ./.github/actions/setup-node-yarn
-      - uses: actions/cache@v5.0.5
+      - uses: actions/cache@v5.1.0
         with:
           path: |
             fe/inventory-frontend/.yarn/cache
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - uses: ./.github/actions/setup-node-yarn
-      - uses: actions/cache@v5.0.5
+      - uses: actions/cache@v5.1.0
         with:
           path: |
             fe/inventory-frontend/.yarn/cache
@@ -59,7 +59,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - uses: ./.github/actions/setup-node-yarn
-      - uses: actions/cache@v5.0.5
+      - uses: actions/cache@v5.1.0
         with:
           path: |
             fe/inventory-frontend/.yarn/cache
@@ -74,7 +74,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - uses: ./.github/actions/setup-node-yarn
-      - uses: actions/cache@v5.0.5
+      - uses: actions/cache@v5.1.0
         with:
           path: |
             fe/inventory-frontend/.yarn/cache
