@@ -1968,16 +1968,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/util@npm:1.11.1":
-  version: 1.11.1
-  resolution: "@rc-component/util@npm:1.11.1"
+"@rc-component/util@npm:1.12.0":
+  version: 1.12.0
+  resolution: "@rc-component/util@npm:1.12.0"
   dependencies:
     is-mobile: "npm:^5.0.0"
-    react-is: "npm:^18.2.0"
+    react-is: "npm:^19.2.7"
   peerDependencies:
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/a5b6a79089dc67a402669e24cb59776806fbebae746cc8d728632637a5f6f6b298a07a82ee24b0eb401cbeb384bc3c04ea82e9fbda4b8aa227f698e01641f62d
+  checksum: 10c0/357aa5d88dc2662d81aa9d84c94ba0349589b53c89ad46989bdaf08840902186d4970f35b1f62cdf1fb0be2632323f3c56f2eb5e5ac961e0107333e34e7a34ab
   languageName: node
   linkType: hard
 
@@ -4962,6 +4962,13 @@ __metadata:
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^19.2.7":
+  version: 19.2.7
+  resolution: "react-is@npm:19.2.7"
+  checksum: 10c0/419fe54d5bd7fdf5414a5bb7bd9a1e0e36f9fae28ffb4cb73290fbe342bde15d8584a90d1db62547f6aa03018dce517b178a041abb522136cd4b4b51b4e94c83
   languageName: node
   linkType: hard
 
