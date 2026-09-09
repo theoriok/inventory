@@ -27,11 +27,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
@@ -45,16 +45,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
       - run: ./gradlew test testCodeCoverageReport
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             be/**/build/test-results
@@ -68,11 +68,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
@@ -94,15 +94,15 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup-java-gradle
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: ~/.gradle/wrapper/dists
           key: gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: be/**/build
           key: gradle-build-${{ github.sha }}
-      - uses: actions/cache@v5.1.0
+      - uses: actions/cache@v6.1.0
         with:
           path: |
             be/**/build/test-results
