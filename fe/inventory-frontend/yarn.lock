@@ -1971,16 +1971,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rc-component/util@npm:1.12.0":
-  version: 1.12.0
-  resolution: "@rc-component/util@npm:1.12.0"
+"@rc-component/util@npm:1.13.0":
+  version: 1.13.0
+  resolution: "@rc-component/util@npm:1.13.0"
   dependencies:
     is-mobile: "npm:^5.0.0"
     react-is: "npm:^19.2.7"
   peerDependencies:
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/357aa5d88dc2662d81aa9d84c94ba0349589b53c89ad46989bdaf08840902186d4970f35b1f62cdf1fb0be2632323f3c56f2eb5e5ac961e0107333e34e7a34ab
+  checksum: 10c0/c1e9ee4f2be436b091bae18d4547818c43fbddad5a4e15b971cdcde3bf25f49c33eb4f51fac726a48f61fc254e4a5f719efc2882b7458fbe15c79ff77c337380
   languageName: node
   linkType: hard
 
