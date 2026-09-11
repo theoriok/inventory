@@ -25,7 +25,7 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.1.0
       - uses: ./.github/actions/setup-node-yarn
       - uses: actions/cache@v6.1.0
         with:
@@ -42,7 +42,7 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.1.0
       - uses: ./.github/actions/setup-node-yarn
       - uses: actions/cache@v6.1.0
         with:
@@ -57,7 +57,7 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.1.0
       - uses: ./.github/actions/setup-node-yarn
       - uses: actions/cache@v6.1.0
         with:
@@ -72,7 +72,7 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.1.0
       - uses: ./.github/actions/setup-node-yarn
       - uses: actions/cache@v6.1.0
         with:
