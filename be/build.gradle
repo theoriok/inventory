@@ -21,7 +21,7 @@ ext {
     flywayVersion = '12.11.0'
     annotationsVersion = '26.1.0'
     checkstyleVersion = "13.11.0"
-    pmdVersion = '7.26.0'
+    pmdVersion = '7.27.0'
     recordBuilderVersion = '52'
 }
 
