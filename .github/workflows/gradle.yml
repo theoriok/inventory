@@ -79,7 +79,7 @@ jobs:
       - run: ./gradlew checkstyleMain checkstyleTest pmdMain pmdTest
       - name: Upload lint reports
         if: failure()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: lint-reports
           path: |
@@ -142,7 +142,7 @@ jobs:
             --exclude **/package-lock.json
             --exclude **/yarn.lock
       - name: Upload Test results
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: Dependency check report
           path: ${{github.workspace}}/reports
