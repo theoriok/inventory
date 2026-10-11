@@ -12,5 +12,4 @@ public interface BookRepository extends ListCrudRepository<BookEntity, UUID> {
     @Modifying
     @Query("DELETE FROM book WHERE id = :id")
     int deleteByIdReturningCount(@Param("id") UUID id);
-
 }

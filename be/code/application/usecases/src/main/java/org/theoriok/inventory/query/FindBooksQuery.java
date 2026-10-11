@@ -24,5 +24,4 @@ public class FindBooksQuery implements FindBooks {
     public Optional<Book> findById(BookId id) {
         return persistBookPort.findById(id);
     }
-
 }

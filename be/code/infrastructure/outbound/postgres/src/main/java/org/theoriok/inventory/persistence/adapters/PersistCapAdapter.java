@@ -86,13 +86,13 @@ public class PersistCapAdapter implements PersistCapPort {
         return capRepository.deleteByIdReturningCount(id.toUuid()) > 0;
     }
 
-    private CapEntity toEntity(Cap domainObject) {
+    private CapEntity toEntity(Cap cap) {
         return new CapEntity(
-            domainObject.id().toUuid(),
-            domainObject.name(),
-            domainObject.description(),
-            domainObject.amount(),
-            domainObject.country().code()
+            cap.id().toUuid(),
+            cap.name(),
+            cap.description(),
+            cap.amount(),
+            cap.country().code()
         );
     }
 

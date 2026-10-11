@@ -112,13 +112,13 @@ public class CapController {
             .toList();
     }
 
-    private CapDto toCapDto(Cap domainObject) {
+    private CapDto toCapDto(Cap cap) {
         return new CapDto(
-            domainObject.id().value(),
-            domainObject.name(),
-            domainObject.description(),
-            domainObject.amount(),
-            toCountryDto(domainObject.country())
+            cap.id().value(),
+            cap.name(),
+            cap.description(),
+            cap.amount(),
+            toCountryDto(cap.country())
         );
     }
 

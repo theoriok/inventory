@@ -448,7 +448,6 @@ class BookIntegrationTest extends IntegrationTest {
                 }
                 """;
         }
-
     }
 
     @Nested

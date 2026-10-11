@@ -12,7 +12,7 @@ public record BookId(String value) {
     }
 
     public static BookId randomBookId() {
-        return  BookId.from(UUID.randomUUID());
+        return BookId.from(UUID.randomUUID());
     }
 
     public static BookId from(UUID id) {

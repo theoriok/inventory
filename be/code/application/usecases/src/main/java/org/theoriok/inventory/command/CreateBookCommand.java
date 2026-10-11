@@ -5,7 +5,6 @@ import org.theoriok.inventory.port.PersistBookPort;
 
 @Command
 public class CreateBookCommand implements CreateBook {
-
     private final PersistBookPort persistBookPort;
 
     public CreateBookCommand(PersistBookPort persistBookPort) {

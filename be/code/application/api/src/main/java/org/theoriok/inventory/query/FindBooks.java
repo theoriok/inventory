@@ -10,5 +10,4 @@ public interface FindBooks {
     List<Book> findAll();
 
     Optional<Book> findById(BookId id);
-
 }

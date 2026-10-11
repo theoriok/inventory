@@ -31,7 +31,6 @@ import java.util.List;
 @RequestMapping("/books")
 @Timed
 public class BookController {
-
     private final FindBooks findBooks;
     private final CreateBook createBook;
     private final UpdateBook updateBook;
