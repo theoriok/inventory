@@ -8,7 +8,11 @@ public interface UpdateBook {
     record Request(BookId id, String title, String author, String description) {
     }
 
-    enum Result {
-        UPDATED, NOT_FOUND
+    sealed interface Result {
+        record Updated() implements Result {
+        }
+
+        record NotFound(BookId id) implements Result {
+        }
     }
 }

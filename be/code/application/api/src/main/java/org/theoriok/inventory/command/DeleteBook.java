@@ -5,8 +5,11 @@ import org.theoriok.inventory.BookId;
 public interface DeleteBook {
     Result delete(BookId id);
 
-    enum Result {
-        DELETED,
-        NOT_FOUND
+    sealed interface Result {
+        record Deleted() implements Result {
+        }
+
+        record NotFound(BookId id) implements Result {
+        }
     }
 }

@@ -8,9 +8,14 @@ public interface UpdateCap {
     record Request(CapId id, String name, String description, int amount, String country) {
     }
 
-    enum Result {
-        UPDATED,
-        NOT_FOUND,
-        UNKNOWN_COUNTRY
+    sealed interface Result {
+        record Updated() implements Result {
+        }
+
+        record NotFound(CapId id) implements Result {
+        }
+
+        record UnknownCountry(String country) implements Result {
+        }
     }
 }

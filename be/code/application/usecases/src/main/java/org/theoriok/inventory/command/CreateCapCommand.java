@@ -23,6 +23,6 @@ public class CreateCapCommand implements CreateCap {
                 var created = persistCapPort.create(cap);
                 return (Result) new Result.Created(created);
             })
-            .orElse(new Result.UnknownCountry());
+            .orElseGet(() -> new Result.UnknownCountry(request.country()));
     }
 }

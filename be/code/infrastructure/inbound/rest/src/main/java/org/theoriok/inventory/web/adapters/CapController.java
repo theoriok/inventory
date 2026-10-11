@@ -64,8 +64,8 @@ public class CapController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCapById(@PathVariable(name = "id") String id) {
         return switch (deleteCap.delete(new CapId(id))) {
-            case DELETED -> ResponseEntity.ok().build();
-            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Cap %s not found".formatted(id))).build();
+            case DeleteCap.Result.Deleted() -> ResponseEntity.ok().build();
+            case DeleteCap.Result.NotFound(var capId) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Cap %s not found".formatted(capId.value()))).build();
         };
     }
 
@@ -73,16 +73,16 @@ public class CapController {
     public ResponseEntity<?> createCap(@Valid @RequestBody CreateCapDto capDto) {
         return switch (createCap.create(toCreateRequest(capDto))) {
             case CreateCap.Result.Created(var cap) -> ResponseEntity.status(HttpStatus.CREATED).body(toCapDto(cap));
-            case CreateCap.Result.UnknownCountry() -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();
+            case CreateCap.Result.UnknownCountry(var country) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(country))).build();
         };
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCap(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateCapDto capDto) {
         return switch (updateCap.update(toUpdateRequest(id, capDto))) {
-            case UPDATED -> ResponseEntity.noContent().build();
-            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Cap %s not found".formatted(id))).build();
-            case UNKNOWN_COUNTRY -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(capDto.country()))).build();
+            case UpdateCap.Result.Updated() -> ResponseEntity.noContent().build();
+            case UpdateCap.Result.NotFound(var capId) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Cap %s not found".formatted(capId.value()))).build();
+            case UpdateCap.Result.UnknownCountry(var country) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(country))).build();
         };
     }
 

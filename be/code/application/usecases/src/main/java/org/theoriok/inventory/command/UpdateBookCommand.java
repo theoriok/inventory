@@ -1,8 +1,5 @@
 package org.theoriok.inventory.command;
 
-import static org.theoriok.inventory.command.UpdateBook.Result.NOT_FOUND;
-import static org.theoriok.inventory.command.UpdateBook.Result.UPDATED;
-
 import org.theoriok.inventory.port.PersistBookPort;
 
 @Command
@@ -19,8 +16,8 @@ public class UpdateBookCommand implements UpdateBook {
         return persistBookPort.findById(request.id())
             .map(book -> {
                 persistBookPort.update(book.update(request.title(), request.author(), request.description()));
-                return UPDATED;
+                return (Result) new Result.Updated();
             })
-            .orElse(NOT_FOUND);
+            .orElseGet(() -> new Result.NotFound(request.id()));
     }
 }

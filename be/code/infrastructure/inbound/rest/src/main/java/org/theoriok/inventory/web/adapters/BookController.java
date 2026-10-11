@@ -60,8 +60,8 @@ public class BookController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookById(@PathVariable(name = "id") String id) {
         return switch (deleteBook.delete(new BookId(id))) {
-            case DELETED -> ResponseEntity.ok().build();
-            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Book %s not found".formatted(id))).build();
+            case DeleteBook.Result.Deleted() -> ResponseEntity.ok().build();
+            case DeleteBook.Result.NotFound(var bookId) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Book %s not found".formatted(bookId.value()))).build();
         };
     }
 
@@ -74,8 +74,8 @@ public class BookController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateBook(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateBookDto bookDto) {
         return switch (updateBook.update(toUpdateRequest(id, bookDto))) {
-            case UPDATED -> ResponseEntity.noContent().build();
-            case NOT_FOUND -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Book %s not found".formatted(id))).build();
+            case UpdateBook.Result.Updated() -> ResponseEntity.noContent().build();
+            case UpdateBook.Result.NotFound(var bookId) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Book %s not found".formatted(bookId.value()))).build();
         };
     }
 

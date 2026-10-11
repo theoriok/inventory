@@ -13,7 +13,7 @@ public interface CreateCap {
         record Created(Cap cap) implements Result {
         }
 
-        record UnknownCountry() implements Result {
+        record UnknownCountry(String country) implements Result {
         }
     }
 }

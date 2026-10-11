@@ -1,9 +1,5 @@
 package org.theoriok.inventory.command;
 
-import static org.theoriok.inventory.command.UpdateCap.Result.NOT_FOUND;
-import static org.theoriok.inventory.command.UpdateCap.Result.UNKNOWN_COUNTRY;
-import static org.theoriok.inventory.command.UpdateCap.Result.UPDATED;
-
 import org.theoriok.inventory.port.PersistCapPort;
 import org.theoriok.inventory.port.PersistCountryPort;
 
@@ -24,10 +20,10 @@ public class UpdateCapCommand implements UpdateCap {
             .map(cap -> persistCountryPort.findByCode(request.country())
                 .map(country -> {
                     persistCapPort.update(cap.update(request.name(), request.description(), request.amount(), country));
-                    return UPDATED;
+                    return (Result) new Result.Updated();
                 })
-                .orElse(UNKNOWN_COUNTRY)
+                .orElseGet(() -> new Result.UnknownCountry(request.country()))
             )
-            .orElse(NOT_FOUND);
+            .orElseGet(() -> new Result.NotFound(request.id()));
     }
 }
