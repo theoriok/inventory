@@ -1,6 +1,7 @@
 package org.theoriok.inventory.query;
 
 import org.theoriok.inventory.CapId;
+import org.theoriok.inventory.CountryCode;
 import org.theoriok.inventory.domain.Cap;
 
 import java.util.List;
@@ -11,6 +12,6 @@ public interface FindCaps {
 
     Optional<Cap> findById(CapId id);
 
-    record Request(String country) {
+    record Request(CountryCode country) {
     }
 }

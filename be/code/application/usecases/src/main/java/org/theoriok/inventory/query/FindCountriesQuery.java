@@ -1,5 +1,6 @@
 package org.theoriok.inventory.query;
 
+import org.theoriok.inventory.CountryCode;
 import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.port.PersistCountryPort;
 
@@ -20,7 +21,7 @@ public class FindCountriesQuery implements FindCountries {
     }
 
     @Override
-    public Optional<Country> findByCode(String code) {
+    public Optional<Country> findByCode(CountryCode code) {
         return persistCountryPort.findByCode(code);
     }
 }

@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.theoriok.inventory.Author;
 import org.theoriok.inventory.BookId;
+import org.theoriok.inventory.Description;
+import org.theoriok.inventory.Title;
 import org.theoriok.inventory.command.CreateBook;
 import org.theoriok.inventory.command.DeleteBook;
 import org.theoriok.inventory.command.UpdateBook;
@@ -82,18 +85,18 @@ public class BookController {
     private CreateBook.Request toCreateRequest(CreateBookDto bookDto) {
         return new CreateBook.Request(
             BookId.randomBookId(),
-            bookDto.title(),
-            bookDto.author(),
-            bookDto.description()
+            new Title(bookDto.title()),
+            new Author(bookDto.author()),
+            new Description(bookDto.description())
         );
     }
 
     private UpdateBook.Request toUpdateRequest(String id, UpdateBookDto bookDto) {
         return new UpdateBook.Request(
             new BookId(id),
-            bookDto.title(),
-            bookDto.author(),
-            bookDto.description()
+            new Title(bookDto.title()),
+            new Author(bookDto.author()),
+            new Description(bookDto.description())
         );
     }
 
@@ -106,9 +109,9 @@ public class BookController {
     private BookDto toBookDto(Book book) {
         return new BookDto(
             book.id().value(),
-            book.title(),
-            book.author(),
-            book.description()
+            book.title().value(),
+            book.author().value(),
+            book.description().value()
         );
     }
 }

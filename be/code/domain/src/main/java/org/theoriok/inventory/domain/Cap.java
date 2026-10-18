@@ -1,17 +1,20 @@
 package org.theoriok.inventory.domain;
 
 import io.soabase.recordbuilder.core.RecordBuilder;
+import org.theoriok.inventory.Amount;
 import org.theoriok.inventory.CapId;
+import org.theoriok.inventory.Description;
+import org.theoriok.inventory.Name;
 
 @RecordBuilder
 public record Cap(
     CapId id,
-    String name,
-    String description,
-    int amount,
+    Name name,
+    Description description,
+    Amount amount,
     Country country
 ) implements CapBuilder.With {
-    public static Cap create(CapId id, String name, String description, int amount, Country country) {
+    public static Cap create(CapId id, Name name, Description description, Amount amount, Country country) {
         return CapBuilder.builder()
             .id(id)
             .name(name)
@@ -21,7 +24,7 @@ public record Cap(
             .build();
     }
 
-    public Cap update(String name, String description, int amount, Country country) {
+    public Cap update(Name name, Description description, Amount amount, Country country) {
         return CapBuilder.builder()
             .id(this.id)
             .name(name)

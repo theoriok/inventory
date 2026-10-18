@@ -4,7 +4,10 @@ import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.Author;
 import org.theoriok.inventory.BookId;
+import org.theoriok.inventory.Description;
+import org.theoriok.inventory.Title;
 import org.theoriok.inventory.domain.Book;
 import org.theoriok.inventory.domain.BookBuilder;
 import org.theoriok.inventory.persistence.entities.BookEntity;
@@ -56,18 +59,18 @@ public class PersistBookAdapter implements PersistBookPort {
     private BookEntity toEntity(Book book) {
         return new BookEntity(
             book.id().toUuid(),
-            book.title(),
-            book.author(),
-            book.description()
+            book.title().value(),
+            book.author().value(),
+            book.description().value()
         );
     }
 
     private Book toDomainObject(BookEntity entity) {
         return BookBuilder.builder()
             .id(BookId.from(entity.id()))
-            .title(entity.title())
-            .author(entity.author())
-            .description(entity.description())
+            .title(new Title(entity.title()))
+            .author(new Author(entity.author()))
+            .description(new Description(entity.description()))
             .build();
     }
 }

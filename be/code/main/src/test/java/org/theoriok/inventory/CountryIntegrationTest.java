@@ -34,9 +34,9 @@ class CountryIntegrationTest extends IntegrationTest {
 
         @Test
         void shouldReturnNotFoundWhenCountryNotFoundById() throws Exception {
-            mvc.perform(get("/countries/BE-1"))
+            mvc.perform(get("/countries/XX"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().json(expectedCountryNotFoundProblemJson("BE-1")));
+                .andExpect(content().json(expectedCountryNotFoundProblemJson("XX")));
         }
 
         @Test

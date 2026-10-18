@@ -1,6 +1,7 @@
 package org.theoriok.inventory.port;
 
 import org.theoriok.inventory.CapId;
+import org.theoriok.inventory.CountryCode;
 import org.theoriok.inventory.domain.Cap;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Optional;
 public interface PersistCapPort {
     List<Cap> findAll();
 
-    List<Cap> findAllByCountry(String country);
+    List<Cap> findAllByCountry(CountryCode country);
 
     Optional<Cap> findById(CapId id);
 

@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.theoriok.inventory.Amount;
 import org.theoriok.inventory.CapId;
+import org.theoriok.inventory.CountryCode;
+import org.theoriok.inventory.Description;
+import org.theoriok.inventory.Name;
 import org.theoriok.inventory.command.CreateCap;
 import org.theoriok.inventory.command.DeleteCap;
 import org.theoriok.inventory.command.UpdateCap;
@@ -49,7 +53,8 @@ public class CapController {
 
     @GetMapping
     public ResponseEntity<List<CapDto>> findCaps(@RequestParam(required = false, name = "country") String country) {
-        var capsResponse = findCaps.findAll(new FindCaps.Request(country));
+        var countryCode = country == null ? null : new CountryCode(country);
+        var capsResponse = findCaps.findAll(new FindCaps.Request(countryCode));
         return ResponseEntity.ok(toCapDtos(capsResponse));
     }
 
@@ -73,7 +78,7 @@ public class CapController {
     public ResponseEntity<?> createCap(@Valid @RequestBody CreateCapDto capDto) {
         return switch (createCap.create(toCreateRequest(capDto))) {
             case CreateCap.Result.Created(var cap) -> ResponseEntity.status(HttpStatus.CREATED).body(toCapDto(cap));
-            case CreateCap.Result.UnknownCountry(var country) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(country))).build();
+            case CreateCap.Result.UnknownCountry(var country) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(country.value()))).build();
         };
     }
 
@@ -82,27 +87,27 @@ public class CapController {
         return switch (updateCap.update(toUpdateRequest(id, capDto))) {
             case UpdateCap.Result.Updated() -> ResponseEntity.noContent().build();
             case UpdateCap.Result.NotFound(var capId) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Cap %s not found".formatted(capId.value()))).build();
-            case UpdateCap.Result.UnknownCountry(var country) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(country))).build();
+            case UpdateCap.Result.UnknownCountry(var country) -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Unknown country %s".formatted(country.value()))).build();
         };
     }
 
     private CreateCap.Request toCreateRequest(CreateCapDto capDto) {
         return new CreateCap.Request(
             CapId.randomCapId(),
-            capDto.name(),
-            capDto.description(),
-            capDto.amount(),
-            capDto.country()
+            new Name(capDto.name()),
+            new Description(capDto.description()),
+            new Amount(capDto.amount()),
+            new CountryCode(capDto.country())
         );
     }
 
     private UpdateCap.Request toUpdateRequest(String id, UpdateCapDto capDto) {
         return new UpdateCap.Request(
             new CapId(id),
-            capDto.name(),
-            capDto.description(),
-            capDto.amount(),
-            capDto.country()
+            new Name(capDto.name()),
+            new Description(capDto.description()),
+            new Amount(capDto.amount()),
+            new CountryCode(capDto.country())
         );
     }
 
@@ -115,17 +120,17 @@ public class CapController {
     private CapDto toCapDto(Cap cap) {
         return new CapDto(
             cap.id().value(),
-            cap.name(),
-            cap.description(),
-            cap.amount(),
+            cap.name().value(),
+            cap.description().value(),
+            cap.amount().value(),
             toCountryDto(cap.country())
         );
     }
 
     private CountryDto toCountryDto(Country domainObject) {
         return new CountryDto(
-            domainObject.name(),
-            domainObject.code()
+            domainObject.name().value(),
+            domainObject.code().value()
         );
     }
 }

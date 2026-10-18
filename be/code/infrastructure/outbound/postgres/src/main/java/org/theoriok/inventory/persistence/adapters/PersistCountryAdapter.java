@@ -4,6 +4,8 @@ import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.CountryCode;
+import org.theoriok.inventory.Name;
 import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.domain.CountryBuilder;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
@@ -28,15 +30,15 @@ public class PersistCountryAdapter implements PersistCountryPort {
     }
 
     @Override
-    public Optional<Country> findByCode(String code) {
-        return jdbcAggregateTemplate.findOne(Query.query(Criteria.where("code").is(code)), CountryEntity.class)
+    public Optional<Country> findByCode(CountryCode code) {
+        return jdbcAggregateTemplate.findOne(Query.query(Criteria.where("code").is(code.value())), CountryEntity.class)
             .map(this::toDomainObject);
     }
 
     private Country toDomainObject(CountryEntity entity) {
         return CountryBuilder.builder()
-            .name(entity.name())
-            .code(entity.code())
+            .name(new Name(entity.name()))
+            .code(new CountryCode(entity.code()))
             .build();
     }
 }

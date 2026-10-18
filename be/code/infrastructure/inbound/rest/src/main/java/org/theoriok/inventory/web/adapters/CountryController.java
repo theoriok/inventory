@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.theoriok.inventory.CountryCode;
 import org.theoriok.inventory.domain.Country;
 import org.theoriok.inventory.query.FindCountries;
 import org.theoriok.inventory.web.dto.CountryDto;
@@ -38,13 +39,13 @@ public class CountryController {
 
     @GetMapping("/{code}")
     public ResponseEntity<CountryDto> findCountryByCode(@PathVariable(name = "code") String code) {
-        return findCountries.findByCode(code)
+        return findCountries.findByCode(new CountryCode(code))
             .map(this::toCountryDto)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.of(ProblemDetail.forStatusAndDetail(NOT_FOUND, "Country %s not found".formatted(code))).build());
     }
 
     private CountryDto toCountryDto(Country country) {
-        return new CountryDto(country.name(), country.code());
+        return new CountryDto(country.name().value(), country.code().value());
     }
 }

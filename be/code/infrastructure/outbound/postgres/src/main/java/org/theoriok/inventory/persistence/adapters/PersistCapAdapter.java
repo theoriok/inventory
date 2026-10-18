@@ -8,7 +8,11 @@ import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Component;
+import org.theoriok.inventory.Amount;
 import org.theoriok.inventory.CapId;
+import org.theoriok.inventory.CountryCode;
+import org.theoriok.inventory.Description;
+import org.theoriok.inventory.Name;
 import org.theoriok.inventory.domain.Cap;
 import org.theoriok.inventory.domain.CapBuilder;
 import org.theoriok.inventory.domain.Country;
@@ -49,12 +53,12 @@ public class PersistCapAdapter implements PersistCapPort {
     }
 
     @Override
-    public List<Cap> findAllByCountry(String country) {
-        List<CapEntity> capEntities = jdbcAggregateTemplate.findAll(Query.query(Criteria.where("country_code").is(country)), CapEntity.class);
+    public List<Cap> findAllByCountry(CountryCode country) {
+        List<CapEntity> capEntities = jdbcAggregateTemplate.findAll(Query.query(Criteria.where("country_code").is(country.value())), CapEntity.class);
         if (capEntities.isEmpty()) {
             return emptyList();
         }
-        Map<String, Country> countriesByCode = Map.of(country, getCountry(country));
+        Map<String, Country> countriesByCode = Map.of(country.value(), getCountry(country.value()));
         return toDomainObjects(capEntities, countriesByCode);
     }
 
@@ -89,10 +93,10 @@ public class PersistCapAdapter implements PersistCapPort {
     private CapEntity toEntity(Cap cap) {
         return new CapEntity(
             cap.id().toUuid(),
-            cap.name(),
-            cap.description(),
-            cap.amount(),
-            cap.country().code()
+            cap.name().value(),
+            cap.description().value(),
+            cap.amount().value(),
+            cap.country().code().value()
         );
     }
 
@@ -105,17 +109,17 @@ public class PersistCapAdapter implements PersistCapPort {
     private Cap toDomainObject(CapEntity entity, Country country) {
         return CapBuilder.builder()
             .id(CapId.from(entity.id()))
-            .name(entity.name())
-            .description(entity.description())
-            .amount(entity.amount())
+            .name(new Name(entity.name()))
+            .description(new Description(entity.description()))
+            .amount(new Amount(entity.amount()))
             .country(country)
             .build();
     }
 
     private Country toDomainObject(CountryEntity entity) {
         return CountryBuilder.builder()
-            .name(entity.name())
-            .code(entity.code())
+            .name(new Name(entity.name()))
+            .code(new CountryCode(entity.code()))
             .build();
     }
 }
