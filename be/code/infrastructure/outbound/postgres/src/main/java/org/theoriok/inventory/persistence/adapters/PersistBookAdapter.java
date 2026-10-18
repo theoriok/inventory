@@ -9,7 +9,6 @@ import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.Description;
 import org.theoriok.inventory.Title;
 import org.theoriok.inventory.domain.Book;
-import org.theoriok.inventory.domain.BookBuilder;
 import org.theoriok.inventory.persistence.entities.BookEntity;
 import org.theoriok.inventory.persistence.repositories.BookRepository;
 import org.theoriok.inventory.port.PersistBookPort;
@@ -66,11 +65,11 @@ public class PersistBookAdapter implements PersistBookPort {
     }
 
     private Book toDomainObject(BookEntity entity) {
-        return BookBuilder.builder()
-            .id(BookId.from(entity.id()))
-            .title(new Title(entity.title()))
-            .author(new Author(entity.author()))
-            .description(new Description(entity.description()))
-            .build();
+        return new Book(
+            BookId.from(entity.id()),
+            new Title(entity.title()),
+            new Author(entity.author()),
+            new Description(entity.description())
+        );
     }
 }

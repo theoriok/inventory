@@ -1,33 +1,16 @@
 package org.theoriok.inventory.domain;
 
-import io.soabase.recordbuilder.core.RecordBuilder;
 import org.theoriok.inventory.Author;
 import org.theoriok.inventory.BookId;
 import org.theoriok.inventory.Description;
 import org.theoriok.inventory.Title;
 
-@RecordBuilder
-public record Book(
-    BookId id,
-    Title title,
-    Author author,
-    Description description
-) implements BookBuilder.With {
+public record Book(BookId id, Title title, Author author, Description description) {
     public static Book create(BookId id, Title title, Author author, Description description) {
-        return BookBuilder.builder()
-            .id(id)
-            .title(title)
-            .author(author)
-            .description(description)
-            .build();
+        return new Book(id, title, author, description);
     }
 
     public Book update(Title title, Author author, Description description) {
-        return BookBuilder.builder()
-            .id(this.id)
-            .title(title)
-            .author(author)
-            .description(description)
-            .build();
+        return new Book(this.id, title, author, description);
     }
 }

@@ -22,7 +22,6 @@ ext {
     annotationsVersion = '26.1.0'
     checkstyleVersion = "14.3.0"
     pmdVersion = '7.28.0'
-    recordBuilderVersion = '53'
 }
 
 allprojects {

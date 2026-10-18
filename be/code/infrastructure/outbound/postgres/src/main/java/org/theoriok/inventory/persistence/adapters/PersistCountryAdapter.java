@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.theoriok.inventory.CountryCode;
 import org.theoriok.inventory.Name;
 import org.theoriok.inventory.domain.Country;
-import org.theoriok.inventory.domain.CountryBuilder;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.port.PersistCountryPort;
 
@@ -36,9 +35,9 @@ public class PersistCountryAdapter implements PersistCountryPort {
     }
 
     private Country toDomainObject(CountryEntity entity) {
-        return CountryBuilder.builder()
-            .name(new Name(entity.name()))
-            .code(new CountryCode(entity.code()))
-            .build();
+        return new Country(
+            new Name(entity.name()),
+            new CountryCode(entity.code())
+        );
     }
 }

@@ -14,9 +14,7 @@ import org.theoriok.inventory.CountryCode;
 import org.theoriok.inventory.Description;
 import org.theoriok.inventory.Name;
 import org.theoriok.inventory.domain.Cap;
-import org.theoriok.inventory.domain.CapBuilder;
 import org.theoriok.inventory.domain.Country;
-import org.theoriok.inventory.domain.CountryBuilder;
 import org.theoriok.inventory.persistence.entities.CapEntity;
 import org.theoriok.inventory.persistence.entities.CountryEntity;
 import org.theoriok.inventory.persistence.repositories.CapRepository;
@@ -107,19 +105,19 @@ public class PersistCapAdapter implements PersistCapPort {
     }
 
     private Cap toDomainObject(CapEntity entity, Country country) {
-        return CapBuilder.builder()
-            .id(CapId.from(entity.id()))
-            .name(new Name(entity.name()))
-            .description(new Description(entity.description()))
-            .amount(new Amount(entity.amount()))
-            .country(country)
-            .build();
+        return new Cap(
+            CapId.from(entity.id()),
+            new Name(entity.name()),
+            new Description(entity.description()),
+            new Amount(entity.amount()),
+            country
+        );
     }
 
     private Country toDomainObject(CountryEntity entity) {
-        return CountryBuilder.builder()
-            .name(new Name(entity.name()))
-            .code(new CountryCode(entity.code()))
-            .build();
+        return new Country(
+            new Name(entity.name()),
+            new CountryCode(entity.code())
+        );
     }
 }
