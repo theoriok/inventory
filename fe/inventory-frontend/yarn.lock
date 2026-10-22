@@ -2866,9 +2866,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:6.6.6":
-  version: 6.6.6
-  resolution: "antd@npm:6.6.6"
+"antd@npm:6.6.7":
+  version: 6.6.7
+  resolution: "antd@npm:6.6.7"
   dependencies:
     "@ant-design/colors": "npm:^8.0.1"
     "@ant-design/cssinjs": "npm:^2.1.2"
@@ -2913,7 +2913,7 @@ __metadata:
     "@rc-component/tree-select": "npm:~1.16.1"
     "@rc-component/trigger": "npm:^3.10.1"
     "@rc-component/upload": "npm:~1.1.1"
-    "@rc-component/util": "npm:^1.13.0"
+    "@rc-component/util": "npm:^1.14.0"
     clsx: "npm:^2.1.1"
     dayjs: "npm:^1.11.11"
     scroll-into-view-if-needed: "npm:^3.1.0"
@@ -2921,7 +2921,7 @@ __metadata:
   peerDependencies:
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/cfc360bd12a727bf7af27db1afb2419d21cab71915f652cb239f27531cf9702770d70eec078ae5ca6a657ea435908e7ba10052b218a0476a5c94846f3fe9e898
+  checksum: 10c0/123644cc3d03f03ff1b41757f2f166de12ea0691fdb201c0a2f5628cd0a26c086fe9d6aecf0152ddf58de045e76c7bdd122e35bd7ed1a7ad5b323fa9b5908156
   languageName: node
   linkType: hard
 
@@ -4026,7 +4026,7 @@ __metadata:
     "@types/react-dom": "npm:19.2.3"
     "@vitejs/plugin-react": "npm:6.1.1"
     "@vitest/coverage-v8": "npm:4.1.12"
-    antd: "npm:6.6.6"
+    antd: "npm:6.6.7"
     axios: "npm:1.20.0"
     eslint: "npm:10.11.0"
     eslint-plugin-react-hooks: "npm:7.1.1"
