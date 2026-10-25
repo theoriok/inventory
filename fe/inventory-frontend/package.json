@@ -44,7 +44,7 @@
     "vite": "8.3.5",
     "vitest": "4.1.12"
   },
-  "packageManager": "yarn@4.17.1",
+  "packageManager": "yarn@4.18.1",
   "resolutions": {
     "@rc-component/util": "1.14.0"
   }
