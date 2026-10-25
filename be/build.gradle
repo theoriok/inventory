@@ -120,7 +120,7 @@ allprojects {
             dependency "com.tngtech.archunit:archunit-junit5:1.5.1"
             dependency "com.tngtech.archunit:archunit-junit5-engine:1.5.1"
             dependency "net.javacrumbs.json-unit:json-unit-assertj:6.4.0"
-            dependency "org.openapitools:jackson-databind-nullable:0.2.12"
+            dependency "org.openapitools:jackson-databind-nullable:0.2.13"
         }
     }
 
