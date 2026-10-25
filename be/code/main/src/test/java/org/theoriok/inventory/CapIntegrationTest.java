@@ -422,7 +422,8 @@ class CapIntegrationTest extends IntegrationTest {
             mvc.perform(put("/caps/" + cap.id())
                     .contentType(APPLICATION_JSON)
                     .content(capToUpdateWithUnknownCountry()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(expectedUnknownCountryProblemJson().formatted(cap.id())));
         }
 
         @ParameterizedTest
@@ -612,6 +613,18 @@ class CapIntegrationTest extends IntegrationTest {
                   "errors": {
                     "amount": "must be greater than 0"
                   }
+                }
+                """;
+        }
+
+        @Language("JSON")
+        private static String expectedUnknownCountryProblemJson() {
+            return """
+                {
+                  "title": "Bad Request",
+                  "status": 400,
+                  "detail": "Unknown country XX",
+                  "instance": "/caps/%s"
                 }
                 """;
         }
